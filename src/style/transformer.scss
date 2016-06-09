@@ -1,0 +1,16 @@
+.transformer {
+  &.entering {
+    opacity: 0;
+    transition-property: none;
+  }
+
+  &.visible {
+    transition-property: opacity, transform;
+    opacity: 1;
+  }
+
+  &.leaving {
+    transition-property: opacity, transform;
+    opacity: 0;
+  }
+}

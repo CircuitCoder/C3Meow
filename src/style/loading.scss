@@ -1,0 +1,121 @@
+$loading-loop: 2s;
+
+@keyframes cloud-animation {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes dot-1-animation {
+  35%, 65% {
+    opacity: 1;
+  }
+
+  45%, 55% {
+    opacity: 0;
+  }
+}
+
+@keyframes dot-2-animation {
+  20%, 80% {
+    opacity: 1;
+  }
+
+  30%, 70% {
+    opacity: 0;
+  }
+}
+
+@keyframes dot-3-animation {
+  5%, 95% {
+    opacity: 1;
+  }
+
+  15%, 85% {
+    opacity: 0;
+  }
+}
+
+@keyframes arrow-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  65%, 100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes arrow-out {
+  0%, 35% {
+    opacity: 1;
+    transform: translateY(3px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.loading {
+  opacity: 0.3;
+
+  height: 52px;
+  width: 64px;
+  text-align: center;
+
+  .cloud {
+    font-size: 36px;
+    line-height: 36px;
+    display: block;
+
+    animation-name: cloud-animation;
+    animation-duration: $loading-loop;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease;
+  }
+
+  .arrow-wrapper {
+    animation: arrow-in 2s ease-out infinite;
+
+    .arrow {
+      color: white;
+      font-size: 24px;
+      line-height: 36px;
+      margin-top: -36px;
+      display: block;
+
+      animation: arrow-out 2s ease-in infinite;
+    }
+  }
+
+  .hint {
+    line-height: 16px;
+    font-size: 12px;
+
+    .dot-1 {
+      animation-name: dot-1-animation;
+    }
+
+    .dot-2 {
+      animation-name: dot-2-animation;
+    }
+
+    .dot-3 {
+      animation-name: dot-3-animation;
+    }
+
+    span {
+      animation-duration: $loading-loop;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease;
+    }
+  }
+}

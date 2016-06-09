@@ -1,0 +1,21 @@
+<div class="list" @scroll="scroll" :class="{ 'has-prev': hasPrev }">
+  <div class="placeholder" v-show="hasPrev">
+    <i class="material-icons placeholder-icon md-24">keyboard_arrow_up</i>
+    <div>第 {{ page - 1 }} 页</div>
+  </div>
+  <div class="entries">
+    <div v-for="entry of entries" class="entry" @click="select($index)" :class="{ selected: $index === selected }">
+      <div class="entry-topic">
+        {{ entry.topic }}
+      </div>
+      <div class="post-time">
+        <i class="material-icons">access_time</i> {{ entry.post_time }}
+      </div>
+      <div class="overlap"></div>
+    </div>
+  </div>
+  <div class="placeholder" v-show="hasNext">
+    <div>第 {{ page + 1 }} 页</div>
+    <i class="material-icons placeholder-icon md-24">keyboard_arrow_down</i>
+  </div>
+</div>

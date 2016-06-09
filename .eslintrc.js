@@ -9,6 +9,16 @@ module.exports = {
   'rules': {
     'import/no-unresolved': 0,
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'keyword-spacing': [2, {
+      overrides: {
+        if: { after: false },
+        for: { after: false },
+        while: { after: false },
+        catch: { after: false },
+      }
+    }],
+    'no-console': process.env.NODE_ENV === 'production' ? 2 : 1,
+    'no-else-return': 0,
   }
 }

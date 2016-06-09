@@ -2,10 +2,38 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>c3meow</title>
+    <title>{{ title }}</title>
+    <link href="https://fonts.lug.ustc.edu.cn/icon?family=Material+Icons" rel="stylesheet">
   </head>
   <body>
-    <app></app>
-    <!-- built files will be auto injected -->
+    <div class="frame" v-show="running" transition="init-frame">
+      <div class="sidebar">
+        <div class="loading">
+          <i class="material-icons cloud">cloud</i>
+          <div class="arrow-wrapper">
+            <i class="material-icons arrow">keyboard_arrow_down</i>
+          </div>
+          <div class="hint">Loading<span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span></div>
+        </div>
+        <div class="list-ref">
+          <div class="pager"></div>
+        </div>
+        <div class="list-content-holder">
+        </div>
+        <div class="list-account">
+          <a @click="pushRef('a')">a</a>
+          <a @click="pushRef('c')">c</a>
+        </div>
+      </div>
+      <div class="post">
+        <div class="loading">
+          <i class="material-icons cloud">cloud</i>
+          <div class="arrow-wrapper">
+            <i class="material-icons arrow">keyboard_arrow_down</i>
+          </div>
+          <div class="hint">Loading<span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span></div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
