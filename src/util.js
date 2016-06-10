@@ -72,6 +72,32 @@ function whyAreYouLookingAtThis() {
   throw new Error('should never be called');
 }
 
+function doLogin(cb) {
+  const pro = window.gapi.auth2.getAuthInstance().signIn();
+  if(cb) pro.then(cb);
+}
+
+function doLogout(cb) {
+  const pro = window.gapi.auth2.getAuthInstance().signOut().then(cb);
+  if(cb) pro.then(cb);
+}
+
+function initLogin(signIn, signOut) {
+  window.gapi.load('auth2', () => {
+    const auth = window.gapi.auth2.init({
+      client_id: config.googleClientID,
+    });
+
+    auth.isSignedIn.listen((signedIn) => {
+      if(signedIn) {
+        if(signIn) signIn(auth.currentUser.get());
+      } else {
+        if(signOut) signOut();
+      }
+    });
+  });
+}
+
 export default {
   parseURL,
   postURL,
@@ -79,4 +105,7 @@ export default {
   loadList,
   ping,
   whyAreYouLookingAtThis,
+  doLogin,
+  doLogout,
+  initLogin,
 };

@@ -22,6 +22,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
+  overflow: hidden;
 
   background: rgba(0,0,0,.06);
 
@@ -91,7 +92,7 @@ body {
     top: $ref-height;
     left: 0;
     right: 0;
-    bottom: $account-height;
+    bottom: $bottom-bar-height + 1px;
 
     overflow: hidden;
 
@@ -102,22 +103,12 @@ body {
     }
   }
 
-  .list-account {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    border-top: $border-color 1px solid;
-    height: $account-height;
-    box-sizing: border-box;
-  }
 }
 
 .post {
   position: absolute;
   top: 0;
-  bottom: 0;
+  bottom: $bottom-bar-height + 1px;
   left: $sidebar-width;
   right: 0;
 
@@ -126,4 +117,163 @@ body {
 
   justify-content: center;
   align-items: center;
+}
+
+.bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  border-top: $border-color 1px solid;
+  height: $bottom-bar-height;
+
+  background: white;
+  padding: 0 20px;
+
+  .account {
+    cursor: pointer;
+    float: right;
+    position: relative;
+    height: 100%;
+
+    .avatar-background {
+      height: 62px;
+      width: 62px;
+      border-radius: 50%;
+      background-color: white;
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+
+      &.overlap {
+        background-color: $border-color;
+      }
+    }
+
+    .avatar {
+      height: 60px;
+      width: 60px;
+      border-radius: 50px;
+
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      
+      opacity: 0;
+
+      transition: opacity 0.2s ease-in;
+
+      background: white;
+
+      &.placeholder {
+        opacity: 1;
+        background: url('https://developers.google.com/identity/images/g-logo.png'), white;
+        background-position: 50%;
+        background-repeat: no-repeat;
+        background-size: 40px;
+      }
+
+      .avatar-content {
+        width: 54px;
+        height: 54px;
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        border-radius: 50%;
+      }
+    }
+
+    .avatar-background-cover {
+      height: 40px;
+      width: 62px;
+      position: absolute;
+      bottom: 0;
+      right: -1px;
+      background-color: white;
+    }
+
+    .action-overlap {
+      position: absolute;
+      bottom: 3px;
+      right: 3px;
+      height: 54px;
+      width: 54px;
+      border-radius: 50%;
+
+      opacity: 0;
+      background: rgba(0,0,0,.3);
+      color: white;
+
+      transition: opacity 0.2s ease-in;
+
+      .material-icons {
+        transition-property: opacity;
+        transition-duration: 0.2s;
+        line-height: 54px;
+        width: 54px;
+        font-size: 36px;
+        position: absolute;
+        text-align: center;
+        top: 0;
+        right: 0;
+
+        &.login {
+          opacity: 1;
+          transition-delay: 0.2s;
+          transition-timing-function: ease-out;
+        }
+
+        &.logout {
+          opacity: 0;
+          transition-delay: 0s;
+          transition-timing-function: ease-in;
+        }
+      }
+    }
+
+    .name-holder {
+      height: $bottom-bar-height;
+      line-height: $bottom-bar-height;
+      transform: translateX(-70px);
+      text-align: right;
+      opacity: 0.7;
+
+      .transformer {
+        display: block;
+
+        &:last-child:not(:first-child) {
+          margin-top: -40px;
+        }
+      }
+    }
+
+    &.signed-in {
+      .avatar.visible {
+        transition: opacity 0.2s ease-out;
+        opacity: 1;
+      }
+
+      .material-icons {
+        &.logout {
+          opacity: 1;
+          transition-delay: 0.2s;
+          transition-timing-function: ease-out;
+        }
+
+        &.login {
+          opacity: 0;
+          transition-delay: 0s;
+          transition-timing-function: ease-in;
+        }
+      }
+    }
+
+    &:hover {
+      .action-overlap {
+        transition: opacity 0.2s ease-out;
+        opacity: 1;
+      }
+    }
+  }
 }

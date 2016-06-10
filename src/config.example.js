@@ -5,11 +5,14 @@
 
 export default {
   // Backend url Without tailing slash
-  backend: 'http://127.0.0.1:13579',
+  backend: 'http://SOMEWHERE.AROUND.THE/WORLD',
 
   // Base pathname
   base: '/',
 
   // Title
   title: 'C3Meow',
+
+  // Google auth client ID
+  googleClientID: 'INPUT_YOUR_ID';
 };

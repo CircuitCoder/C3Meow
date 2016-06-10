@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>{{ title }}</title>
     <link href="https://fonts.lug.ustc.edu.cn/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://apis.google.com/js/api:client.js"></script>
   </head>
   <body>
     <div class="frame" v-show="running" transition="init-frame">
@@ -20,10 +21,6 @@
         </div>
         <div class="list-content-holder">
         </div>
-        <div class="list-account">
-          <a @click="pushRef('a')">a</a>
-          <a @click="pushRef('c')">c</a>
-        </div>
       </div>
       <div class="post">
         <div class="loading">
@@ -32,6 +29,26 @@
             <i class="material-icons arrow">keyboard_arrow_down</i>
           </div>
           <div class="hint">Loading<span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span></div>
+        </div>
+      </div>
+      <div class="bottom-bar">
+        <a @click="pushRef('a')">a</a>
+        <a @click="pushRef('c')">c</a>
+        <div class="account" @click="modAccount" :class="{ 'signed-in': signedIn }">
+          <div class="avatar-background"></div>
+          <div class="avatar-background overlap"></div>
+          <div class="avatar-background-cover"></div>
+          <div class="avatar placeholder"></div>
+
+          <div class="avatar container" :class="{ visible: this.avatarLoaded }">
+            <img :src="user ? user.avatar : ''" class="avatar-content" @load="onAvatarLoad">
+          </div>
+
+          <div class="action-overlap">
+            <i class="material-icons login">archive</i>
+            <i class="material-icons logout">unarchive</i>
+          </div>
+          <div class="name-holder"></div>
         </div>
       </div>
     </div>

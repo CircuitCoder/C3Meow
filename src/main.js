@@ -24,6 +24,12 @@ const instance = new Vue({
     pageTrans: null,
 
     postReady: false,
+
+    user: null,
+    signedIn: false,
+    avatarLoaded: false,
+
+    accountTrans: null,
   },
   methods: {
     initialize() {
@@ -56,6 +62,28 @@ const instance = new Vue({
       }, 0);
 
       this.loadList(list, page, 'right');
+
+      this.popAccount();
+      util.initLogin((user) => {
+        // TODO: validate
+        const profile = user.getBasicProfile();
+        const newAvatar = profile.getImageUrl();
+
+        if(!this.user || newAvatar !== this.user.avatar) {
+          this.avatarLoaded = false;
+        }
+
+        this.user = {
+          name: profile.getName(),
+          avatar: newAvatar,
+          email: profile.getEmail(),
+        };
+        this.signedIn = true;
+        this.pushAccount(this.user.name);
+      }, () => {
+        this.signedIn = false;
+        this.popAccount();
+      });
     },
 
     loadList(ref, page, direction) {
@@ -84,6 +112,19 @@ const instance = new Vue({
 
         this.showList(direction, list);
       });
+    },
+
+    modAccount() {
+      if(this.signedIn) {
+        util.doLogout();
+      } else {
+        // TODO: prevent multiple invoke
+        util.doLogin();
+      }
+    },
+
+    onAvatarLoad() {
+      this.avatarLoaded = true;
     },
 
     getRefName(ref) {
@@ -181,6 +222,37 @@ const instance = new Vue({
       content.$appendTo(list.$el);
 
       this.listTrans = list;
+    },
+
+    pushAccount(name) {
+      this.accountTrans.direction = 'right';
+      this.accountTrans.leave();
+
+      const account = new Transformer();
+      account.delta = 20;
+      account.delay = 100;
+      account.duration = 200;
+      account.direction = 'right';
+      account.content = name;
+      account.enter('.name-holder');
+
+      this.accountTrans = account;
+    },
+
+    popAccount() {
+      const account = new Transformer();
+      account.delta = 20;
+      account.delay = 100;
+      account.content = '使用 Google 登录';
+
+      if(this.accountTrans) {
+        this.accountTrans.direction = 'left';
+        this.accountTrans.leave();
+      }
+
+      account.direction = 'left';
+      account.enter('.name-holder');
+      this.accountTrans = account;
     },
   },
 });

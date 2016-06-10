@@ -49,7 +49,7 @@ export default Vue.component('transformer', {
 
       setTimeout(() => {
         this.stage = 'visible';
-      }, 0);
+      }, this.delay);
     },
 
     update() {
