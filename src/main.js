@@ -8,6 +8,8 @@ import './style/general.scss';
 import Transformer from './transformer.js';
 import List from './list.js';
 
+import './filters.js';
+
 /* eslint-disable no-new */
 const instance = new Vue({
   el: 'html',
@@ -90,7 +92,10 @@ const instance = new Vue({
       if(this.listTrans) this.hideList(direction);
       this.updatePage(page);
 
-      util.loadList(ref, page, (data) => {
+      util.loadList(ref, page, (err, data) => {
+        // TODO: handle
+        if(err) throw err;
+
         const list = new List();
         list.entries = data;
         list.initialize();

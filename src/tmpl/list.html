@@ -9,7 +9,8 @@
         {{ entry.topic }}
       </div>
       <div class="post-time">
-        <i class="material-icons">access_time</i> {{ entry.post_time }}
+        <!-- using v-text to prevent FOUC -->
+        <i class="material-icons">access_time</i> <span v-text="entry.post_time | timeConverter"></span>
       </div>
       <div class="overlap"></div>
     </div>

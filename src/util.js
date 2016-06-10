@@ -3,7 +3,7 @@
  * @author Liu Xiaoyi <me@c-3.io>
  */
 
-// import superagent from 'superagent';
+import request from 'superagent';
 import config from './config';
 
 const base = config.base.charAt(config.base.length - 1) === '/' ? config.base : `${config.base}/`;
@@ -53,15 +53,17 @@ function listURL(tag, page) {
 }
 
 function loadList(tag, page, cb) {
-  setTimeout(() => cb([{
-    topic: '喵',
-    post_time: 100000000,
-    url: 'abc',
-  }, {
-    topic: '这是一个很长很长的帖子',
-    post_time: 100000000,
-    url: 'def',
-  }]), 1000);
+  const path = tag === 'all' ? `/posts/${page}` : `/tag/${tag}/${page}`;
+  request.get(config.backend + path, (err, resp) => {
+    if(err) return cb(err);
+    else {
+      try {
+        return cb(null, JSON.parse(resp.text));
+      } catch(e) {
+        return cb(e);
+      }
+    }
+  });
 }
 
 function ping() {
