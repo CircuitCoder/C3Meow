@@ -32,7 +32,7 @@ export default Vue.component('list', {
         this.$dispatch('scroll-up');
       }
 
-      if(this.$el.scrollTop === this.$el.scrollHeight - this.$el.offsetHeight) {
+      if(this.$el.scrollTop === this.$el.scrollHeight - this.$el.offsetHeight && this.hasNext) {
         this.$dispatch('scroll-down');
       }
     },

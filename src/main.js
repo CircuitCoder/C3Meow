@@ -97,10 +97,11 @@ const instance = new Vue({
         if(err) throw err;
 
         const list = new List();
-        list.entries = data;
+        list.entries = data.posts;
         list.initialize();
         list.page = page;
         list.hasPrev = page !== 1;
+        list.hasNext = data.hasNext;
 
         let removed = false;
 
