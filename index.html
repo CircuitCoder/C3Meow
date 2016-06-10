@@ -26,14 +26,16 @@
           <div class="hint">Loading<span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span></div>
         </div>
         <div class="list-ref">
+          <div class="back-to-all" :class="{ visible: ref !== 'all' }" @click="backToAll">
+            <i class="material-icons">keyboard_arrow_left</i>
+            返回全部
+          </div>
           <div class="pager"></div>
         </div>
         <div class="list-content-holder">
         </div>
       </div>
       <div class="bottom-bar">
-        <a @click="pushRef('a')">a</a>
-        <a @click="pushRef('c')">c</a>
         <div class="account" @click="modAccount" :class="{ 'signed-in': signedIn }">
           <div class="avatar-background"></div>
           <div class="avatar-background overlap"></div>
@@ -49,6 +51,11 @@
             <i class="material-icons logout">unarchive</i>
           </div>
           <div class="name-holder"></div>
+        </div>
+
+        <div class="toolbox" :class="{ visible: signedIn }">
+          <i class="material-icons" class="edit" @click="doEdit">edit</i>
+          <i class="material-icons" class="add" @click="doAdd">add</i>
         </div>
       </div>
     </div>

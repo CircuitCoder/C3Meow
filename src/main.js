@@ -156,6 +156,9 @@ const instance = new Vue({
         post.source = data.content;
         post.timestamp = data.post_time;
 
+        // Update title
+        this.title = `${post.topic} | ${config.title}`;
+
         post.$on('tag', (tag) => {
           if(tag === this.ref) return;
 
@@ -170,6 +173,16 @@ const instance = new Vue({
 
         this.showPost(direction, post);
       });
+    },
+
+    backToAll() {
+      if(this.ref === 'all') return;
+
+      this.ref = 'all';
+      this.page = 1;
+
+      this.loadList('all', 1, 'left');
+      this.backRef('全部');
     },
 
     modAccount() {
@@ -333,6 +346,14 @@ const instance = new Vue({
       account.direction = 'left';
       account.enter('.name-holder');
       this.accountTrans = account;
+    },
+
+    doEdit() {
+      /* TBI */
+    },
+
+    doAdd() {
+      /* TBI */
     },
   },
 });

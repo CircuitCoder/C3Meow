@@ -77,6 +77,39 @@ body {
       top: 0;
     }
 
+    .back-to-all {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0px;
+      left: 0px;
+      padding: 0 20px;
+      background: white;
+
+      transition-property: opacity;
+      transition-duration: 0.2s;
+      transition-timing-function: ease-in;
+
+      opacity: 0;
+
+      z-index: 1;
+
+      font-size: 16px;
+      font-weight: 400;
+
+      .material-icons {
+        font-size: 24px;
+      }
+
+      &.visible {
+        cursor: pointer;
+      }
+
+      &.visible:hover {
+        opacity: 1;
+      }
+    }
+
     .pager {
       float: right;
       position: relative;
@@ -344,6 +377,26 @@ body {
     &:hover {
       .action-overlap {
         transition: opacity 0.2s ease-out;
+        opacity: 1;
+      }
+    }
+  }
+
+  .toolbox {
+    position: absolute;
+    left: 320px;
+    line-height: 40px;
+    font-size: 18px;
+    color: rgba(0,0,0,.5);
+
+    // TODO: slide animation
+
+    .material-icons {
+      opacity: .6;
+      transition: opacity .2s ease;
+      cursor: pointer;
+
+      &:hover {
         opacity: 1;
       }
     }
