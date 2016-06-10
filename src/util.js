@@ -54,16 +54,31 @@ function listURL(tag, page) {
 
 function loadList(tag, page, cb) {
   const path = tag === 'all' ? `/posts/${page}` : `/tag/${tag}/${page}`;
-  request.get(config.backend + path, (err, resp) => {
+  request.get(config.backend + path, (err, res) => {
     if(err) return cb(err);
     else {
       try {
-        return cb(null, JSON.parse(resp.text));
+        return cb(null, JSON.parse(res.text));
       } catch(e) {
         return cb(e);
       }
     }
   });
+}
+
+function loadPost(url, cb) {
+  setTimeout(() => {
+    request.get(`${config.backend}/post/${url}`, (err, res) => {
+      if(err) return cb(err);
+      else {
+        try {
+          return cb(null, JSON.parse(res.text));
+        } catch(e) {
+          return cb(e);
+        }
+      }
+    });
+  }, 1000);
 }
 
 function ping() {
@@ -105,6 +120,7 @@ export default {
   postURL,
   listURL,
   loadList,
+  loadPost,
   ping,
   whyAreYouLookingAtThis,
   doLogin,

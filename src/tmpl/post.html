@@ -1,0 +1,12 @@
+<div class="post">
+  <div class="column">
+    <div class="topic" v-text="topic"></div>
+    <div class="properties">
+      <div class="timestamp">
+        <i class="material-icons">access_time</i>
+        {{ timestamp | timeConverter }}
+      </div>
+    </div>
+    <div class="content" v-html="source | markdown true "></div>
+  </div>
+</div>

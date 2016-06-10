@@ -38,9 +38,19 @@ export default Vue.component('list', {
     },
 
     select(index) {
-      // TODO: select on load
       this.selected = index;
       this.$dispatch('select', index);
+    },
+
+    selectByUrl(url) {
+      for(let i = 0; i < this.entries.length; ++i) {
+        if(this.entries[i].url === url) {
+          this.selected = i;
+          return;
+        }
+      }
+
+      this.selected = -1;
     },
   },
 });

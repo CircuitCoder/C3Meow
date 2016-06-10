@@ -8,6 +8,15 @@
   </head>
   <body>
     <div class="frame" v-show="running" transition="init-frame">
+      <div class="post-container">
+        <div class="loading" :class="{ visible: postUrl !== null }">
+          <i class="material-icons cloud">cloud</i>
+          <div class="arrow-wrapper">
+            <i class="material-icons arrow">keyboard_arrow_down</i>
+          </div>
+          <div class="hint">Loading<span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span></div>
+        </div>
+      </div>
       <div class="sidebar">
         <div class="loading">
           <i class="material-icons cloud">cloud</i>
@@ -20,15 +29,6 @@
           <div class="pager"></div>
         </div>
         <div class="list-content-holder">
-        </div>
-      </div>
-      <div class="post">
-        <div class="loading">
-          <i class="material-icons cloud">cloud</i>
-          <div class="arrow-wrapper">
-            <i class="material-icons arrow">keyboard_arrow_down</i>
-          </div>
-          <div class="hint">Loading<span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span></div>
         </div>
       </div>
       <div class="bottom-bar">

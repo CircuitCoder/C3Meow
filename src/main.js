@@ -7,6 +7,7 @@ import './style/general.scss';
 
 import Transformer from './transformer.js';
 import List from './list.js';
+import Post from './post.js';
 
 import './filters.js';
 
@@ -25,7 +26,9 @@ const instance = new Vue({
     listTrans: null,
     pageTrans: null,
 
-    postReady: false,
+    postUrl: null,
+    postTimestamp: 0,
+    postTrans: null,
 
     user: null,
     signedIn: false,
@@ -116,7 +119,42 @@ const instance = new Vue({
           this.loadList(ref, page + 1, 'up');
         });
 
+        list.$on('select', (index) => {
+          let postDirection;
+
+          const url = list.entries[index].url;
+          const ts = list.entries[index].post_time;
+
+          if(this.postUrl === null) postDirection = 'up';
+          else if(this.postTimestamp < ts) postDirection = 'right';
+          else if(this.postTimestamp > ts) postDirection = 'left';
+
+          this.postUrl = url;
+          this.postTimestamp = ts;
+
+          this.loadPost(url, postDirection);
+        });
+
         this.showList(direction, list);
+      });
+    },
+
+    loadPost(url, direction) {
+      if(this.postTrans) this.hidePost(direction);
+
+      util.loadPost(url, (err, data) => {
+        // TODO: handle
+        if(err) throw err;
+
+        const post = new Post();
+        post.topic = data.topic;
+        post.tags = data.tags;
+        post.source = data.content;
+        post.timestamp = data.post_time;
+
+        post.$mount();
+
+        this.showPost(direction, post);
       });
     },
 
@@ -221,13 +259,31 @@ const instance = new Vue({
     showList(direction, content) {
       const list = new Transformer();
       list.delta = 20;
-      list.delay = 0;
+      list.delay = 10;
       list.direction = direction;
       list.enter('.list-content-holder');
 
       content.$appendTo(list.$el);
 
       this.listTrans = list;
+    },
+
+    hidePost(direction) {
+      this.postTrans.direction = direction;
+      this.postTrans.leave();
+      this.postTrans = null;
+    },
+
+    showPost(direction, content) {
+      const post = new Transformer();
+      post.delta = 50;
+      post.delay = 10;
+      post.direction = direction;
+      post.enter('.post-container');
+
+      content.$appendTo(post.$el);
+
+      this.postTrans = post;
     },
 
     pushAccount(name) {
