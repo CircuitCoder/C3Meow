@@ -67,18 +67,16 @@ function loadList(tag, page, cb) {
 }
 
 function loadPost(url, cb) {
-  setTimeout(() => {
-    request.get(`${config.backend}/post/${url}`, (err, res) => {
-      if(err) return cb(err);
-      else {
-        try {
-          return cb(null, JSON.parse(res.text));
-        } catch(e) {
-          return cb(e);
-        }
+  request.get(`${config.backend}/post/${url}`, (err, res) => {
+    if(err) return cb(err);
+    else {
+      try {
+        return cb(null, JSON.parse(res.text));
+      } catch(e) {
+        return cb(e);
       }
-    });
-  }, 1000);
+    }
+  });
 }
 
 function ping() {

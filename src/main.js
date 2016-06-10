@@ -106,6 +106,8 @@ const instance = new Vue({
         list.hasPrev = page !== 1;
         list.hasNext = data.hasNext;
 
+        if(this.postUrl !== null) list.selectByUrl(this.postUrl);
+
         let removed = false;
 
         list.$once('scroll-up', () => {
@@ -128,6 +130,7 @@ const instance = new Vue({
           if(this.postUrl === null) postDirection = 'up';
           else if(this.postTimestamp < ts) postDirection = 'right';
           else if(this.postTimestamp > ts) postDirection = 'left';
+          else return;
 
           this.postUrl = url;
           this.postTimestamp = ts;
@@ -140,6 +143,7 @@ const instance = new Vue({
     },
 
     loadPost(url, direction) {
+      // TODO: prevent multiple
       if(this.postTrans) this.hidePost(direction);
 
       util.loadPost(url, (err, data) => {
@@ -151,6 +155,16 @@ const instance = new Vue({
         post.tags = data.tags;
         post.source = data.content;
         post.timestamp = data.post_time;
+
+        post.$on('tag', (tag) => {
+          if(tag === this.ref) return;
+
+          this.ref = tag;
+          this.page = 1;
+
+          this.loadList(tag, 1, 'right');
+          this.pushRef(tag);
+        });
 
         post.$mount();
 
@@ -181,6 +195,10 @@ const instance = new Vue({
       ref.content = cont;
       ref.delta = 20;
       ref.delay = 100;
+
+      ref.$on('click', () => {
+        console.log('click!');
+      });
 
       if(this.refTrans) {
         this.hideRef('right');

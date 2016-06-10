@@ -6,6 +6,10 @@
         <i class="material-icons">access_time</i>
         {{ timestamp | timeConverter }}
       </div>
+      <div class="tags">
+        <i class="material-icons">label_outline</i>
+        <span class="tag" v-for="tag of tags" @click="tagClick($index)">{{ tag }}</span>
+      </div>
     </div>
     <div class="content" v-html="source | markdown true "></div>
   </div>

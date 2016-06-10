@@ -11,4 +11,9 @@ export default Vue.component('post', {
     tags: [],
     // TODO: author
   }),
+  methods: {
+    tagClick(index) {
+      this.$dispatch('tag', this.tags[index]);
+    },
+  },
 });
