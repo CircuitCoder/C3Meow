@@ -6,7 +6,7 @@
         <i class="material-icons">access_time</i>
         {{ timestamp | timeConverter }}
       </div>
-      <div class="tags">
+      <div class="tags" v-show="tags.length > 0">
         <i class="material-icons">label_outline</i>
         <span class="tag" v-for="tag of tags" @click="tagClick($index)">{{ tag }}</span>
       </div>

@@ -113,6 +113,36 @@ function initLogin(signIn, signOut) {
   });
 }
 
+function updatePost(id, content, cb) {
+  request.post(`${config.backend}/internal/post/${id}`)
+      .withCredentials()
+      .send(content)
+      .end((err, res) => {
+        if(err) return cb(err);
+        else if(res.status !== 200) return cb({ code: res.status, text: res.text });
+        try {
+          return cb(null, JSON.parse(res.text));
+        } catch(e) {
+          return cb(e);
+        }
+      });
+}
+
+function newPost(content, cb) {
+  request.post(`${config.backend}/posts`)
+      .withCredentials()
+      .send(content)
+      .end((err, res) => {
+        if(err) return cb(err);
+        else if(res.status !== 200) return cb({ code: res.status, text: res.text });
+        try {
+          return cb(null, JSON.parse(res.text));
+        } catch(e) {
+          return cb(e);
+        }
+      });
+}
+
 export default {
   parseURL,
   postURL,
@@ -124,4 +154,7 @@ export default {
   doLogin,
   doLogout,
   initLogin,
+
+  updatePost,
+  newPost,
 };

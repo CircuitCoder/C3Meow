@@ -167,7 +167,7 @@ body {
     left: 0;
   }
 
-  .post {
+  .post, .editor {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -182,6 +182,7 @@ body {
     width: 100%;
     padding: 100px 0;
     margin: 0 auto;
+    position: relative;
   }
 
   .topic {
@@ -219,6 +220,67 @@ body {
 
   .content {
     color: rgba(0,0,0,.7);
+  }
+
+  .editor {
+    input {
+      background: rgba(255,255,255,.7);
+      border: 0;
+      outline: 0;
+      padding: 5px 12px;
+      width: 100%;
+      margin-top: -5px;
+      margin-left: -12px;
+    }
+
+    .topic {
+      margin-bottom: 15px;
+    }
+
+    .url {
+      line-height: 24px;
+      font-size: 20px;
+      color: rgba(0,0,0,.54);
+    }
+
+    .preview {
+      position: absolute;
+      top: 100px + 65px + 34px;
+      right: 0;
+      left: 0;
+      background: #EEE;
+
+      opacity: 0;
+      transition-property: opacity;
+      transition-duration: 0.2s;
+
+      transition-timing-function: ease-in;
+
+      &.visible {
+        opacity: 1;
+        transition-timing-function: ease-out;
+      }
+    }
+
+    .source {
+      position: absolute;
+      top: 220px - 5px;
+      right: -12px;
+      left: -12px;
+
+      .CodeMirror {
+        height: auto;
+        font-size: 16px;
+
+        .CodeMirror-lines {
+          padding: 5px 12px 5px 0;
+
+          .CodeMirror-line {
+            word-break: break-all;
+          }
+        }
+      }
+    }
   }
 }
 

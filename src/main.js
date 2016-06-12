@@ -8,6 +8,7 @@ import './style/general.scss';
 import Transformer from './transformer.js';
 import List from './list.js';
 import Post from './post.js';
+import Editor from './editor.js';
 
 import './filters.js';
 
@@ -28,6 +29,8 @@ const instance = new Vue({
 
     postUrl: null,
     postTimestamp: 0,
+    postCont: null,
+    editor: null,
     postTrans: null,
 
     user: null,
@@ -106,7 +109,7 @@ const instance = new Vue({
         list.hasPrev = page !== 1;
         list.hasNext = data.hasNext;
 
-        if(this.postUrl !== null) list.selectByUrl(this.postUrl);
+        if(this.postCont !== null) list.selectByUrl(this.postUrl);
 
         let removed = false;
 
@@ -149,6 +152,8 @@ const instance = new Vue({
       util.loadPost(url, (err, data) => {
         // TODO: handle
         if(err) throw err;
+
+        this.postCont = data;
 
         const post = new Post();
         post.topic = data.topic;
@@ -241,6 +246,12 @@ const instance = new Vue({
       this.refTrans = ref;
     },
 
+    hideRef(direction) {
+      this.refTrans.direction = direction;
+      this.refTrans.leave();
+      this.refTrans = null;
+    },
+
     updatePage(page) {
       if(this.pageTrans) {
         if(page === this.page) return;
@@ -256,12 +267,6 @@ const instance = new Vue({
       }
 
       this.page = page;
-    },
-
-    hideRef(direction) {
-      this.refTrans.direction = direction;
-      this.refTrans.leave();
-      this.refTrans = null;
     },
 
     showPage(direction, num) {
@@ -349,11 +354,83 @@ const instance = new Vue({
     },
 
     doEdit() {
-      /* TBI */
+      if(this.postCont === null) throw new Error('Invalid Environment');
+
+      const editor = new Editor();
+      editor.topic = this.postCont.topic;
+      editor.tags = this.postCont.tags;
+      editor.content = this.postCont.content;
+      editor.id = this.postCont.post_time;
+      editor.url = this.postCont.url;
+      editor.$mount();
+
+      this.editor = editor;
+
+      this.hidePost('');
+
+      this.showPost('', editor);
+      setTimeout(() => editor.initialize(true), 0);
+
+      editor.$on('save', () => {
+        this.saveEdit();
+      });
+
+      editor.$on('close', () => {
+        this.loadPost(editor.url, '');
+      });
+
+      editor.$on('saveclose', () => {
+        this.saveEdit(() => this.loadPost(editor.url, ''));
+      });
+    },
+
+    saveEdit(cb) {
+      const data = this.editor.getContent();
+
+      util.updatePost(data.post_time, data, (err, res) => {
+        if(err) throw err;
+        else if(res.ok !== 0) throw res;
+
+        if(cb) cb();
+      });
     },
 
     doAdd() {
-      /* TBI */
+      const editor = new Editor();
+
+      this.editor = editor;
+      editor.$mount();
+
+      if(this.postCont) {
+        this.hidePost('up');
+        this.showPost('up', editor);
+      } else {
+        this.showPost('', editor);
+      }
+
+      setTimeout(() => editor.initialize(true), 0);
+
+      const savecb = () => {
+        const data = this.editor.getContent();
+
+        if(!data.url || data.url === '') return false;
+
+        util.newPost(data, (err) => {
+          if(err) throw err;
+
+          this.loadPost(data.url, '');
+          this.loadList(this.ref, this.page, '');
+        });
+
+        return true;
+      };
+
+      editor.$on('close', () => {
+        // TODO: close post
+      });
+
+      editor.$on('save', savecb);
+      editor.$on('saveclose', savecb);
     },
   },
 });
