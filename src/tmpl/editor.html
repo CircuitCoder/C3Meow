@@ -1,7 +1,14 @@
 <div class="editor">
   <div class="column">
+    <i class="material-icons input-desc title-desc">title</i>
     <input class="topic" v-model="topic">
-    <input class="url" v-model="url" placeholder="url">
+
+    <i class="material-icons input-desc">link</i>
+    <input class="url" v-model="url">
+
+    <i class="material-icons input-desc">label</i>
+    <input class="tags" v-model="tagsStr">
+
     <div class="content preview" :class="{ visible: preview }"></div>
     <div class="source"></div>
   </div>

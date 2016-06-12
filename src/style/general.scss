@@ -227,20 +227,36 @@ body {
       background: rgba(255,255,255,.7);
       border: 0;
       outline: 0;
-      padding: 5px 12px;
+      padding: 5px 12px 5px 12px;
       width: 100%;
       margin-top: -5px;
       margin-left: -12px;
+    }
+
+    .input-desc {
+      position: absolute;
+      right: 100%;
+      transform: translateX(-24px);
+      line-height: 24px;
+      font-size: 20px;
+      opacity: .54;
+
+      &.title-desc {
+        line-height: 40px;
+        font-size: 40px;
+        transform: translateX(-16px);
+      }
     }
 
     .topic {
       margin-bottom: 15px;
     }
 
-    .url {
+    .url, .tags {
       line-height: 24px;
       font-size: 20px;
       color: rgba(0,0,0,.54);
+      margin-bottom: 15px;
     }
 
     .preview {
@@ -264,7 +280,6 @@ body {
 
     .source {
       position: absolute;
-      top: 220px - 5px;
       right: -12px;
       left: -12px;
 

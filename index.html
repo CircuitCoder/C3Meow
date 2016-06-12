@@ -54,8 +54,10 @@
         </div>
 
         <div class="toolbox" :class="{ visible: signedIn }">
-          <i class="material-icons" class="edit" @click="doEdit">edit</i>
+          <i class="material-icons" class="close" @click="closePost('down')">close</i>
           <i class="material-icons" class="add" @click="doAdd">add</i>
+          <i class="material-icons" class="edit" @click="doEdit">edit</i>
+          <i class="material-icons" class="delete" @click="doDelete">delete</i>
         </div>
       </div>
     </div>

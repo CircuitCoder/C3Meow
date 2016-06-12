@@ -71,7 +71,9 @@ function loadPost(url, cb) {
     if(err) return cb(err);
     else {
       try {
-        return cb(null, JSON.parse(res.text));
+        const post = JSON.parse(res.text);
+        if(post.tags === null) post.tags = [];
+        return cb(null, post);
       } catch(e) {
         return cb(e);
       }
@@ -143,6 +145,20 @@ function newPost(content, cb) {
       });
 }
 
+function deletePost(id, cb) {
+  request.delete(`${config.backend}/internal/post/${id}`)
+      .withCredentials()
+      .end((err, res) => {
+        if(err) return cb(err);
+        else if(res.status !== 200) return cb({ code: res.status, text: res.text });
+        try {
+          return cb(null, JSON.parse(res.text));
+        } catch(e) {
+          return cb(e);
+        }
+      });
+}
+
 export default {
   parseURL,
   postURL,
@@ -157,4 +173,5 @@ export default {
 
   updatePost,
   newPost,
+  deletePost,
 };

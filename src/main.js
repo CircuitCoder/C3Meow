@@ -180,6 +180,13 @@ const instance = new Vue({
       });
     },
 
+    closePost(direction) {
+      this.postUrl = null;
+      this.postCont = null;
+      this.postTimestamp = 0;
+      this.hidePost(direction);
+    },
+
     backToAll() {
       if(this.ref === 'all') return;
 
@@ -426,11 +433,19 @@ const instance = new Vue({
       };
 
       editor.$on('close', () => {
-        // TODO: close post
+        this.closePost('down');
       });
 
       editor.$on('save', savecb);
       editor.$on('saveclose', savecb);
+    },
+
+    doDelete() {
+      if(this.postCont === null) throw new Error('Invalid Condition');
+      util.deletePost(this.postCont.post_time, () => {
+        this.closePost('down');
+        this.loadList(this.ref, this.page, '');
+      });
     },
   },
 });

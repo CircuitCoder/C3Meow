@@ -30,6 +30,7 @@ export default Vue.component('editor', {
     content: '',
     topic: '',
     tags: [],
+    tagsStr: '',
     url: '',
     id: 0,
 
@@ -47,10 +48,13 @@ export default Vue.component('editor', {
         lineWrapping: true,
       });
 
+      this.tagsStr = this.tags.join(' ');
+
       instance = this;
     },
 
     getContent() {
+      this.tags = this.tagsStr.split(' ');
       return {
         topic: this.topic,
         url: this.url,
