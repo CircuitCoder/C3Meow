@@ -440,8 +440,11 @@ const instance = new Vue({
 
         if(!data.url || data.url === '') return false;
 
-        util.newPost(data, (err) => {
+        util.newPost(data, (err, res) => {
           if(err) throw err;
+
+          this.postUrl = data.url;
+          this.postTimestamp = res.id;
 
           this.loadPost(data.url, '');
           this.loadList(this.ref, this.page, '');
