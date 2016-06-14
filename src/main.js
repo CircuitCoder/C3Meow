@@ -101,7 +101,6 @@ const instance = new Vue({
         });
       }, () => {
         util.postLogout((err, pres) => {
-          console.log(err);
           if(err) throw err;
           else if(pres.ok !== 0) throw pres;
 
@@ -238,10 +237,6 @@ const instance = new Vue({
       ref.content = cont;
       ref.delta = 20;
       ref.delay = 100;
-
-      ref.$on('click', () => {
-        console.log('click!');
-      });
 
       if(this.refTrans) {
         this.hideRef('right');
