@@ -53,11 +53,13 @@
           <div class="name-holder"></div>
         </div>
 
-        <div class="toolbox" :class="{ visible: signedIn }">
-          <i class="material-icons" class="close" @click="closePost('down')">close</i>
-          <i class="material-icons" class="add" @click="doAdd">add</i>
-          <i class="material-icons" class="edit" @click="doEdit">edit</i>
-          <i class="material-icons" class="delete" @click="doDelete">delete</i>
+        <div class="toolbox" :class="{ signed: signedIn, author: isAuthor }">
+          <i class="material-icons close" @click="closePost('down')">close</i>
+          <span class="control">
+            <i class="material-icons add" @click="doAdd">add</i>
+            <i class="material-icons edit" @click="doEdit">edit</i>
+            <i class="material-icons delete" @click="doDelete">delete</i>
+          </span>
         </div>
       </div>
     </div>

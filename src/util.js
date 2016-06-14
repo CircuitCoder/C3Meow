@@ -54,31 +54,35 @@ function listURL(tag, page) {
 
 function loadList(tag, page, cb) {
   const path = tag === 'all' ? `/posts/${page}` : `/tag/${tag}/${page}`;
-  request.get(config.backend + path, (err, res) => {
-    if(err) return cb(err);
-    else {
-      try {
-        return cb(null, JSON.parse(res.text));
-      } catch(e) {
-        return cb(e);
-      }
-    }
-  });
+  request.get(config.backend + path)
+      .withCredentials()
+      .end((err, res) => {
+        if(err) return cb(err);
+        else {
+          try {
+            return cb(null, JSON.parse(res.text));
+          } catch(e) {
+            return cb(e);
+          }
+        }
+      });
 }
 
 function loadPost(url, cb) {
-  request.get(`${config.backend}/post/${url}`, (err, res) => {
-    if(err) return cb(err);
-    else {
-      try {
-        const post = JSON.parse(res.text);
-        if(post.tags === null) post.tags = [];
-        return cb(null, post);
-      } catch(e) {
-        return cb(e);
-      }
-    }
-  });
+  request.get(`${config.backend}/post/${url}`)
+      .withCredentials()
+      .end((err, res) => {
+        if(err) return cb(err);
+        else {
+          try {
+            const post = JSON.parse(res.text);
+            if(post.tags === null) post.tags = [];
+            return cb(null, post);
+          } catch(e) {
+            return cb(e);
+          }
+        }
+      });
 }
 
 function ping() {
@@ -97,6 +101,35 @@ function doLogin(cb) {
 function doLogout(cb) {
   const pro = window.gapi.auth2.getAuthInstance().signOut().then(cb);
   if(cb) pro.then(cb);
+}
+
+function postLogin(token, sub, cb) {
+  request.post(`${config.backend}/account/login`)
+      .withCredentials()
+      .send({ token, sub })
+      .end((err, res) => {
+        if(err) return cb(err);
+        else if(res.status !== 200) return cb({ code: res.status, text: res.text });
+        try {
+          return cb(null, JSON.parse(res.text));
+        } catch(e) {
+          return cb(e);
+        }
+      });
+}
+
+function postLogout(cb) {
+  request.post(`${config.backend}/account/logout`)
+      .withCredentials()
+      .end((err, res) => {
+        if(err) return cb(err);
+        else if(res.status !== 200) return cb({ code: res.status, text: res.text });
+        try {
+          return cb(null, JSON.parse(res.text));
+        } catch(e) {
+          return cb(e);
+        }
+      });
 }
 
 function initLogin(signIn, signOut) {
@@ -169,6 +202,8 @@ export default {
   whyAreYouLookingAtThis,
   doLogin,
   doLogout,
+  postLogin,
+  postLogout,
   initLogin,
 
   updatePost,

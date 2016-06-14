@@ -460,6 +460,7 @@ body {
   }
 
   .toolbox {
+    -webkit-user-select: none;
     position: absolute;
     left: 320px;
     line-height: 40px;
@@ -475,6 +476,25 @@ body {
 
       &:hover {
         opacity: 1;
+      }
+    }
+
+    .control {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(40px);
+      transition-property: opacity, transform;
+      transition-duration: .2s, .4s;
+      transition-delay: 0s, 0s;
+      transition-timing-function: ease-in;
+    }
+
+    &.signed.author {
+      .control {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0s, -.2s;
+        transition-timing-function: ease-out;
       }
     }
   }

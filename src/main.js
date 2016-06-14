@@ -35,6 +35,7 @@ const instance = new Vue({
 
     user: null,
     signedIn: false,
+    isAuthor: false,
     avatarLoaded: false,
 
     accountTrans: null,
@@ -81,16 +82,33 @@ const instance = new Vue({
           this.avatarLoaded = false;
         }
 
-        this.user = {
-          name: profile.getName(),
-          avatar: newAvatar,
-          email: profile.getEmail(),
-        };
-        this.signedIn = true;
-        this.pushAccount(this.user.name);
+        util.postLogin(user.getAuthResponse().id_token, user.getId(), (err, pres) => {
+          if(err) throw err;
+          else if(pres.error_description) throw pres.error_description;
+          else if(!pres.valid) throw new Error('Not valid');
+          else {
+            this.user = {
+              name: profile.getName(),
+              avatar: newAvatar,
+              email: profile.getEmail(),
+            };
+
+            this.isAuthor = !!pres.isAuthor;
+            this.signedIn = true;
+
+            this.pushAccount(this.user.name);
+          }
+        });
       }, () => {
-        this.signedIn = false;
-        this.popAccount();
+        util.postLogout((err, pres) => {
+          console.log(err);
+          if(err) throw err;
+          else if(pres.ok !== 0) throw pres;
+
+          this.signedIn = false;
+          this.isAuthor = false;
+          this.popAccount();
+        });
       });
     },
 
