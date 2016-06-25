@@ -9,7 +9,7 @@
   <body>
     <div class="frame" v-show="running" transition="init-frame">
       <div class="post-container">
-        <div class="loading" :class="{ visible: postUrl !== null }">
+        <div class="loading" :class="{ visible: post !== null }">
           <i class="material-icons cloud">cloud</i>
           <div class="arrow-wrapper">
             <i class="material-icons arrow">keyboard_arrow_down</i>

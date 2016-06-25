@@ -19,7 +19,6 @@ function parseURL(url) {
     throw new Error('Invalid path prefix. Please check the base field in your configuration.');
   } else {
     const segs = url.substring(base.length).split('/').filter(e => e.length > 0);
-    console.log(segs);
     if(segs.length === 0) {
       // Is index
       return {
@@ -67,8 +66,8 @@ function buildURL(state) {
     refurl = `/${state.ref}/${state.page}`;
   }
 
-  if(state.page !== null) {
-    posturl = `/${state.page}`;
+  if(state.post !== null) {
+    posturl = `/${state.post}`;
   } else {
     posturl = '';
   }

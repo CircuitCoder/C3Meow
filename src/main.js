@@ -27,7 +27,6 @@ const instance = new Vue({
     listTrans: null,
     pageTrans: null,
 
-    postUrl: null,
     postTimestamp: 0,
     postCont: null,
     editor: null,
@@ -57,6 +56,8 @@ const instance = new Vue({
         this.post = null;
         this.page = 1;
 
+        this.saveState(true);
+
         // TODO: pushState
       }
 
@@ -65,6 +66,8 @@ const instance = new Vue({
       }, 0);
 
       this.loadList(this.ref, this.page, '');
+      if(this.post) this.loadPost(this.post, '');
+
       if(this.ref === 'all') this.showRef('全部', '');
       else this.showRef(this.ref, '');
 
@@ -127,18 +130,22 @@ const instance = new Vue({
         list.hasPrev = page !== 1;
         list.hasNext = data.hasNext;
 
-        if(this.postCont !== null) list.selectByUrl(this.postUrl);
+        if(this.post !== null) list.selectByUrl(this.post);
 
         let removed = false;
 
         list.$once('scroll-up', () => {
           if(removed) return;
           removed = true;
+          this.page = page - 1;
+          this.saveState();
           this.loadList(ref, page - 1, 'down');
         });
 
         list.$once('scroll-down', () => {
           if(removed) return;
+          this.page = page + 1;
+          this.saveState();
           this.loadList(ref, page + 1, 'up');
         });
 
@@ -148,13 +155,14 @@ const instance = new Vue({
           const url = list.entries[index].url;
           const ts = list.entries[index].post_time;
 
-          if(this.postUrl === null) postDirection = 'up';
+          if(this.post === null) postDirection = 'up';
           else if(this.postTimestamp < ts) postDirection = 'right';
           else if(this.postTimestamp > ts) postDirection = 'left';
           else return;
 
-          this.postUrl = url;
+          this.post = url;
           this.postTimestamp = ts;
+          this.saveState();
 
           this.loadPost(url, postDirection);
         });
@@ -187,6 +195,7 @@ const instance = new Vue({
 
           this.ref = tag;
           this.page = 1;
+          this.saveState();
 
           this.loadList(tag, 1, 'right');
           this.showRef(tag, 'right');
@@ -199,9 +208,11 @@ const instance = new Vue({
     },
 
     closePost(direction) {
-      this.postUrl = null;
+      this.post = null;
       this.postCont = null;
       this.postTimestamp = 0;
+      this.saveState();
+
       this.hidePost(direction);
     },
 
@@ -210,6 +221,7 @@ const instance = new Vue({
 
       this.ref = 'all';
       this.page = 1;
+      this.saveState();
 
       this.loadList('all', 1, 'left');
       this.showRef('全部', 'left');
@@ -375,6 +387,7 @@ const instance = new Vue({
       });
 
       editor.$on('close', () => {
+        // TODO: state on editor
         this.loadPost(editor.url, '');
       });
 
@@ -417,8 +430,9 @@ const instance = new Vue({
         util.newPost(data, (err, res) => {
           if(err) throw err;
 
-          this.postUrl = data.url;
+          this.post = data.url;
           this.postTimestamp = res.id;
+          this.saveState();
 
           this.loadPost(data.url, '');
           this.loadList(this.ref, this.page, '');
@@ -441,6 +455,22 @@ const instance = new Vue({
         this.closePost('down');
         this.loadList(this.ref, this.page, '');
       });
+    },
+
+    saveState(replace) {
+      const state = {
+        post: this.post,
+        ref: this.ref,
+        page: this.page,
+      };
+
+      const url = util.buildURL(state);
+
+      console.log(state);
+      console.log(url);
+
+      if(replace) window.history.replaceState(state, '', url);
+      else window.history.pushState(state, '', url);
     },
   },
 });
