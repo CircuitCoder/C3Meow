@@ -27,8 +27,8 @@ const instance = new Vue({
     listTrans: null,
     pageTrans: null,
 
-    postTimestamp: 0,
     postCont: null,
+    listCont: null,
     editor: null,
     postTrans: null,
 
@@ -38,20 +38,19 @@ const instance = new Vue({
     avatarLoaded: false,
 
     accountTrans: null,
+
+    postTsStore: [],
   },
   methods: {
     initialize() {
       let data = {};
       try {
         data = util.parseURL(window.location.pathname);
-        console.log(data);
 
         this.ref = data.ref;
         this.post = data.post;
         this.page = data.page;
       } catch(e) {
-        console.log(e);
-
         this.ref = 'all';
         this.post = null;
         this.page = 1;
@@ -72,6 +71,8 @@ const instance = new Vue({
       else this.showRef(this.ref, '');
 
       this.popAccount();
+
+      window.onpopstate = (e) => this.loadState(e.state);
 
       util.initLogin((user) => {
         // TODO: validate
@@ -112,7 +113,27 @@ const instance = new Vue({
     },
 
     loadState(state) {
-      console.log(state);
+      if(!state) return;
+      if(state.ref !== this.ref || state.page !== this.page) {
+        this.ref = state.ref;
+        this.page = state.page;
+
+        const direction = this.ref === 'all' ? 'left' : 'right';
+        this.loadList(this.ref, this.page, direction);
+        this.showRef(this.ref === 'all' ? '全部' : this.ref, direction);
+      }
+
+      if(state.post !== this.post) {
+        let postDirection = 'up';
+        if(!(state.post in this.postTsStore)) postDirection = 'up';
+        if(this.postTsStore[this.post] < this.postTsStore[state.post]) postDirection = 'right';
+        if(this.postTsStore[this.post] > this.postTsStore[state.post]) postDirection = 'left';
+
+        this.post = state.post;
+        if(this.listCont) this.listCont.selectByUrl(this.post);
+
+        this.loadPost(this.post, postDirection);
+      }
     },
 
     loadList(ref, page, direction) {
@@ -156,17 +177,19 @@ const instance = new Vue({
           const ts = list.entries[index].post_time;
 
           if(this.post === null) postDirection = 'up';
-          else if(this.postTimestamp < ts) postDirection = 'right';
-          else if(this.postTimestamp > ts) postDirection = 'left';
+          else if(this.postTsStore[this.post] < ts) postDirection = 'right';
+          else if(this.postTsStore[this.post] > ts) postDirection = 'left';
           else return;
 
+          this.postTsStore[url] = ts;
+
           this.post = url;
-          this.postTimestamp = ts;
           this.saveState();
 
           this.loadPost(url, postDirection);
         });
 
+        this.listCont = list;
         this.showList(direction, list);
       });
     },
@@ -186,6 +209,9 @@ const instance = new Vue({
         post.tags = data.tags;
         post.source = data.content;
         post.timestamp = data.post_time;
+
+        // For start-up loading
+        this.postTsStore[url] = post.timestamp;
 
         // Update title
         this.title = `${post.topic} | ${config.title}`;
@@ -210,7 +236,6 @@ const instance = new Vue({
     closePost(direction) {
       this.post = null;
       this.postCont = null;
-      this.postTimestamp = 0;
       this.saveState();
 
       this.hidePost(direction);
@@ -431,7 +456,7 @@ const instance = new Vue({
           if(err) throw err;
 
           this.post = data.url;
-          this.postTimestamp = res.id;
+          this.postTsStore[this.post] = res.id;
           this.saveState();
 
           this.loadPost(data.url, '');
@@ -465,9 +490,6 @@ const instance = new Vue({
       };
 
       const url = util.buildURL(state);
-
-      console.log(state);
-      console.log(url);
 
       if(replace) window.history.replaceState(state, '', url);
       else window.history.pushState(state, '', url);
