@@ -45,34 +45,31 @@ const instance = new Vue({
       let data = {};
       try {
         data = util.parseURL(window.location.pathname);
+        console.log(data);
+
+        this.ref = data.ref;
+        this.post = data.post;
+        this.page = data.page;
       } catch(e) {
-        // TODO: push state to index
+        console.log(e);
+
+        this.ref = 'all';
+        this.post = null;
+        this.page = 1;
+
+        // TODO: pushState
       }
-
-      let list = 'all';
-      let page = 1;
-      let post = null;
-
-      if(data.type === 'list') {
-        list = data.ref;
-        page = data.page;
-      } else if(data.type === 'post') {
-        post = data.url;
-      }
-
-      this.pushRef(this.getRefName(list));
-
-      this.ref = list;
-      this.page = page;
-      this.post = post;
 
       setTimeout(() => {
         this.running = true;
       }, 0);
 
-      this.loadList(list, page, 'right');
+      this.loadList(this.ref, this.page, '');
+      if(this.ref === 'all') this.showRef('全部', '');
+      else this.showRef(this.ref, '');
 
       this.popAccount();
+
       util.initLogin((user) => {
         // TODO: validate
         const profile = user.getBasicProfile();
@@ -109,6 +106,10 @@ const instance = new Vue({
           this.popAccount();
         });
       });
+    },
+
+    loadState(state) {
+      console.log(state);
     },
 
     loadList(ref, page, direction) {
@@ -188,7 +189,7 @@ const instance = new Vue({
           this.page = 1;
 
           this.loadList(tag, 1, 'right');
-          this.pushRef(tag);
+          this.showRef(tag, 'right');
         });
 
         post.$mount();
@@ -211,7 +212,7 @@ const instance = new Vue({
       this.page = 1;
 
       this.loadList('all', 1, 'left');
-      this.backRef('全部');
+      this.showRef('全部', 'left');
     },
 
     modAccount() {
@@ -227,38 +228,16 @@ const instance = new Vue({
       this.avatarLoaded = true;
     },
 
-    getRefName(ref) {
-      if(ref === 'all') return '全部';
-      else return ref;
-    },
-
-    pushRef(cont) {
+    showRef(cont, direction) {
       const ref = new Transformer();
       ref.content = cont;
       ref.delta = 20;
       ref.delay = 100;
 
       if(this.refTrans) {
-        this.hideRef('right');
+        this.hideRef(direction);
 
-        ref.direction = 'right';
-      }
-
-      ref.enter('.list-ref');
-
-      this.refTrans = ref;
-    },
-
-    backRef(cont) {
-      const ref = new Transformer();
-      ref.content = cont;
-      ref.delta = 20;
-      ref.delay = 100;
-
-      if(this.refTrans) {
-        this.hideRef('left');
-
-        ref.direction = 'left';
+        ref.direction = direction;
       }
 
       ref.enter('.list-ref');

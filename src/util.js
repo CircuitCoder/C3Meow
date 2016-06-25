@@ -8,36 +8,72 @@ import config from './config';
 
 const base = config.base.charAt(config.base.length - 1) === '/' ? config.base : `${config.base}/`;
 
+// Internal
+function isInt(str) {
+  return /^\d+$/.test(str);
+}
+
+// Exposed
 function parseURL(url) {
   if(url.indexOf(base) !== 0) {
     throw new Error('Invalid path prefix. Please check the base field in your configuration.');
   } else {
     const segs = url.substring(base.length).split('/').filter(e => e.length > 0);
+    console.log(segs);
     if(segs.length === 0) {
       // Is index
       return {
-        type: 'list',
         ref: 'all',
         page: 1,
+        post: null,
       };
     } if(segs.length === 1) {
       // Is post
       return {
-        type: 'post',
-        url: segs[0],
+        ref: 'all',
+        page: 1,
+        post: segs[0],
       };
     } else if(segs.length === 2) {
-      if(Number.isInteger(segs[1])) {
+      if(isInt(segs[1])) {
         // Is tag
         return {
-          type: 'list',
-          ref: segs[0],
+          ref: window.decodeURIComponent(segs[0]),
           page: Number.parseInt(segs[1], 10),
+          post: null,
+        };
+      }
+    } else if(segs.length === 3) {
+      if(isInt(segs[1])) {
+        // Is tag
+        return {
+          ref: window.decodeURIComponent(segs[0]),
+          page: Number.parseInt(segs[1], 10),
+          post: segs[2],
         };
       }
     }
+
     throw new Error('Invalid url format.');
   }
+}
+
+function buildURL(state) {
+  let refurl;
+  let posturl;
+  if(state.ref === 'all' && state.page === 1) {
+    refurl = '';
+  } else {
+    refurl = `/${state.ref}/${state.page}`;
+  }
+
+  if(state.page !== null) {
+    posturl = `/${state.page}`;
+  } else {
+    posturl = '';
+  }
+
+  return refurl + posturl;
 }
 
 function postURL(url) {
@@ -194,6 +230,7 @@ function deletePost(id, cb) {
 
 export default {
   parseURL,
+  buildURL,
   postURL,
   listURL,
   loadList,
