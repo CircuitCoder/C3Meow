@@ -27,12 +27,12 @@
           <div class="delete-hint">喵，你确认要删除吗？</div>
           <div class="delete-confirmation">
             <div class="delete-confirmation-placeholder">{{ deletionPlaceholder }}</div>
-            <div class="sidebar-mask" v-show="sidebarShown" transition="opacity" @click="closeSidebar()"></div>
             <input class="delete-confirmation-input" v-model="deletionConfirmation" @input="checkDeletion()" :disabled="!pendingDeletion || deleting" @keydown.esc="discardDeletion()">
           </div>
           <div class="deleting-hint" :class="{ shown: deleting }">删除中...</div>
         </div>
       </div>
+      <div class="sidebar-mask" v-show="sidebarShown" transition="opacity" @click="closeSidebar()"></div>
       <div class="sidebar" :class="{ extended: sidebarShown }">
         <div class="loading">
           <i class="material-icons cloud">cloud</i>
