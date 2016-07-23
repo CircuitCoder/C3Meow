@@ -43,6 +43,11 @@ const instance = new Vue({
     postTsStore: [],
 
     sidebarShown: false,
+
+    pendingDeletion: false,
+    deletionConfirmation: '',
+    deletionPlaceholder: '',
+    deleting: false,
   },
   methods: {
     initialize() {
@@ -497,11 +502,35 @@ const instance = new Vue({
     },
 
     doDelete() {
+      // Close sidebar
+      this.sidebarShown = false;
+
       if(this.postCont === null) throw new Error('Invalid Condition');
-      util.deletePost(this.postCont.post_time, () => {
-        this.closePost('down');
-        this.loadList(this.ref, this.page, '');
-      });
+
+      // Request to delete
+      this.deletionConfirmation = '';
+      this.deletionPlaceholder = this.post;
+      this.pendingDeletion = true;
+    },
+
+    checkDeletion() {
+      if(!this.pendingDeletion) {
+        // Ignore
+        return;
+      } if(this.deletionConfirmation === this.deletionPlaceholder) {
+        // Perform deletion
+        this.deleting = true;
+        util.deletePost(this.postCont.post_time, () => {
+          this.closePost('down');
+          this.loadList(this.ref, this.page, '');
+          this.deleting = false;
+          this.pendingDeletion = false;
+        });
+      }
+    },
+
+    discardDeletion() {
+      this.pendingDeletion = false;
     },
 
     saveState(replace) {

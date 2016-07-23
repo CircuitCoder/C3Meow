@@ -172,21 +172,6 @@ body {
 
   background: black;
   opacity: 0.12;
-
-  &.sidebar-mask-transition {
-    transition-property: opacity;
-    transition-duration: 0.2s;
-    transition-timing-function: ease-out;
-  }
-
-  &.sidebar-mask-enter {
-    opacity: 0;
-  }
-
-  &.sidebar-mask-leave {
-    opacity: 0;
-    transition-timing-function: ease-in;
-  }
 }
 
 .post-container {
@@ -632,5 +617,107 @@ body {
 
   strong {
     color: black;
+  }
+}
+
+// Delete mask
+.delete-mask {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+
+  left: $sidebar-width;
+  @media screen and (max-width: $responsive-trigger - 1px) {
+    left: 0;
+  }
+
+  right: 0;
+
+  background: rgba(0,0,0,.12);
+
+  opacity: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .delete-wrapper {
+    display: inline-block;
+  }
+
+  .delete-hint {
+    color: rgba(0,0,0,.3);
+    line-height: 24px;
+    font-size: 18px;
+  }
+
+  .deleting-hint {
+    opacity: 0;
+    margin-top: 4px;
+
+    transition-property: opacity;
+    transition-timing-function: ease-in;
+    transition-duration: 0.2s;
+
+    &.shown {
+      opacity: 0.3;
+      transition-timing-function: ease-out;
+    }
+  }
+
+  .delete-confirmation {
+    height: 60px;
+    position: relative;
+    display: inline-block;
+    min-width: 100%;
+    padding: 0 12px;
+    border-radius: 4px;
+    background: rgba(0,0,0,.12px);
+
+    margin-top: 4px;
+    margin-left: -12px;
+
+    .delete-confirmation-placeholder {
+      line-height: 60px;
+      font-size: 36px;
+      color: rgba(0,0,0,.3px);
+      letter-spacing: 0.05em;
+    }
+
+    .delete-confirmation-input {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 12px;
+      left: 12px;
+
+      border: 0;
+      outline: 0;
+
+      width: 100%;
+      line-height: 60px;
+
+      background: transparent;
+
+      letter-spacing: 0.05em;
+      font: inherit;
+      font-size: 36px;
+    }
+  }
+}
+
+// General transition
+.opacity-transition {
+  transition-property: opacity;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
+
+  &.opacity-enter {
+    opacity: 0;
+  }
+
+  &.opacity-leave {
+    opacity: 0;
+    transition-timing-function: ease-in;
   }
 }
