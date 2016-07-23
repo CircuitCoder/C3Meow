@@ -204,7 +204,6 @@ const instance = new Vue({
     loadPost(url, direction) {
       if(this.postTrans) this.hidePost(direction);
       this.notFound = false;
-      console.log(this.notFound);
 
       util.loadPost(url, (err, data) => {
         if(url !== this.post) {
@@ -213,7 +212,6 @@ const instance = new Vue({
         }
 
         if(err) {
-          console.log(err);
           if(err.status === 404) {
             this.notFound = true;
             this.title = `404 | ${config.title}`;
