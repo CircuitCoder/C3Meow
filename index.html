@@ -8,7 +8,7 @@
     <script src="https://apis.google.com/js/api:client.js"></script>
   </head>
   <body>
-    <div class="frame" v-show="running" transition="init-frame">
+    <div class="frame" v-show="running" transition="init-frame" style="display: none">
       <div class="post-container">
         <div class="loading" :class="{ visible: post !== null }">
           <i class="material-icons cloud">cloud</i>
