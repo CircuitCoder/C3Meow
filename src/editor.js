@@ -54,7 +54,8 @@ export default Vue.component('editor', {
     },
 
     getContent() {
-      this.tags = this.tagsStr.split(' ');
+      this.tags = this.tagsStr.split(' ').filter((e) => e !== '');
+
       return {
         topic: this.topic,
         url: this.url,
