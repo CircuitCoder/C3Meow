@@ -520,6 +520,10 @@ const instance = new Vue({
     toggleSidebar() {
       this.sidebarShown = !this.sidebarShown;
     },
+
+    closeSidebar() {
+      this.sidebarShown = false;
+    },
   },
 });
 

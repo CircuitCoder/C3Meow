@@ -22,7 +22,7 @@
           喵...找不到了...
         </div>
       </div>
-      <div class="sidebar-mask" v-show="sidebarShown" transition="sidebar-mask"></div>
+      <div class="sidebar-mask" v-show="sidebarShown" transition="sidebar-mask" @click="closeSidebar()"></div>
       <div class="sidebar" :class="{ extended: sidebarShown }">
         <div class="loading">
           <i class="material-icons cloud">cloud</i>
