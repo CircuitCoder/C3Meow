@@ -72,7 +72,8 @@ function buildURL(state) {
     posturl = '';
   }
 
-  return refurl + posturl;
+  const result = refurl + posturl;
+  return result === '' ? '/' : result;
 }
 
 function postURL(url) {

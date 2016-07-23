@@ -64,8 +64,6 @@ const instance = new Vue({
         this.page = 1;
 
         this.saveState(true);
-
-        // TODO: pushState
       }
 
       setTimeout(() => {
@@ -522,6 +520,8 @@ const instance = new Vue({
         this.deleting = true;
         util.deletePost(this.postCont.post_time, () => {
           this.closePost('down');
+          this.post = null;
+
           this.loadList(this.ref, this.page, '');
           this.deleting = false;
           this.pendingDeletion = false;
@@ -540,7 +540,10 @@ const instance = new Vue({
         page: this.page,
       };
 
+      console.log(this.post);
+
       const url = util.buildURL(state);
+      console.log(url);
 
       if(replace) window.history.replaceState(state, '', url);
       else window.history.pushState(state, '', url);
