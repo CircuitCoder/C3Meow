@@ -312,11 +312,11 @@ const instance = new Vue({
 
     updatePage(page) {
       if(this.pageTrans) {
-        if(page === this.page) return;
-        else if(page > this.page) {
+        if(page === this.pageTrans.content) return;
+        else if(page > this.pageTrans.content) {
           this.hidePage('right');
           this.showPage('right', page);
-        } else if(page < this.page) {
+        } else if(page < this.pageTrans.content) {
           this.hidePage('left');
           this.showPage('left', page);
         }
