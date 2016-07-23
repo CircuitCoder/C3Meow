@@ -2,6 +2,12 @@
 @import './icons.scss';
 @import './loading.scss';
 
+html {
+  // Prevents viewport bounce
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -12,6 +18,8 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
+
+  overflow: auto;
 
   font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
 }
@@ -136,13 +144,62 @@ body {
     }
   }
 
+  transition: transform 0.2s ease-out;
+
+  @media screen and (max-width: $responsive-trigger - 1px) {
+    transition: transform 0.2s ease-in;
+    transform: translateX(-$sidebar-width);
+
+    &.extended {
+      transition: transform 0.2s ease-out;
+      transform: translateX(0);
+    }
+  }
+}
+
+.sidebar-mask {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+
+  display: none;
+
+  @media screen and (max-width: $responsive-trigger - 1px) {
+    display: block;
+  }
+
+  background: black;
+  opacity: 0.12;
+
+  &.sidebar-mask-transition {
+    transition-property: opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+  }
+
+  &.sidebar-mask-enter {
+    opacity: 0;
+  }
+
+  &.sidebar-mask-leave {
+    opacity: 0;
+    transition-timing-function: ease-in;
+  }
 }
 
 .post-container {
   position: absolute;
   top: 0;
   bottom: $bottom-bar-height + 1px;
+
   left: $sidebar-width;
+
+  @media screen and (max-width: $responsive-trigger - 1px) {
+    left: 0;
+  }
+
   right: 0;
 
   display: flex;
@@ -203,7 +260,7 @@ body {
 
   .column {
     // TODO: responsive
-    max-width: 600px;
+    max-width: $column-width;
     width: 100%;
     padding: 100px 0;
     margin: 0 auto;
@@ -486,7 +543,12 @@ body {
   .toolbox {
     -webkit-user-select: none;
     position: absolute;
+
     left: 320px;
+    @media screen and (max-width: $responsive-trigger - 1px) {
+      left: 20px;
+    }
+
     line-height: 40px;
     font-size: 18px;
     color: rgba(0,0,0,.5);
@@ -500,6 +562,20 @@ body {
 
       &:hover {
         opacity: 1;
+      }
+    }
+
+    .sidebar-toggle {
+      display: none;
+
+      @media screen and (max-width: $responsive-trigger - 1px) {
+        display: inline-block;
+      }
+
+      transition: transform .2s ease, opacity .2s ease;
+
+      &.reverse {
+        transform: rotate(180deg);
       }
     }
 

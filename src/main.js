@@ -41,6 +41,8 @@ const instance = new Vue({
     accountTrans: null,
 
     postTsStore: [],
+
+    sidebarShown: false,
   },
   methods: {
     initialize() {
@@ -513,6 +515,10 @@ const instance = new Vue({
 
       if(replace) window.history.replaceState(state, '', url);
       else window.history.pushState(state, '', url);
+    },
+
+    toggleSidebar() {
+      this.sidebarShown = !this.sidebarShown;
     },
   },
 });
