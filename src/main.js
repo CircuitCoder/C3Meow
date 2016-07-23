@@ -142,6 +142,11 @@ const instance = new Vue({
       this.updatePage(page);
 
       util.loadList(ref, page, (err, data) => {
+        if(this.page !== page || this.ref !== ref) {
+          // Another loading procedure already kicked in
+          return;
+        }
+
         // TODO: handle
         if(err) throw err;
 
@@ -180,6 +185,7 @@ const instance = new Vue({
           if(this.post === null) postDirection = 'up';
           else if(this.postTsStore[this.post] < ts) postDirection = 'right';
           else if(this.postTsStore[this.post] > ts) postDirection = 'left';
+          else if(this.postTsStore[this.post] === ts) return;
           else throw new Error('Post timestamp not stored');
 
           this.postTsStore[url] = ts;
@@ -196,12 +202,16 @@ const instance = new Vue({
     },
 
     loadPost(url, direction) {
-      // TODO: prevent multiple
       if(this.postTrans) this.hidePost(direction);
       this.notFound = false;
       console.log(this.notFound);
 
       util.loadPost(url, (err, data) => {
+        if(url !== this.post) {
+          // Another loading procedure already kicked in
+          return;
+        }
+
         if(err) {
           console.log(err);
           if(err.status === 404) {
