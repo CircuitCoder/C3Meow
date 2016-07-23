@@ -14,6 +14,9 @@
       </div>
       <div class="overlap"></div>
     </div>
+    <div class="list-empty-hint" v-show="!entries || entries.length === 0">
+      这里除了一只猫，什么都没有
+    </div>
   </div>
   <div class="placeholder" v-show="hasNext">
     <div>第 {{ page + 1 }} 页</div>
