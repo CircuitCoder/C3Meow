@@ -31,6 +31,7 @@ const instance = new Vue({
     listCont: null,
     editor: null,
     postTrans: null,
+    notFound: false,
 
     user: null,
     signedIn: false,
@@ -179,7 +180,7 @@ const instance = new Vue({
           if(this.post === null) postDirection = 'up';
           else if(this.postTsStore[this.post] < ts) postDirection = 'right';
           else if(this.postTsStore[this.post] > ts) postDirection = 'left';
-          else return;
+          else throw new Error('Post timestamp not stored');
 
           this.postTsStore[url] = ts;
 
@@ -197,10 +198,21 @@ const instance = new Vue({
     loadPost(url, direction) {
       // TODO: prevent multiple
       if(this.postTrans) this.hidePost(direction);
+      this.notFound = false;
+      console.log(this.notFound);
 
       util.loadPost(url, (err, data) => {
-        // TODO: handle
-        if(err) throw err;
+        if(err) {
+          console.log(err);
+          if(err.status === 404) {
+            this.notFound = true;
+            this.title = `404 | ${config.title}`;
+            this.post = null;
+            return;
+          } else {
+            throw err;
+          }
+        }
 
         this.postCont = data;
 
