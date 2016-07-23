@@ -540,10 +540,7 @@ const instance = new Vue({
         page: this.page,
       };
 
-      console.log(this.post);
-
       const url = util.buildURL(state);
-      console.log(url);
 
       if(replace) window.history.replaceState(state, '', url);
       else window.history.pushState(state, '', url);
