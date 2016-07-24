@@ -633,7 +633,7 @@ body {
 
   right: 0;
 
-  background: rgba(0,0,0,.12);
+  background: rgba(#EEE,.87);
 
   opacity: 1;
 
@@ -646,13 +646,14 @@ body {
   }
 
   .delete-hint {
-    color: rgba(0,0,0,.3);
+    color: rgba(0,0,0,.54);
     line-height: 24px;
     font-size: 18px;
   }
 
   .deleting-hint {
     opacity: 0;
+    color: black;
     margin-top: 4px;
 
     transition-property: opacity;
@@ -660,7 +661,7 @@ body {
     transition-duration: 0.2s;
 
     &.shown {
-      opacity: 0.3;
+      opacity: 0.54;
       transition-timing-function: ease-out;
     }
   }
