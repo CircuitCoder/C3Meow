@@ -7,8 +7,8 @@
     <link href="https://fonts.lug.ustc.edu.cn/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://apis.google.com/js/api:client.js"></script>
   </head>
-  <body>
-    <div class="frame" v-show="running" transition="init-frame" style="display: none" @keyup.d="doDelete" @keyup.e="doEdit" @keyup.a="doAdd" @keyup.esc="closePost('down')" @keyup.s="toggleSidebar" tabindex="0">
+  <body @keyup.d="doDelete" @keyup.e="doEdit" @keyup.a="doAdd" @keyup.esc="closePost('down')" @keyup.s="toggleSidebar" tabindex="0">
+    <div class="frame" v-show="running" transition="init-frame" style="display: none">
       <div class="post-container">
         <div class="loading" :class="{ visible: post !== null }">
           <i class="material-icons cloud">cloud</i>
