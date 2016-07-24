@@ -472,6 +472,8 @@ const instance = new Vue({
         this.showPost('', editor);
       }
 
+      if(this.listCont) this.listCont.unselect();
+
       setTimeout(() => editor.initialize(true), 0);
 
       const savecb = () => {
