@@ -430,7 +430,7 @@ const instance = new Vue({
       this.hidePost('');
 
       this.showPost('', editor);
-      setTimeout(() => editor.initialize(true), 0);
+      setTimeout(() => editor.initialize(true, true), 0);
 
       editor.$on('save', () => {
         this.saveEdit();

@@ -38,9 +38,10 @@ export default Vue.component('editor', {
     cm: null,
   }),
   methods: {
-    initialize(vim) {
+    initialize(vim, focus) {
+      const el = this.$el.getElementsByClassName('source')[0];
       /* eslint-disable new-cap */
-      this.cm = CodeMirror(this.$el.getElementsByClassName('source')[0], {
+      this.cm = CodeMirror(el, {
         value: this.content,
         mode: 'markdown',
         keyMap: vim ? 'vim' : 'default',
@@ -51,6 +52,12 @@ export default Vue.component('editor', {
       this.tagsStr = this.tags.join(' ');
 
       instance = this;
+
+      if(focus) {
+        setTimeout(() => {
+          this.cm.focus();
+        });
+      }
     },
 
     getContent() {
