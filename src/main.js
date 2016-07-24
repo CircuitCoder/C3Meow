@@ -263,6 +263,8 @@ const instance = new Vue({
       this.postCont = null;
       this.saveState();
 
+      if(this.listCont) this.listCont.unselect();
+
       this.hidePost(direction);
     },
 

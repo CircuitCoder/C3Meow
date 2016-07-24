@@ -42,6 +42,11 @@ export default Vue.component('list', {
       this.$dispatch('select', index);
     },
 
+    unselect() {
+      this.selected = -1;
+      this.$dispatch('unselect');
+    },
+
     selectByUrl(url) {
       for(let i = 0; i < this.entries.length; ++i) {
         if(this.entries[i].url === url) {
