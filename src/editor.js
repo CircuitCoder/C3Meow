@@ -65,5 +65,10 @@ export default Vue.component('editor', {
         user_ident: 'test,dummy',
       };
     },
+
+    blocker(e) {
+      e.stopPropagation();
+      e.preventDefault();
+    },
   },
 });
