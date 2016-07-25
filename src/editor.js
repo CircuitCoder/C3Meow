@@ -73,9 +73,8 @@ export default Vue.component('editor', {
       };
     },
 
-    blocker(e) {
+    eventBlocker(e) {
       e.stopPropagation();
-      e.preventDefault();
     },
   },
 });

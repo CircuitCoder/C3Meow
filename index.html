@@ -7,7 +7,7 @@
     <link href="https://fonts.lug.ustc.edu.cn/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://apis.google.com/js/api:client.js"></script>
   </head>
-  <body @keyup.d="doDelete" @keyup.e="doEdit" @keyup.a="doAdd" @keyup.esc="closePost('down')" @keyup.s="toggleSidebar" tabindex="0">
+  <body @keydown.d="doDelete" @keydown.e="doEdit" @keydown.a="doAdd" @keydown.esc="closePost('down')" @keydown.s="toggleSidebar" tabindex="0">
     <div class="frame" v-show="running" transition="init-frame" style="display: none">
       <div class="post-container">
         <div class="loading" :class="{ visible: post !== null }">
@@ -22,7 +22,7 @@
           喵...找不到了...
         </div>
       </div>
-      <div class="delete-mask" v-show="pendingDeletion" transition="opacity">
+      <div class="delete-mask" v-show="pendingDeletion" transition="opacity" @keydown="eventBlocker">
         <div class="delete-container">
           <div class="delete-hint">喵，你确认要删除吗？</div>
           <div class="delete-confirmation">

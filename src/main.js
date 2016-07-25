@@ -513,6 +513,8 @@ const instance = new Vue({
       this.deletionConfirmation = '';
       this.deletionPlaceholder = this.post;
       this.pendingDeletion = true;
+
+      setTimeout(() => this.$el.querySelector('input').focus());
     },
 
     checkDeletion() {
@@ -556,6 +558,10 @@ const instance = new Vue({
 
     closeSidebar() {
       this.sidebarShown = false;
+    },
+
+    eventBlocker(e) {
+      e.stopPropagation();
     },
   },
 });
