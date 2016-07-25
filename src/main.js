@@ -118,8 +118,13 @@ const instance = new Vue({
       });
     },
 
-    loadState(state) {
-      if(!state) return;
+    loadState(_state) {
+      const state = _state || {
+        post: null,
+        ref: 'all',
+        page: 1,
+      };
+
       if(state.ref !== this.ref || state.page !== this.page) {
         this.ref = state.ref;
         this.page = state.page;
@@ -130,15 +135,19 @@ const instance = new Vue({
       }
 
       if(state.post !== this.post) {
-        let postDirection = 'up';
-        if(!(state.post in this.postTsStore)) postDirection = 'up';
-        if(this.postTsStore[this.post] < this.postTsStore[state.post]) postDirection = 'right';
-        if(this.postTsStore[this.post] > this.postTsStore[state.post]) postDirection = 'left';
+        if(!state.post) {
+          this.closePost('down', true);
+        } else {
+          let postDirection = 'up';
+          if(!(state.post in this.postTsStore)) postDirection = 'up';
+          if(this.postTsStore[this.post] < this.postTsStore[state.post]) postDirection = 'right';
+          if(this.postTsStore[this.post] > this.postTsStore[state.post]) postDirection = 'left';
 
-        this.post = state.post;
-        if(this.listCont) this.listCont.selectByUrl(this.post);
+          this.post = state.post;
+          if(this.listCont) this.listCont.selectByUrl(this.post);
 
-        this.loadPost(this.post, postDirection);
+          this.loadPost(this.post, postDirection);
+        }
       }
     },
 
@@ -258,10 +267,11 @@ const instance = new Vue({
       });
     },
 
-    closePost(direction) {
+    closePost(direction, fromState) {
+      // TODO: refactor
       this.post = null;
       this.postCont = null;
-      this.saveState();
+      if(!fromState) this.saveState();
 
       if(this.listCont) this.listCont.unselect();
 
