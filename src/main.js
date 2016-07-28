@@ -478,6 +478,7 @@ const instance = new Vue({
       if(this.postCont) {
         this.hidePost('up');
         this.showPost('up', editor);
+        this.post = null;
       } else {
         this.showPost('', editor);
       }
