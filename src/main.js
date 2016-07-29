@@ -191,6 +191,8 @@ const instance = new Vue({
         });
 
         list.$on('select', (index) => {
+          this.closeSidebar();
+
           let postDirection;
 
           const url = list.entries[index].url;
@@ -251,6 +253,8 @@ const instance = new Vue({
         this.title = `${post.topic} | ${config.title}`;
 
         post.$on('tag', (tag) => {
+          this.openSidebar();
+
           if(tag === this.ref) return;
 
           this.ref = tag;
@@ -565,6 +569,10 @@ const instance = new Vue({
 
     toggleSidebar() {
       this.sidebarShown = !this.sidebarShown;
+    },
+
+    openSidebar() {
+      this.sidebarShown = true;
     },
 
     closeSidebar() {
