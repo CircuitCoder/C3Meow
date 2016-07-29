@@ -3,6 +3,9 @@ var config = require('../config')
 var utils = require('./utils')
 var projectRoot = path.resolve(__dirname, '../')
 
+const precss = require('precss');
+const autoprefixer = require('autoprefixer');
+
 module.exports = {
   entry: {
     app: './src/main.js'
@@ -81,5 +84,6 @@ module.exports = {
   },
   vue: {
     loaders: utils.cssLoaders()
-  }
+  },
+  postcss: () => [precss, autoprefixer],
 }
