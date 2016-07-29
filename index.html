@@ -8,7 +8,9 @@
     <script src="https://apis.google.com/js/api:client.js"></script>
   </head>
   <body @keydown.d="doDelete" @keydown.e="doEdit" @keydown.a="doAdd" @keydown.esc="closePost('down')" @keydown.s="toggleSidebar" tabindex="0">
-    <div class="frame" v-show="running" transition="init-frame" style="display: none">
+    <div class="frame" v-show="running" transition="init-frame" style="display: none"x
+      v-touch:swipeleft="closeSidebar" v-touch:swiperight="openSidebar"
+      v-touch-options:swipe="{ direction: 'horizontal', threshold: 200, velocity: 0.3 }">
       <div class="post-container">
         <div class="loading" :class="{ visible: post !== null }">
           <i class="material-icons cloud">cloud</i>

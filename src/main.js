@@ -1,5 +1,13 @@
 import Vue from 'vue';
 
+import VueTouch from 'vue-touch';
+import Hammer from 'hammerjs';
+
+Hammer.defaults.cssProps.userSelect = 'initial';
+Hammer.defaults.inputClass = Hammer.TouchInput;
+
+Vue.use(VueTouch);
+
 import util from './util';
 import config from './config';
 
