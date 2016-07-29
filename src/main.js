@@ -68,7 +68,7 @@ const instance = new Vue({
 
       setTimeout(() => {
         this.running = true;
-      }, 0);
+      });
 
       this.loadList(this.ref, this.page, '');
       if(this.post) this.loadPost(this.post, '');
@@ -446,7 +446,7 @@ const instance = new Vue({
       this.hidePost('');
 
       this.showPost('', editor);
-      setTimeout(() => editor.initialize(true, true), 0);
+      setTimeout(() => editor.initialize(true, true));
 
       editor.$on('save', () => {
         this.saveEdit();
@@ -489,7 +489,7 @@ const instance = new Vue({
 
       if(this.listCont) this.listCont.unselect();
 
-      setTimeout(() => editor.initialize(true), 0);
+      setTimeout(() => editor.initialize(true));
 
       const savecb = () => {
         const data = this.editor.getContent();
