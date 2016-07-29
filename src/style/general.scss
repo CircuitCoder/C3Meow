@@ -239,17 +239,20 @@ body {
     right: 0;
     left: 0;
     padding: 0 40px;
-    background-color: #EEE;
+    background-color: $bg-gray;
     overflow: auto;
   }
 
   .column {
-    // TODO: responsive
     max-width: $column-width;
     width: 100%;
     padding: 100px 0;
     margin: 0 auto;
     position: relative;
+
+    @media screen and (max-width: $responsive-trigger - 1px) {
+      padding-top: $title-bar-height + 40px;
+    }
   }
 
   .topic {
@@ -331,7 +334,7 @@ body {
       top: 100px + 65px + 34px;
       right: 0;
       left: 0;
-      background: #EEE;
+      background: $bg-gray;
 
       opacity: 0;
       transition-property: opacity;
@@ -550,20 +553,6 @@ body {
       }
     }
 
-    .sidebar-toggle {
-      display: none;
-
-      @media screen and (max-width: $responsive-trigger - 1px) {
-        display: inline-block;
-      }
-
-      transition: transform .2s ease, opacity .2s ease;
-
-      &.reverse {
-        transform: rotate(180deg);
-      }
-    }
-
     .control {
       display: inline-block;
       opacity: 0;
@@ -584,6 +573,47 @@ body {
     }
   }
 }
+
+.title-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: $title-bar-height;
+  padding: 0 20px;
+  transform: translateY(- ($title-bar-height + 5px));
+  transition: transform 0.2s ease;
+
+  background: white;
+  border-bottom: $border-color 1px solid;
+  
+  @media screen and (max-width: $responsive-trigger - 1px) {
+    transform: translateY(0);
+  }
+
+  .sidebar-toggle {
+    line-height: $title-bar-height;
+    text-align: center;
+    font-size: $title-bar-icon-size;
+    cursor: pointer;
+
+    transition: opacity 0.2s ease;
+    opacity: 0.54;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .brand {
+    line-height: $title-bar-height;
+    margin-left: 10px;
+    font-size: $title-bar-font-size;
+    opacity: 0.87;
+  }
+}
+
 
 // Styling
 .post {
@@ -633,7 +663,7 @@ body {
 
   right: 0;
 
-  background: rgba(#EEE,.87);
+  background: rgba($bg-gray,.87);
 
   opacity: 1;
 

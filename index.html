@@ -22,6 +22,10 @@
           喵...找不到了...
         </div>
       </div>
+      <div class="title-bar">
+        <i class="material-icons sidebar-toggle" @click="toggleSidebar()">menu</i>
+        <span class="brand">{{ titlebar }}</span>
+      </div>
       <div class="delete-mask" v-show="pendingDeletion" transition="opacity" @keydown="eventBlocker">
         <div class="delete-container">
           <div class="delete-hint">喵，你确认要删除吗？</div>
@@ -70,7 +74,6 @@
         </div>
 
         <div class="toolbox" :class="{ signed: signedIn, author: isAuthor }">
-          <i class="material-icons sidebar-toggle" :class="{ reverse: sidebarShown }" @click="toggleSidebar()">keyboard_arrow_right</i>
           <i class="material-icons close" @click="closePost('down')">close</i>
           <span class="control">
             <i class="material-icons add" @click="doAdd">add</i>

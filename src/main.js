@@ -18,6 +18,7 @@ const instance = new Vue({
   data: {
     running: false,
     title: `正在喂食 | ${config.title}`,
+    titlebar: config.title,
 
     ref: '',
     page: 0,
