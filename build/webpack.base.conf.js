@@ -55,7 +55,7 @@ module.exports = {
       },
       {
         test: /manifest\.json\.js$/,
-        loader: './build/json-emit-loader',
+        loader: './build/json-emit-loader'
       },
       {
         test: /\.json$/,
