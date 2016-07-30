@@ -91,7 +91,7 @@ body {
       bottom: 0;
       right: 0px;
       left: 0px;
-      padding: 0 20px;
+      padding: 0 20px + 30px;
       background: white;
 
       transition-property: opacity;
@@ -104,18 +104,45 @@ body {
 
       font-size: 16px;
       font-weight: 400;
+    }
 
-      .material-icons {
-        font-size: 24px;
-      }
+    .back-to-all-arrow {
+      font-size: 24px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 20px;
 
-      &.visible {
+      transition-property: opacity;
+      transition-duration: 0.2s;
+      transition-timing-function: ease-in;
+      transition-delay: 0s;
+
+      opacity: 0;
+
+      z-index: 2;
+    }
+
+    &.show-back-to-all {
+      .back-to-all {
         cursor: pointer;
+
+        &:hover {
+          opacity: 1;
+          transition-timing-function: ease-out;
+        }
       }
 
-      &.visible:hover {
+      .back-to-all-arrow {
         opacity: 1;
+        transition-timing-function: ease-in;
+        transition-delay: 0.2s;
       }
+    }
+
+    .blocker {
+      padding-left: 30px;
+      display: inline-block;
     }
 
     .pager {

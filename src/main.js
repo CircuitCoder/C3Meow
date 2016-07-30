@@ -82,7 +82,7 @@ const instance = new Vue({
       this.loadList(this.ref, this.page, '');
       if(this.post) this.loadPost(this.post, '');
 
-      if(this.ref === 'all') this.showRef('全部', '');
+      if(this.ref === 'all') this.showRef('全部', '', false);
       else this.showRef(this.ref, '');
 
       this.popAccount();
@@ -140,7 +140,7 @@ const instance = new Vue({
 
         const direction = this.ref === 'all' ? 'left' : 'right';
         this.loadList(this.ref, this.page, direction);
-        this.showRef(this.ref === 'all' ? '全部' : this.ref, direction);
+        this.showRef(this.ref === 'all' ? '全部' : this.ref, direction, this.ref !== 'all');
       }
 
       if(state.post !== this.post) {
@@ -299,7 +299,7 @@ const instance = new Vue({
       this.saveState();
 
       this.loadList('all', 1, 'left');
-      this.showRef('全部', 'left');
+      this.showRef('全部', 'left', false);
     },
 
     modAccount() {
@@ -315,9 +315,12 @@ const instance = new Vue({
       this.avatarLoaded = true;
     },
 
-    showRef(cont, direction) {
+    showRef(cont, direction, hasBack = true) {
       const ref = new Transformer();
-      ref.content = cont;
+
+      if(hasBack) ref.content = `<span class="blocker"></span>${cont}`;
+      else ref.content = cont;
+
       ref.delta = 20;
       ref.delay = 100;
 

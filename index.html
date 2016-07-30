@@ -60,11 +60,11 @@
           </div>
           <div class="hint">Loading<span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span></div>
         </div>
-        <div class="list-ref">
-          <div class="back-to-all" :class="{ visible: ref !== 'all' }" @click="backToAll">
-            <i class="material-icons">keyboard_arrow_left</i>
+        <div class="list-ref" :class="{ 'show-back-to-all': ref !== 'all' }">
+          <div class="back-to-all" @click="backToAll">
             返回全部
           </div>
+          <i class="material-icons back-to-all-arrow">keyboard_arrow_left</i>
           <div class="pager"></div>
         </div>
         <div class="list-content-holder">
