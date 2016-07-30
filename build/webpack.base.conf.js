@@ -6,8 +6,6 @@ var projectRoot = path.resolve(__dirname, '../')
 const precss = require('precss');
 const autoprefixer = require('autoprefixer');
 
-const c3config = require('../src/config.js');
-
 module.exports = {
   entry: {
     app: './src/main.js'
@@ -61,7 +59,7 @@ module.exports = {
       },
       {
         test: /\.html$/,
-        loader: 'vue-html'
+        loader: 'vue-html?interpolate',
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -85,8 +83,7 @@ module.exports = {
     formatter: require('eslint-friendly-formatter')
   },
   vue: {
-    loaders: utils.cssLoaders()
+    loaders: utils.cssLoaders(),
   },
   postcss: () => [precss, autoprefixer],
-  c3: c3config,
 }

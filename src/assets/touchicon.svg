@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch -->
+    <title>touchicon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="4" y="4" width="56" height="56" rx="8"></rect>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.12 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="touchicon">
+            <g id="Rectangle-1">
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                <use fill="#E0E0E0" fill-rule="evenodd" xlink:href="#path-1"></use>
+            </g>
+            <g id="Group" opacity="0.54" transform="translate(11.000000, 21.000000)" stroke="#000000" stroke-width="2">
+                <path d="M0.823529412,12.4074074 L3.05475941,19.9392843" id="Path-1"></path>
+                <path d="M0,11.85348 C7.92116537,11.710189 9.95820828,9.99180507 8.31994495,17.7078302" id="Path-2"></path>
+                <path d="M4.11764706,18.8546157 C5.64888333,18.3351759 7.18011961,17.8157361 8.71135588,17.2962963" id="Path-3"></path>
+                <path d="M10.7058824,10.7777778 C11.7121233,14.1541364 12.7183643,17.530495 13.7246053,20.9068536" id="Path-7"></path>
+                <path d="M11.5294118,9.96296296 C26.9325886,10.360236 30.0117005,8.50573936 25.3218174,21.9608046" id="Path-8"></path>
+                <path d="" id="Path-9"></path>
+                <path d="" id="Path-10"></path>
+                <path d="M15.6470588,16.4814815 C18.507873,16.784488 21.3686872,17.0874946 24.2295014,17.3905011" id="Path-11"></path>
+                <path d="" id="Path-12"></path>
+                <path d="M19.7647059,14.037037 L20.42095,20.4904677" id="Path-13"></path>
+                <path d="" id="Path-14"></path>
+                <path d="" id="Path-15"></path>
+                <path d="" id="Path-16"></path>
+                <path d="M15.6470588,22.8344849 L24.0526231,22.1851852" id="Path-17"></path>
+                <path d="M11.5294118,4.09374418 C16.5624965,3.87731093 21.5955813,3.66087769 26.6286661,3.44444444" id="Path-4"></path>
+                <path d="M15.6470588,1 C16.3908022,2.93471031 17.1345455,4.86942061 17.8782888,6.80413092" id="Path-5"></path>
+                <path d="M23.7325675,1 C22.6844567,3.19629017 21.636346,5.39258034 20.5882353,7.58887052" id="Path-6"></path>
+                <path d="M31,4.46930808 C34.4726539,-0.462719582 35.9992935,5.18862302 42.4331861,0" id="Path-18"></path>
+            </g>
+        </g>
+    </g>
+</svg>
