@@ -1,27 +1,23 @@
-# c3meow
+# C3meow
 
-> A frontend for C3Blog
+> C3Blog 的一个前端实现
 
-## Build Setup
+## 构建
+传统三板斧:
 
-``` bash
-# install dependencies
+```bash
+git clone https://github.com/CircuitCoder/C3Meow.git && cd C3Meow
 npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
 npm run build
-
-# run unit tests
-npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+然后你就可以在 `/dist` 目录下看到生成的文件了
+
+## 开发
+一言不合
+```
+npm run dev
+```
+
+## 协议
+本项目所有代码在 MIT 协议下公开。细节请查阅 LICENSE 文件
