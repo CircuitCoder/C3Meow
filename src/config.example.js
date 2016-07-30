@@ -3,7 +3,7 @@
  * @author Liu Xiaoyi <me@c-3.io>
  */
 
-export default {
+module.exports = {
   // Backend url Without tailing slash
   backend: 'http://SOMEWHERE.AROUND.THE/WORLD',
 

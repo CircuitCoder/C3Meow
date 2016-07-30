@@ -6,6 +6,8 @@ var projectRoot = path.resolve(__dirname, '../')
 const precss = require('precss');
 const autoprefixer = require('autoprefixer');
 
+const c3config = require('../src/config.js');
+
 module.exports = {
   entry: {
     app: './src/main.js'
@@ -86,4 +88,5 @@ module.exports = {
     loaders: utils.cssLoaders()
   },
   postcss: () => [precss, autoprefixer],
+  c3: c3config,
 }
