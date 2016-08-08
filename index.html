@@ -91,6 +91,7 @@
 
         <div class="toolbox" :class="{ signed: signedIn, author: isAuthor }">
           <i class="material-icons close" @click="closePost('down')">close</i>
+          <i class="material-icons feed" @click="gotoFeed">rss_feed</i>
           <span class="control">
             <i class="material-icons add" @click="doAdd">add</i>
             <i class="material-icons edit" @click="doEdit">edit</i>

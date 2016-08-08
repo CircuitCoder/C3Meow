@@ -594,6 +594,10 @@ const instance = new Vue({
     eventBlocker(e) {
       e.stopPropagation();
     },
+
+    gotoFeed() {
+      window.location.href = `${config.backend}/feed`;
+    },
   },
 });
 
