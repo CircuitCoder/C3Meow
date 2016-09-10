@@ -9,7 +9,7 @@ export default Vue.component('post', {
     source: '',
     timestamp: 0,
     tags: [],
-    // TODO: author
+    author: null,
   }),
   methods: {
     tagClick(index) {

@@ -254,6 +254,7 @@ const instance = new Vue({
         post.tags = data.tags;
         post.source = data.content;
         post.timestamp = data.post_time;
+        post.author = data.user;
 
         // For start-up loading
         this.postTsStore[url] = post.timestamp;

@@ -282,6 +282,21 @@ body {
     }
   }
 
+  .top.has-author {
+    padding-right: 80px;
+    position: relative;
+  }
+
+  .avatar {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    border-radius: 50%;
+  }
+
   .topic {
     font-weight: 800;
     line-height: 40px;
@@ -294,6 +309,8 @@ body {
     font-size: 16px;
     color: rgba(0,0,0,.3);
 
+    display: flex;
+
     .timestamp {
       display: inline-block;
       margin-right: 10px;
@@ -301,6 +318,8 @@ body {
 
     .tags {
       display: inline-block;
+      flex: 1;
+
       .tag {
         margin-right: 5px;
         cursor: pointer;
@@ -312,6 +331,11 @@ body {
           opacity: 1;
         }
       }
+    }
+
+    .author {
+      display: inline-block;
+      margin-right: 10px;
     }
   }
 

@@ -1,16 +1,25 @@
 <div class="post">
   <div class="column">
-    <div class="topic" v-text="topic"></div>
-    <div class="properties">
-      <div class="timestamp">
-        <i class="material-icons">access_time</i>
-        {{ timestamp | timeConverter }}
+
+    <div class="top" :class="{ 'has-author': author }">
+      <div class="topic" v-text="topic"></div>
+      <div class="properties">
+        <div class="timestamp">
+          <i class="material-icons">access_time</i>
+          {{ timestamp | timeConverter }}
+        </div>
+        <div class="tags" v-show="tags.length > 0">
+          <i class="material-icons">label_outline</i>
+          <span class="tag" v-for="tag of tags" @click="tagClick($index)">{{ tag }}</span>
+        </div>
+        <div class="author" v-show="author">
+          <i class="material-icons">edit</i>
+          {{ author.name }}
+        </div>
       </div>
-      <div class="tags" v-show="tags.length > 0">
-        <i class="material-icons">label_outline</i>
-        <span class="tag" v-for="tag of tags" @click="tagClick($index)">{{ tag }}</span>
-      </div>
+      <img :src="author.avatar" v-if="author" class="avatar">
     </div>
+
     <div class="content" v-html="source | markdown true "></div>
   </div>
 </div>
