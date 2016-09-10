@@ -47,9 +47,14 @@ export default Vue.component('transformer', {
       this.stage = 'entering';
       this.$mount().$appendTo(target);
 
-      setTimeout(() => {
-        this.stage = 'visible';
-      }, this.delay);
+      this.$nextTick(() => {
+        this.$el.offsetHeight; // eslint-disable-line no-unused-expressions
+        // To force a DOM repaint
+
+        setTimeout(() => {
+          this.stage = 'visible';
+        }, this.delay);
+      });
     },
 
     update() {

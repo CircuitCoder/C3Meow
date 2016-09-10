@@ -385,7 +385,7 @@ const instance = new Vue({
     showList(direction, content) {
       const list = new Transformer();
       list.delta = 20;
-      list.delay = 10;
+      list.delay = 0;
       list.direction = direction;
       list.enter('.list-content-holder');
 
@@ -403,7 +403,7 @@ const instance = new Vue({
     showPost(direction, content) {
       const post = new Transformer();
       post.delta = 50;
-      post.delay = 10;
+      post.delay = 0;
       post.direction = direction;
       post.enter('.post-container');
 
