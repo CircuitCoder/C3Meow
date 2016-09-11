@@ -462,7 +462,9 @@ const instance = new Vue({
       setTimeout(() => editor.initialize(true, true));
 
       editor.$on('save', () => {
-        this.saveEdit();
+        this.saveEdit(() => {
+          this.loadPost(editor.url, '');
+        });
       });
 
       editor.$on('close', () => {
