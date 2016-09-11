@@ -314,11 +314,16 @@ body {
     .timestamp {
       display: inline-block;
       margin-right: 10px;
+      white-space: nowrap;
     }
 
     .tags {
       display: inline-block;
       flex: 1;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      margin-right: 10px;
 
       .tag {
         margin-right: 5px;
@@ -331,11 +336,17 @@ body {
           opacity: 1;
         }
       }
+
+      .tag:last-child {
+        margin-right: 0;
+      }
     }
 
     .author {
-      display: inline-block;
+      display: inline-flex;
       margin-right: 10px;
+      align-items: flex-end;
+      white-space: nowrap;
     }
   }
 
