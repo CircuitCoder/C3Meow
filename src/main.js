@@ -20,6 +20,8 @@ import Editor from './editor.js';
 
 import './filters.js';
 
+let gaPV;
+
 /* eslint-disable no-new */
 const instance = new Vue({
   el: 'html',
@@ -57,6 +59,8 @@ const instance = new Vue({
     deletionConfirmation: '',
     deletionPlaceholder: '',
     deleting: false,
+
+    lastPV: '',
   },
   methods: {
     initialize() {
@@ -223,6 +227,8 @@ const instance = new Vue({
 
         this.listCont = list;
         this.showList(direction, list);
+
+        this.pageview();
       });
     },
 
@@ -278,6 +284,8 @@ const instance = new Vue({
         post.$mount();
 
         this.showPost(direction, post);
+
+        this.pageview();
       });
     },
 
@@ -290,6 +298,9 @@ const instance = new Vue({
       if(this.listCont) this.listCont.unselect();
 
       this.hidePost(direction);
+      this.title = `正在喂食 | ${config.title}`;
+
+      this.pageview();
     },
 
     backToAll() {
@@ -301,6 +312,8 @@ const instance = new Vue({
 
       this.loadList('all', 1, 'left');
       this.showRef('全部', 'left', false);
+
+      this.pageview();
     },
 
     modAccount() {
@@ -594,6 +607,20 @@ const instance = new Vue({
       this.sidebarShown = false;
     },
 
+    pageview() {
+      if(gaPV) {
+        const url = util.buildURL({
+          post: this.post,
+          ref: this.ref,
+          page: this.page,
+        });
+
+        if(url === this.lastPV) return;
+        this.lastPV = url;
+        this.$nextTick(() => gaPV(this.title, url));
+      }
+    },
+
     eventBlocker(e) {
       e.stopPropagation();
     },
@@ -605,3 +632,22 @@ const instance = new Vue({
 });
 
 instance.initialize();
+
+if(config.googleAnalyticsID) {
+  /* eslint-disable */
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', config.googleAnalyticsID, 'auto');
+
+  gaPV = (title, url) => {
+    ga('send', {
+      hitType: 'pageview',
+      title,
+      page: url,
+    });
+  }
+  /* eslint-enable */
+}

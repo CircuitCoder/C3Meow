@@ -14,5 +14,8 @@ module.exports = {
   title: 'C3Meow',
 
   // Google auth client ID
-  googleClientID: 'INPUT_YOUR_ID';
+  googleClientID: 'INPUT_YOUR_ID',
+
+  // Google Analytics Tracking ID, if there is one
+  googleAnalyticsID: 'INPUT_YOUR_ID',
 };
