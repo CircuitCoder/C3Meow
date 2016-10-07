@@ -540,10 +540,12 @@ new Vue({
       if(this.postCont) {
         this.hidePost('up');
         this.showPost('up', editor);
-        this.post = null;
       } else {
         this.showPost('', editor);
       }
+
+      this.post = null;
+      this.saveState();
 
       if(this.listCont) this.listCont.unselect();
 
@@ -582,7 +584,7 @@ new Vue({
       // Close sidebar
       this.sidebarShown = false;
 
-      if(this.postCont === null) throw new Error('Invalid Condition');
+      if(this.postCont === null || this.post === null) throw new Error('Invalid Condition');
 
       // Request to delete
       this.deletionConfirmation = '';
