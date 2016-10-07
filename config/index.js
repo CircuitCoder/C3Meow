@@ -1,11 +1,15 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 
+const assetsRoot = process.env.C3_BUILD_TYPE == 'ssr'
+  ? path.resolve(__dirname, '../ssrres')
+  : path.resolve(__dirname, '../dist');
+
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../dist/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    index: path.resolve(assetsRoot, './index.html'),
+    assetsRoot: assetsRoot,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     productionSourceMap: true,
@@ -18,5 +22,9 @@ module.exports = {
     env: require('./dev.env'),
     port: 8080,
     proxyTable: {}
+  },
+  ssr: {
+    index: path.resolve(__dirname, '../ssrres/index.html'),
+    port: 3820,
   }
 }

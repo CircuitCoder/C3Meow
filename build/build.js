@@ -6,7 +6,10 @@ var path = require('path')
 var config = require('../config')
 var ora = require('ora')
 var webpack = require('webpack')
-var webpackConfig = require('./webpack.prod.conf')
+var webpackConfig =
+  env.C3_BUILD_TYPE == 'ssr' ?
+  require('./webpack.ssr.conf') :
+  require('./webpack.prod.conf')
 
 console.log(
   '  Tip:\n' +
@@ -14,7 +17,9 @@ console.log(
   '  Opening index.html over file:// won\'t work.\n'
 )
 
-var spinner = ora('building for production...')
+var spinner = env.C3_BUILD_TYPE == 'ssr' ?
+  ora('building for server-side rendering...') :
+  ora('building for production...')
 spinner.start()
 
 var assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory)
