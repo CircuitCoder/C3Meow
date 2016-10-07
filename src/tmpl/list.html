@@ -4,13 +4,13 @@
     <div>第 {{ page - 1 }} 页</div>
   </div>
   <div class="entries">
-    <div v-for="entry of entries" class="entry" @click="select($index)" :class="{ selected: $index === selected }">
+    <div v-for="(entry, index) of entries" class="entry" @click="select(index)" :class="{ selected: index === selected }">
       <div class="entry-topic">
         {{ entry.topic }}
       </div>
       <div class="post-time">
         <!-- using v-text to prevent FOUC -->
-        <i class="material-icons">access_time</i> <span v-text="entry.post_time | timeConverter"></span>
+        <i class="material-icons">access_time</i> <span v-text="convertTime(entry.post_time)"></span>
       </div>
       <div class="overlap"></div>
     </div>

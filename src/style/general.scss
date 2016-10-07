@@ -25,7 +25,7 @@ body {
 }
 
 .frame {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
@@ -35,14 +35,14 @@ body {
   background: $bg-gray;
 
   opacity: 1;
+}
 
-  &.init-frame-transition {
-    transition: opacity 0.2s ease-out;
-  }
+.init-frame-enter-active, .init-frame-leave-active {
+  transition: opacity 0.2s ease-out;
+}
 
-  &.init-frame-enter, &.init-frame-leave {
-    opacity: 0;
-  }
+.init-frame-enter, .init-frame-leave-active {
+  opacity: 0;
 }
 
 .sidebar {
@@ -800,7 +800,7 @@ body {
 }
 
 // General transition
-.opacity-transition {
+.opacity-enter-active, .opacity-leave-active {
   transition-property: opacity;
   transition-duration: 0.2s;
   transition-timing-function: ease-out;
@@ -809,7 +809,7 @@ body {
     opacity: 0;
   }
 
-  &.opacity-leave {
+  &.opacity-leave-active {
     opacity: 0;
     transition-timing-function: ease-in;
   }

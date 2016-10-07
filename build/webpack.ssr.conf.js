@@ -9,6 +9,11 @@ const webpackConfig = merge(prodWebpackConfig, {
   output: {
     libraryTarget: 'commonjs2',
   },
+  resolve: {
+    alias: {
+      vue: 'vue',
+    },
+  },
 });
 
 for(let i = 0; i < webpackConfig.plugins.length; ++i)

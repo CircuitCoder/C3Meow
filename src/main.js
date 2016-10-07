@@ -6,6 +6,20 @@ import Hammer from 'hammerjs';
 Hammer.defaults.cssProps.userSelect = 'initial';
 Hammer.defaults.inputClass = Hammer.TouchInput;
 
+VueTouch.registerCustomEvent('sidebar-open', {
+  type: 'swipe',
+  direction: Hammer.DIRECTION_RIGHT,
+  threshold: 200,
+  velocity: 0.3,
+});
+
+VueTouch.registerCustomEvent('sidebar-close', {
+  type: 'swipe',
+  direction: Hammer.DIRECTION_LEFT,
+  threshold: 200,
+  velocity: 0.3,
+});
+
 Vue.use(VueTouch);
 
 import util from './util';
@@ -23,8 +37,8 @@ import './filters.js';
 let gaPV;
 
 /* eslint-disable no-new */
-const instance = new Vue({
-  el: 'html',
+new Vue({
+  el: '#app',
   data: {
     running: false,
     title: `正在喂食 | ${config.title}`,
@@ -62,6 +76,12 @@ const instance = new Vue({
 
     lastPV: '',
   },
+
+  mounted() {
+    this.initialize();
+    this.$el.focus();
+  },
+
   methods: {
     initialize() {
       let data = {};
@@ -402,7 +422,7 @@ const instance = new Vue({
       list.direction = direction;
       list.enter('.list-content-holder');
 
-      content.$appendTo(list.$el);
+      list.$el.appendChild(content.$el);
 
       this.listTrans = list;
     },
@@ -420,7 +440,7 @@ const instance = new Vue({
       post.direction = direction;
       post.enter('.post-container');
 
-      content.$appendTo(post.$el);
+      post.$el.appendChild(content.$el);
 
       this.postTrans = post;
     },
@@ -630,8 +650,6 @@ const instance = new Vue({
     },
   },
 });
-
-instance.initialize();
 
 if(config.googleAnalyticsID) {
   /* eslint-disable */

@@ -3,6 +3,8 @@ import Vue from 'vue';
 import './style/list.scss';
 import tmpl from './tmpl/list.html';
 
+import { time } from './filters.js';
+
 export default Vue.component('list', {
   template: tmpl,
 
@@ -29,22 +31,22 @@ export default Vue.component('list', {
 
     scroll() {
       if(this.$el.scrollTop === 0 && this.hasPrev) {
-        this.$dispatch('scroll-up');
+        this.$emit('scroll-up');
       }
 
       if(this.$el.scrollTop === this.$el.scrollHeight - this.$el.offsetHeight && this.hasNext) {
-        this.$dispatch('scroll-down');
+        this.$emit('scroll-down');
       }
     },
 
     select(index) {
       this.selected = index;
-      this.$dispatch('select', index);
+      this.$emit('select', index);
     },
 
     unselect() {
       this.selected = -1;
-      this.$dispatch('unselect');
+      this.$emit('unselect');
     },
 
     selectByUrl(url) {
@@ -56,6 +58,10 @@ export default Vue.component('list', {
       }
 
       this.selected = -1;
+    },
+
+    convertTime(t) {
+      return time(t);
     },
   },
 });

@@ -6,11 +6,11 @@
       <div class="properties">
         <div class="timestamp">
           <i class="material-icons">access_time</i>
-          {{ timestamp | timeConverter }}
+          {{ timestamp | time }}
         </div>
         <div class="tags" v-show="tags.length > 0">
           <i class="material-icons">label_outline</i>
-          <span class="tag" v-for="tag of tags" @click="tagClick($index)">{{ tag }}</span>
+          <span class="tag" v-for="(tag, index) of tags" @click="tagClick(index)">{{ tag }}</span>
         </div>
         <div class="author" v-show="author">
           <i class="material-icons">edit</i>
@@ -20,6 +20,6 @@
       <img :src="author.avatar" v-if="author" class="avatar">
     </div>
 
-    <div class="content" v-html="source | markdown true "></div>
+    <div class="content" v-html="md(source)"></div>
   </div>
 </div>

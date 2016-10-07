@@ -13,15 +13,15 @@ import tmpl from './tmpl/editor.html';
 let instance;
 
 CodeMirror.commands.save = () => {
-  if(instance) instance.$dispatch('save');
+  if(instance) instance.$emit('save');
 };
 
 CodeMirror.Vim.defineEx('q', null, () => {
-  if(instance) instance.$dispatch('close');
+  if(instance) instance.$emit('close');
 });
 
 CodeMirror.Vim.defineEx('wq', null, () => {
-  if(instance) instance.$dispatch('saveclose');
+  if(instance) instance.$emit('saveclose');
 });
 
 export default Vue.component('editor', {

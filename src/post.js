@@ -2,6 +2,8 @@ import Vue from 'vue';
 
 import tmpl from './tmpl/post.html';
 
+import { markdown } from './filters';
+
 export default Vue.component('post', {
   template: tmpl,
   data: () => ({
@@ -13,7 +15,10 @@ export default Vue.component('post', {
   }),
   methods: {
     tagClick(index) {
-      this.$dispatch('tag', this.tags[index]);
+      this.$emit('tag', this.tags[index]);
+    },
+    md(m) {
+      return markdown(m, true);
     },
   },
 });

@@ -25,12 +25,20 @@ const safeMd = new MarkdownIt({
   },
 });
 
-Vue.filter('timeConverter', (time) => {
+function time(t) {
   const d = new Date(1970, 0);
 
   // ns to ms
-  d.setMilliseconds(time);
+  d.setMilliseconds(t);
   return d.toLocaleDateString();
-});
+}
 
-Vue.filter('markdown', (source, safe) => (safe ? safeMd.render(source) : unsafeMd.render(source)));
+const markdown = (source, safe) => (safe ? safeMd.render(source) : unsafeMd.render(source));
+
+Vue.filter('time', time);
+Vue.filter('markdown', markdown);
+
+module.exports = {
+  time,
+  markdown,
+};

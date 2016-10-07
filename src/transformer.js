@@ -39,13 +39,17 @@ export default Vue.component('transformer', {
       this.stage = 'leaving';
 
       setTimeout(() => {
-        this.$remove();
+        this.$el.remove();
       }, this.duration);
     },
 
     enter(target) {
       this.stage = 'entering';
-      this.$mount().$appendTo(target);
+      this.$mount();
+
+      const el = document.querySelector(target);
+      if(!el) throw new Error(`Target not found: ${target}`);
+      el.appendChild(this.$el);
 
       this.$nextTick(() => {
         this.$el.offsetHeight; // eslint-disable-line no-unused-expressions
