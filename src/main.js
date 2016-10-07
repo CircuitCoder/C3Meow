@@ -22,6 +22,11 @@ VueTouch.registerCustomEvent('sidebar-close', {
 
 Vue.use(VueTouch);
 
+Vue.config.keyCodes.a = 65;
+Vue.config.keyCodes.d = 68;
+Vue.config.keyCodes.e = 69;
+Vue.config.keyCodes.s = 83;
+
 import util from './util';
 import config from './config';
 
@@ -311,6 +316,8 @@ new Vue({
 
     closePost(direction, fromState) {
       // TODO: refactor
+      if(!this.post) return;
+
       this.post = null;
       this.postCont = null;
       if(!fromState) this.saveState();
@@ -477,6 +484,7 @@ new Vue({
     },
 
     doEdit() {
+      if(!this.isAuthor) return;
       if(this.postCont === null) throw new Error('Invalid Environment');
 
       const editor = new Editor();
@@ -522,6 +530,8 @@ new Vue({
     },
 
     doAdd() {
+      if(!this.isAuthor) return;
+
       const editor = new Editor();
 
       this.editor = editor;
@@ -567,6 +577,8 @@ new Vue({
     },
 
     doDelete() {
+      if(!this.isAuthor) return;
+
       // Close sidebar
       this.sidebarShown = false;
 

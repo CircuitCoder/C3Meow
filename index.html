@@ -22,7 +22,13 @@
     <script src="https://apis.google.com/js/api:client.js"></script>
   </head>
   <body>
-    <div id="app" @keydown.d="doDelete" @keydown.e="doEdit" @keydown.a="doAdd" @keydown.esc="closePost('down')" @keydown.s="toggleSidebar" tabindex="0">
+    <div id="app"
+      @keydown.d="doDelete"
+      @keydown.e="doEdit"
+      @keydown.a="doAdd"
+      @keydown.esc="closePost('down')"
+      @keydown.s="toggleSidebar" tabindex="-1">
+
       <transition name="init-frame">
         <div class="frame" v-show="running" style="display: none"
           v-touch:sidebar-close="closeSidebar" v-touch:sidebar-open="openSidebar">
