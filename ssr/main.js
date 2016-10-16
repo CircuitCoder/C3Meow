@@ -13,6 +13,7 @@ server.use(express.static(path.resolve(__dirname, '../ssrres'), {
 }));
 
 server.get('*', (req, res) => {
+  console.log(req.url);
   const stream = renderer.renderToStream({
     url: req.url
   });

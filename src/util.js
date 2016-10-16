@@ -37,7 +37,7 @@ function parseURL(url) {
       if(isInt(segs[1])) {
         // Is tag
         return {
-          ref: window.decodeURIComponent(segs[0]),
+          ref: decodeURIComponent(segs[0]),
           page: Number.parseInt(segs[1], 10),
           post: null,
         };
@@ -46,7 +46,7 @@ function parseURL(url) {
       if(isInt(segs[1])) {
         // Is tag
         return {
-          ref: window.decodeURIComponent(segs[0]),
+          ref: decodeURIComponent(segs[0]),
           page: Number.parseInt(segs[1], 10),
           post: segs[2],
         };
