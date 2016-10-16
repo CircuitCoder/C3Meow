@@ -364,7 +364,7 @@ const instance = new Vue(tmpl({
             tags: data.tags,
             source: data.content,
             timestamp: data.post_time,
-            author: data.author,
+            author: data.user,
           }, {
             delta: 50,
             delay: 0,
