@@ -142,7 +142,9 @@ const instance = new Vue(tmpl({
 
     bus.on('editor-save', (content, isNew) => {
       if(isNew) bus.emit('editor-saveclose', content, isNew);
-      else this.saveEdit(content);
+      else this.saveEdit(content).then(() => {
+        this.loadList(this.ref, this.page, '');
+      });
     });
 
     bus.on('editor-close', (url, isNew) => {
@@ -158,6 +160,7 @@ const instance = new Vue(tmpl({
           this.post = content.url;
         }
         this.loadPost(content.url, '');
+        this.loadList(this.ref, this.page, '');
       });
     });
 

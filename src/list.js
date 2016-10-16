@@ -30,7 +30,7 @@ export default Vue.component('list', tmpl({
     this.unselectHandler = () => this.unselect();
     this.selectByUrlHandler = url => this.selectByUrl(url);
     bus.on('list-perform-unselect', this.unselectHandler);
-    bus.on('list-perform-select-by-url', this.unselectHandler);
+    bus.on('list-perform-select-by-url', this.selectByUrlHandler);
   },
 
   mounted() {
