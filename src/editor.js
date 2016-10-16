@@ -53,6 +53,7 @@ export default Vue.component('editor', tmpl({
       default: 0,
     },
   },
+
   data: () => ({
     tagsStr: '',
     urlStr: '',

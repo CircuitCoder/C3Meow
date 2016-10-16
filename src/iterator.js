@@ -10,7 +10,7 @@ import List from './list.js';
 let Editor;
 
 if(isBrowser) {
-  Editor = require('./editor.js');
+  Editor = require('./editor.js').default;
 }
 
 export default Vue.component('iterator', tmpl({

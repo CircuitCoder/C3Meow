@@ -385,8 +385,6 @@ const instance = new Vue(tmpl({
 
     closePost(direction, fromState) {
       // TODO: refactor
-      if(!this.post) return;
-
       this.post = null;
       this.postCont = null;
       if(!fromState) this.saveState();
@@ -491,8 +489,8 @@ const instance = new Vue(tmpl({
       if(!this.isAuthor) return;
       if(this.postCont === null) throw new Error('Invalid Environment');
 
-      this.$refs.postIterator.clear();
-      this.$refs.postIterator.overridePush('editor', {
+      this.clearIterator('post', { direction: '' });
+      this.overridePushIterator('post', 'editor', {
         topic: this.postCont.topic,
         tags: this.postCont.tags,
         content: this.postCont.content,
@@ -517,16 +515,16 @@ const instance = new Vue(tmpl({
     },
 
     doAdd() {
-      // if(!this.isAuthor) return;
+      if(!this.isAuthor) return;
 
       let direction = '';
 
       if(this.postCont) {
-        this.$refs.postIterator.clear({ direction: 'up' });
+        this.clearIterator('post', { direction: 'up' });
         direction = 'up';
       }
 
-      this.$refs.postIterator.overridePush('editor', {
+      this.overridePushIterator('post', 'editor', {
         isNew: true,
       }, {
         delta: 50,
@@ -605,7 +603,7 @@ const instance = new Vue(tmpl({
     overridePushIterator(type, _type, data, trans) {
       const obj = Object.assign({}, trans);
       obj.data = data;
-      obj.type = type;
+      obj.type = _type;
       obj.leave = false;
       this.iteratorContent[type].push(obj);
       ++this.iteratorCount[type];
