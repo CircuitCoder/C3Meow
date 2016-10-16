@@ -18,7 +18,7 @@ module.exports = {
         catch: { after: false },
       }
     }],
-    'no-console': process.env.NODE_ENV === 'production' ? 1 : 1,
+    'no-console': process.env.NODE_ENV === 'production' ? 2 : 1,
     'no-else-return': 0,
     'global-require': 0,
     'consistent-return': [2, {

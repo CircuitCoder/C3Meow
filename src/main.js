@@ -142,9 +142,11 @@ const instance = new Vue(tmpl({
 
     bus.on('editor-save', (content, isNew) => {
       if(isNew) bus.emit('editor-saveclose', content, isNew);
-      else this.saveEdit(content).then(() => {
-        this.loadList(this.ref, this.page, '');
-      });
+      else {
+        this.saveEdit(content).then(() => {
+          this.loadList(this.ref, this.page, '');
+        });
+      }
     });
 
     bus.on('editor-close', (url, isNew) => {
@@ -474,7 +476,6 @@ const instance = new Vue(tmpl({
         duration: 200,
         direction: 'right',
       });
-      return;
     },
 
     popAccount() {
@@ -483,9 +484,8 @@ const instance = new Vue(tmpl({
         delta: 20,
         delay: 100,
         duration: 200,
-        direction: 'right',
+        direction: 'left',
       });
-      return;
     },
 
     doEdit() {

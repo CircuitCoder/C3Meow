@@ -27,7 +27,7 @@
         喵...找不到了...
       </div>
 
-      <iterator type="post" ref="postIterator" :list="iteratorContent.post"></iterator>
+      <iterator type="post" :list="iteratorContent.post"></iterator>
     </div>
     <div class="title-bar">
       <i class="material-icons sidebar-toggle" @click="toggleSidebar()">menu</i>
@@ -56,18 +56,18 @@
         </div>
         <div class="hint">Loading<span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span></div>
       </div>
-      <div class="list-ref" ref="listRef" :class="{ 'show-back-to-all': ref !== 'all' }">
+      <div class="list-ref" :class="{ 'show-back-to-all': ref !== 'all' }">
         <div class="back-to-all" @click="backToAll">
           返回全部
         </div>
         <i class="material-icons back-to-all-arrow">keyboard_arrow_left</i>
-        <div class="pager" ref="pager">
-          <iterator type="pager" ref="pagerIterator" :list="iteratorContent.pager"></iterator>
+        <div class="pager">
+          <iterator type="pager" :list="iteratorContent.pager"></iterator>
         </div>
-        <iterator type="ref" ref="refIterator" :list="iteratorContent.ref"></iterator>
+        <iterator type="ref" :list="iteratorContent.ref"></iterator>
       </div>
       <div class="list-content-holder">
-        <iterator type="list" ref="listIterator" :list="iteratorContent.list"></iterator>
+        <iterator type="list" :list="iteratorContent.list"></iterator>
       </div>
     </div>
     <div class="bottom-bar">
@@ -86,7 +86,7 @@
           <i class="material-icons logout">unarchive</i>
         </div>
         <div class="name-holder">
-          <iterator type="account" ref="accountIterator" :list="iteratorContent.account"></iterator>
+          <iterator type="account" :list="iteratorContent.account"></iterator>
         </div>
       </div>
 

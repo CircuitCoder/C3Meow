@@ -21,10 +21,8 @@ export default Vue.component('transformer', tmpl({
   },
 
   data: () => ({
-    content: '',
     stage: 'entering',
     transform: '',
-    leaveCb: [],
 
     transcb: null,
   }),
@@ -53,15 +51,10 @@ export default Vue.component('transformer', tmpl({
         this.update();
 
         this.transcb = () => {
-          for(const c of this.leaveCb) c();
           this.$emit('left');
           resolve();
         };
       });
-    },
-
-    afterLeave(cb) {
-      this.leaveCb.push(cb);
     },
 
     enter() {

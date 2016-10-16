@@ -556,10 +556,12 @@ body {
       font-weight: 800;
 
       .transformer {
-        display: block;
+        position: absolute;
+        right: 0;
+        top: 0;
 
-        &:last-child:not(:first-child) {
-          margin-top: -40px;
+        span {
+          white-space: nowrap;
         }
       }
     }
