@@ -1,68 +1,126 @@
 import Vue from 'vue';
 
-import tmpl from './tmpl/transformer.html';
+import tmpl from './tmpl/transformer.tmpl.html';
 import './style/transformer.scss';
 
-function getTransform(stage, direction, delta) {
-  if(stage === 'visible') return 'translate(0,0)';
-
-  let tx = 0;
-  let ty = 0;
-  if(direction === 'up') ty = -delta;
-  else if(direction === 'down') ty = delta;
-  else if(direction === 'left') tx = -delta;
-  else if(direction === 'right') tx = delta;
-
-  if(stage === 'entering') return `translate(${-tx}px, ${-ty}px)`;
-  else if(stage === 'leaving') return `translate(${tx}px, ${ty}px)`;
-  else return 'translate(0,0)';
-}
-
-export default Vue.component('transformer', {
-  template: tmpl,
+export default Vue.component('transformer', tmpl({
   // TODO: validator
-  data: () => ({
-    content: '',
-    transform: '',
-    direction: '',
-    stage: '',
-    delta: '',
-
-    duration: 300,
-    delay: 0,
-  }),
-  watch: {
-    stage: 'update',
-  },
-  methods: {
-    leave() {
-      this.stage = 'leaving';
-
-      setTimeout(() => {
-        this.$el.remove();
-      }, this.duration);
+  props: {
+    direction: String,
+    delta: Number,
+    duration: {
+      type: Number,
+      default: 300,
+    },
+    delay: {
+      type: Number,
+      default: 0,
     },
 
-    enter(target) {
-      this.stage = 'entering';
-      this.$mount();
+    leaveHook: Boolean,
+  },
 
-      const el = document.querySelector(target);
-      if(!el) throw new Error(`Target not found: ${target}`);
-      el.appendChild(this.$el);
+  data: () => ({
+    content: '',
+    stage: 'entering',
+    transform: '',
+    leaveCb: [],
 
-      this.$nextTick(() => {
-        this.$el.offsetHeight; // eslint-disable-line no-unused-expressions
-        // To force a DOM repaint
+    transcb: null,
+  }),
 
-        setTimeout(() => {
-          this.stage = 'visible';
-        }, this.delay);
+  watch: {
+    leaveHook: 'leave',
+  },
+
+  created() {
+    if(this.$isServer) {
+      this.stage = 'visible';
+      this.update();
+    }
+  },
+
+  methods: {
+    leave() {
+      if(this.stage === 'leaving') {
+        return new Promise(resolve => {
+          this.afterLeave(resolve);
+        });
+      }
+
+      return new Promise(resolve => {
+        this.stage = 'leaving';
+        this.update();
+
+        this.transcb = () => {
+          for(const c of this.leaveCb) c();
+          this.$emit('left');
+          resolve();
+        };
       });
     },
 
+    afterLeave(cb) {
+      this.leaveCb.push(cb);
+    },
+
+    enter() {
+      return new Promise(resolve => {
+        if(this.$isServer) {
+          this.stage = 'visible';
+          this.update();
+          return void resolve();
+        }
+
+        this.stage = 'entering';
+        this.update();
+
+        this.$nextTick(() => {
+          this.$el.offsetHeight; // eslint-disable-line no-unused-expressions
+          // To force a DOM repaint
+
+          setTimeout(() => {
+            this.stage = 'visible';
+            this.update();
+
+            this.transcb = () => {
+              resolve();
+            };
+          }, this.delay);
+        });
+      });
+    },
+
+    appear() {
+      this.stage = 'visible';
+      this.update();
+    },
+
+    transend() {
+      if(this.transcb) this.transcb();
+    },
+
     update() {
-      this.transform = getTransform(this.stage, this.direction, this.delta);
+      this.transform = this.generate();
+    },
+
+    generate() {
+      const stage = this.stage;
+      const direction = this.direction;
+      const delta = this.delta;
+
+      if(stage === 'visible') return 'translate(0,0)';
+
+      let tx = 0;
+      let ty = 0;
+      if(direction === 'up') ty = -delta;
+      else if(direction === 'down') ty = delta;
+      else if(direction === 'left') tx = -delta;
+      else if(direction === 'right') tx = delta;
+
+      if(stage === 'entering') return `translate(${-tx}px, ${-ty}px)`;
+      else if(stage === 'leaving') return `translate(${tx}px, ${ty}px)`;
+      else return 'translate(0,0)';
     },
   },
-});
+}));

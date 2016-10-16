@@ -1,24 +1,28 @@
 import Vue from 'vue';
 
-import tmpl from './tmpl/post.html';
+import tmpl from './tmpl/post.tmpl.html';
 
 import { markdown } from './filters';
+import bus from './bus';
 
-export default Vue.component('post', {
-  template: tmpl,
-  data: () => ({
-    topic: '',
-    source: '',
-    timestamp: 0,
-    tags: [],
-    author: null,
-  }),
+export default Vue.component('post', tmpl({
+  props: {
+    topic: String,
+    source: String,
+    timestamp: Number,
+    tags: Array,
+    author: Object,
+  },
   methods: {
     tagClick(index) {
+      bus.emit('tag', this.tags[index]);
       this.$emit('tag', this.tags[index]);
     },
-    md(m) {
-      return markdown(m, true);
+  },
+
+  computed: {
+    compiled() {
+      return markdown(this.source, true);
     },
   },
-});
+}));

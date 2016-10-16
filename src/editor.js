@@ -8,35 +8,64 @@ import 'codemirror/addon/search/searchcursor.js';
 import 'codemirror/addon/dialog/dialog.js';
 import 'codemirror/addon/dialog/dialog.css';
 
-import tmpl from './tmpl/editor.html';
+import tmpl from './tmpl/editor.tmpl.html';
+
+import bus from './bus';
 
 let instance;
 
 CodeMirror.commands.save = () => {
-  if(instance) instance.$emit('save');
+  if(instance) bus.emit('editor-save', instance.getContent(), instance.isNew);
 };
 
 CodeMirror.Vim.defineEx('q', null, () => {
-  if(instance) instance.$emit('close');
+  if(instance) bus.emit('editor-close', instance.url, instance.isNew);
 });
 
 CodeMirror.Vim.defineEx('wq', null, () => {
-  if(instance) instance.$emit('saveclose');
+  if(instance) bus.emit('editor-saveclose', instance.getContent(), instance.isNew);
 });
 
-export default Vue.component('editor', {
-  template: tmpl,
+export default Vue.component('editor', tmpl({
+  props: {
+    isNew: {
+      type: Boolean,
+      default: false,
+    },
+    content: {
+      type: String,
+      default: '',
+    },
+    topic: {
+      type: String,
+      default: '',
+    },
+    tags: {
+      type: Array,
+      default: () => [],
+    },
+    url: {
+      type: String,
+      default: '',
+    },
+    id: {
+      type: Number,
+      default: 0,
+    },
+  },
   data: () => ({
-    content: '',
-    topic: '',
-    tags: [],
     tagsStr: '',
-    url: '',
-    id: 0,
+    urlStr: '',
+    topicStr: '',
 
     preview: false,
     cm: null,
   }),
+
+  mounted() {
+    this.initialize(true, !this.isNew);
+  },
+
   methods: {
     initialize(vim, focus) {
       const el = this.$el.getElementsByClassName('source')[0];
@@ -50,6 +79,8 @@ export default Vue.component('editor', {
       });
 
       this.tagsStr = this.tags.join(' ');
+      this.urlStr = this.url;
+      this.topicStr = this.topic;
 
       instance = this;
 
@@ -61,12 +92,12 @@ export default Vue.component('editor', {
     },
 
     getContent() {
-      this.tags = this.tagsStr.split(' ').filter((e) => e !== '');
+      const tags = this.tagsStr.split(' ').filter((e) => e !== '');
 
       return {
-        topic: this.topic,
-        url: this.url,
-        tags: this.tags,
+        topic: this.topicStr,
+        url: this.urlStr,
+        tags,
         content: this.cm.getValue(),
         post_time: this.id,
         user_ident: 'test,dummy',
@@ -77,4 +108,4 @@ export default Vue.component('editor', {
       e.stopPropagation();
     },
   },
-});
+}));

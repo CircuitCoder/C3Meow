@@ -1,0 +1,103 @@
+<transition name="init-frame">
+  <div
+    class="frame"
+    v-show="running"
+    style="display: none"
+    v-touch:sidebar-close="closeSidebar"
+    v-touch:sidebar-open="openSidebar"
+    @keydown.d="doDelete"
+    @keydown.e="doEdit"
+    @keydown.a="doAdd"
+    @keydown.esc="closePost('down')"
+    @keydown.s="toggleSidebar"
+    tabindex="-1"
+    ref="frame">
+
+    <div class="post-container">
+      <div class="loading" :class="{ visible: post !== null }">
+        <i class="material-icons cloud">cloud</i>
+        <div class="arrow-wrapper">
+          <i class="material-icons arrow">keyboard_arrow_down</i>
+        </div>
+        <div class="hint">Loading<span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span></div>
+      </div>
+
+      <div class="not-found" :class="{ visible: notFound }">
+        喵...找不到了...
+      </div>
+
+      <iterator type="post" ref="postIterator" :list="iteratorContent.post"></iterator>
+    </div>
+    <div class="title-bar">
+      <i class="material-icons sidebar-toggle" @click="toggleSidebar()">menu</i>
+      <span class="brand">{{ titlebar }}</span>
+    </div>
+    <transition name="opacity">
+      <div class="delete-mask" v-show="pendingDeletion" @keydown="eventBlocker">
+        <div class="delete-container">
+          <div class="delete-hint">喵，你确认要删除吗？</div>
+          <div class="delete-confirmation">
+            <div class="delete-confirmation-placeholder">{{ deletionPlaceholder }}</div>
+            <input class="delete-confirmation-input" v-model="deletionConfirmation" @input="checkDeletion()" :disabled="!pendingDeletion || deleting" @keydown.esc="discardDeletion()">
+          </div>
+          <div class="deleting-hint" :class="{ shown: deleting }">删除中...</div>
+        </div>
+      </div>
+    </transition>
+    <transition name="opacity">
+      <div class="sidebar-mask" v-show="sidebarShown" @click="closeSidebar()"></div>
+    </transition>
+    <div class="sidebar" :class="{ extended: sidebarShown }">
+      <div class="loading">
+        <i class="material-icons cloud">cloud</i>
+        <div class="arrow-wrapper">
+          <i class="material-icons arrow">keyboard_arrow_down</i>
+        </div>
+        <div class="hint">Loading<span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span></div>
+      </div>
+      <div class="list-ref" ref="listRef" :class="{ 'show-back-to-all': ref !== 'all' }">
+        <div class="back-to-all" @click="backToAll">
+          返回全部
+        </div>
+        <i class="material-icons back-to-all-arrow">keyboard_arrow_left</i>
+        <div class="pager" ref="pager">
+          <iterator type="pager" ref="pagerIterator" :list="iteratorContent.pager"></iterator>
+        </div>
+        <iterator type="ref" ref="refIterator" :list="iteratorContent.ref"></iterator>
+      </div>
+      <div class="list-content-holder">
+        <iterator type="list" ref="listIterator" :list="iteratorContent.list"></iterator>
+      </div>
+    </div>
+    <div class="bottom-bar">
+      <div class="account" @click="modAccount" :class="{ 'signed-in': signedIn }">
+        <div class="avatar-background"></div>
+        <div class="avatar-background overlap"></div>
+        <div class="avatar-background-cover"></div>
+        <div class="avatar placeholder"></div>
+
+        <div class="avatar container" :class="{ visible: this.avatarLoaded }">
+          <img :src="user ? user.avatar : ''" class="avatar-content" @load="onAvatarLoad">
+        </div>
+
+        <div class="action-overlap">
+          <i class="material-icons login">archive</i>
+          <i class="material-icons logout">unarchive</i>
+        </div>
+        <div class="name-holder">
+          <iterator type="account" ref="accountIterator" :list="iteratorContent.account"></iterator>
+        </div>
+      </div>
+
+      <div class="toolbox" :class="{ signed: signedIn, author: isAuthor }">
+        <i class="material-icons close" @click="closePost('down')">close</i>
+        <i class="material-icons feed" @click="gotoFeed">rss_feed</i>
+        <span class="control">
+          <i class="material-icons add" @click="doAdd">add</i>
+          <i class="material-icons edit" @click="doEdit">edit</i>
+          <i class="material-icons delete" @click="doDelete">delete</i>
+        </span>
+      </div>
+    </div>
+  </div>
+</transition>

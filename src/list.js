@@ -1,52 +1,70 @@
 import Vue from 'vue';
 
 import './style/list.scss';
-import tmpl from './tmpl/list.html';
+import tmpl from './tmpl/list.tmpl.html';
 
 import { time } from './filters.js';
+import bus from './bus';
 
-export default Vue.component('list', {
-  template: tmpl,
+export default Vue.component('list', tmpl({
+  props: {
+    entries: Array,
+    hasPrev: {
+      type: Boolean,
+      default: true,
+    },
+    hasNext: {
+      type: Boolean,
+      default: true,
+    },
+    page: Number,
+  },
 
   data: () => ({
-    entries: [],
-    hasPrev: true,
-    hasNext: true,
+    unselectHandler: null,
+    selectByUrlHandler: null,
     selected: -1,
-    page: 1,
   }),
 
+  created() {
+    this.unselectHandler = () => this.unselect();
+    this.selectByUrlHandler = url => this.selectByUrl(url);
+    bus.on('list-perform-unselect', this.unselectHandler);
+    bus.on('list-perform-select-by-url', this.unselectHandler);
+  },
+
+  mounted() {
+    if(this.hasPrev) {
+      this.$el.scrollTop = 121; // 1 for the border
+    } else {
+      this.$el.scrollTop = 0;
+    }
+  },
+
+  beforeDestroy() {
+    bus.off('list-perform-unselect', this.unselectHandler);
+    bus.off('list-perform-select-by-url', this.unselectHandler);
+  },
+
   methods: {
-    initialize() {
-      this.$mount();
-
-      setTimeout(() => {
-        if(this.hasPrev) {
-          this.$el.scrollTop = 121; // 1 for the border
-        } else {
-          this.$el.scrollTop = 0;
-        }
-      }, 0);
-    },
-
     scroll() {
       if(this.$el.scrollTop === 0 && this.hasPrev) {
-        this.$emit('scroll-up');
+        bus.emit('list-scroll', this.page - 1);
       }
 
       if(this.$el.scrollTop === this.$el.scrollHeight - this.$el.offsetHeight && this.hasNext) {
-        this.$emit('scroll-down');
+        bus.emit('list-scroll', this.page + 1);
       }
     },
 
     select(index) {
       this.selected = index;
-      this.$emit('select', index);
+      bus.emit('list-select', this.entries[index]);
     },
 
     unselect() {
       this.selected = -1;
-      this.$emit('unselect');
+      bus.emit('list-unselect');
     },
 
     selectByUrl(url) {
@@ -64,4 +82,4 @@ export default Vue.component('list', {
       return time(t);
     },
   },
-});
+}));

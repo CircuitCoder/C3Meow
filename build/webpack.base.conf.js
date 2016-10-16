@@ -22,7 +22,6 @@ module.exports = {
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
       'components': path.resolve(__dirname, '../src/components'),
-      'vue': 'vue/dist/vue.js',
     }
   },
   resolveLoader: {
@@ -63,7 +62,11 @@ module.exports = {
         loader: 'json'
       },
       {
-        test: /\.html$/,
+        test: /\.tmpl\.html$/,
+        loader: 'vue-template',
+      },
+      {
+        test: /index\.html$/,
         loader: 'vue-html?interpolate',
       },
       {

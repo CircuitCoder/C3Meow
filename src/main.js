@@ -1,26 +1,30 @@
 import Vue from 'vue';
 
-import VueTouch from 'vue-touch';
-import Hammer from 'hammerjs';
+const isBrowser = typeof window !== 'undefined' && typeof window !== 'undefined';
 
-Hammer.defaults.cssProps.userSelect = 'initial';
-Hammer.defaults.inputClass = Hammer.TouchInput;
+if(isBrowser) {
+  const VueTouch = require('vue-touch');
+  const Hammer = require('hammerjs');
 
-VueTouch.registerCustomEvent('sidebar-open', {
-  type: 'swipe',
-  direction: Hammer.DIRECTION_RIGHT,
-  threshold: 200,
-  velocity: 0.3,
-});
+  Hammer.defaults.cssProps.userSelect = 'initial';
+  Hammer.defaults.inputClass = Hammer.TouchInput;
 
-VueTouch.registerCustomEvent('sidebar-close', {
-  type: 'swipe',
-  direction: Hammer.DIRECTION_LEFT,
-  threshold: 200,
-  velocity: 0.3,
-});
+  VueTouch.registerCustomEvent('sidebar-open', {
+    type: 'swipe',
+    direction: Hammer.DIRECTION_RIGHT,
+    threshold: 200,
+    velocity: 0.3,
+  });
 
-Vue.use(VueTouch);
+  VueTouch.registerCustomEvent('sidebar-close', {
+    type: 'swipe',
+    direction: Hammer.DIRECTION_LEFT,
+    threshold: 200,
+    velocity: 0.3,
+  });
+
+  Vue.use(VueTouch);
+}
 
 Vue.config.keyCodes.a = 65;
 Vue.config.keyCodes.d = 68;
@@ -29,24 +33,44 @@ Vue.config.keyCodes.s = 83;
 
 import util from './util';
 import config from './config';
+import bus from './bus';
 
 import './style/general.scss';
 
-import Transformer from './transformer.js';
-import List from './list.js';
-import Post from './post.js';
-import Editor from './editor.js';
+import './iterator.js';
 
 import './filters.js';
 
 let gaPV;
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  data: {
+function setupGA() {
+  if(config.googleAnalyticsID) {
+    /* eslint-disable */
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', config.googleAnalyticsID, 'auto');
+
+    gaPV = (title, url) => {
+      ga('send', {
+        hitType: 'pageview',
+        title,
+        page: url,
+      });
+    }
+    /* eslint-enable */
+  }
+}
+
+import tmpl from './tmpl/root.tmpl.html';
+
+// eslint-disable-next-line no-new
+const instance = new Vue(tmpl({
+  data: () => ({
     running: false,
-    title: `正在喂食 | ${config.title}`,
+    cacheTitle: `加载中... | ${config.title}`,
     titlebar: config.title,
 
     ref: '',
@@ -54,21 +78,15 @@ new Vue({
     post: null,
 
     refTrans: null,
-    listTrans: null,
-    pageTrans: null,
 
     postCont: null,
     listCont: null,
-    editor: null,
-    postTrans: null,
     notFound: false,
 
     user: null,
     signedIn: false,
     isAuthor: false,
     avatarLoaded: false,
-
-    accountTrans: null,
 
     postTsStore: [],
 
@@ -80,18 +98,106 @@ new Vue({
     deleting: false,
 
     lastPV: '',
-  },
+
+    iteratorContent: {
+      post: [],
+      list: [],
+      ref: [],
+      pager: [],
+      account: [],
+    },
+
+    iteratorCount: {
+      post: 0,
+      list: 0,
+      ref: 0,
+      pager: 0,
+      account: 0,
+    },
+  }),
 
   mounted() {
-    this.initialize();
-    this.$el.focus();
+    if(!this.$isServer) {
+      setupGA();
+      this.initialize(window.location.pathname);
+      this.$refs.frame.focus();
+    }
+  },
+
+  created() {
+    if(!this.$isServer) this.$mount('#app');
+
+    bus.on('tag', tag => {
+      this.openSidebar();
+
+      if(tag === this.ref) return;
+
+      this.ref = tag;
+      this.page = 1;
+      this.saveState();
+
+      this.loadList(tag, 1, 'right');
+      this.updateRef(tag, 'right');
+    });
+
+    bus.on('editor-save', (content, isNew) => {
+      if(isNew) bus.emit('editor-saveclose', content, isNew);
+      else this.saveEdit(content);
+    });
+
+    bus.on('editor-close', (url, isNew) => {
+      if(isNew) this.closePost('down');
+      else this.loadPost(url, '');
+    });
+
+    bus.on('editor-saveclose', (content, isNew) => {
+      (isNew ? this.saveNew(content) : this.saveEdit(content))
+      .then(() => {
+        if(this.post !== content.url) {
+          this.saveState(); // TODO: replace state on edit
+          this.post = content.url;
+        }
+        this.loadPost(content.url, '');
+      });
+    });
+
+    bus.on('list-scroll', (page) => {
+      const up = this.page > page;
+      this.page = page;
+      this.saveState();
+      this.loadList(this.ref, page, up ? 'up' : 'down');
+    });
+
+    bus.on('list-select', (entry) => {
+      this.closeSidebar();
+
+      let postDirection;
+
+      const url = entry.url;
+      const ts = entry.post_time;
+
+      if(this.post === null) postDirection = 'up';
+      else if(this.postTsStore[this.post] < ts) postDirection = 'right';
+      else if(this.postTsStore[this.post] > ts) postDirection = 'left';
+      else if(this.postTsStore[this.post] === ts) return;
+      else throw new Error('Post timestamp not stored');
+
+      this.postTsStore[url] = ts;
+
+      this.post = url;
+      this.saveState();
+
+      this.loadPost(url, postDirection);
+    });
   },
 
   methods: {
-    initialize() {
+    initialize(url) {
+      this.title = `正在喂食 | ${config.title}`;
+
       let data = {};
       try {
-        data = util.parseURL(window.location.pathname);
+        data = util.parseURL(url);
 
         this.ref = data.ref;
         this.post = data.post;
@@ -101,23 +207,24 @@ new Vue({
         this.post = null;
         this.page = 1;
 
-        this.saveState(true);
+        if(!this.$isServer) this.saveState(true);
       }
 
       setTimeout(() => {
         this.running = true;
       });
 
-      this.loadList(this.ref, this.page, '');
-      if(this.post) this.loadPost(this.post, '');
+      const pList = this.loadList(this.ref, this.page, '');
+      const pPost = this.post ? this.loadPost(this.post, '') : Promise.resolve();
 
-      if(this.ref === 'all') this.showRef('全部', '', false);
-      else this.showRef(this.ref, '');
+      if(this.ref === 'all') this.updateRef('全部', '', false);
+      else this.updateRef(this.ref, '');
 
       this.popAccount();
 
-      window.onpopstate = (e) => this.loadState(e.state);
+      if(this.$isServer) return Promise.all([pList, pPost]);
 
+      window.onpopstate = (e) => this.loadState(e.state);
       util.initLogin((user) => {
         // TODO: validate
         const profile = user.getBasicProfile();
@@ -154,9 +261,12 @@ new Vue({
           this.popAccount();
         });
       });
+
+      return Promise.all([pList, pPost]);
     },
 
     loadState(_state) {
+      // TODO: promisify
       const state = _state || {
         post: null,
         ref: 'all',
@@ -169,7 +279,7 @@ new Vue({
 
         const direction = this.ref === 'all' ? 'left' : 'right';
         this.loadList(this.ref, this.page, direction);
-        this.showRef(this.ref === 'all' ? '全部' : this.ref, direction, this.ref !== 'all');
+        this.updateRef(this.ref === 'all' ? '全部' : this.ref, direction, this.ref !== 'all');
       }
 
       if(state.post !== this.post) {
@@ -182,7 +292,7 @@ new Vue({
           if(this.postTsStore[this.post] > this.postTsStore[state.post]) postDirection = 'left';
 
           this.post = state.post;
-          if(this.listCont) this.listCont.selectByUrl(this.post);
+          bus.emit('list-perform-select-by-url', this.post);
 
           this.loadPost(this.post, postDirection);
         }
@@ -190,127 +300,86 @@ new Vue({
     },
 
     loadList(ref, page, direction) {
-      if(this.listTrans) this.hideList(direction);
-      this.updatePage(page);
+      return new Promise((resolve) => {
+        this.clearIterator('list', { direction });
+        this.updatePager();
 
-      util.loadList(ref, page, (err, data) => {
-        if(this.page !== page || this.ref !== ref) {
-          // Another loading procedure already kicked in
-          return;
-        }
+        util.loadList(ref, page, (err, data) => {
+          if(this.page !== page || this.ref !== ref) {
+            // Another loading procedure already kicked in
+            return;
+          }
 
-        // TODO: handle
-        if(err) throw err;
+          // TODO: handle
+          if(err) throw err;
 
-        const list = new List();
-        list.entries = data.posts;
-        list.initialize();
-        list.page = page;
-        list.hasPrev = page !== 1;
-        list.hasNext = data.hasNext;
+          this.pushIterator('list', {
+            entries: data.posts,
+            page,
+            hasPrev: page !== 1,
+            hasNext: data.hasNext,
+          }, {
+            delta: 20,
+            delay: 0,
+            direction,
+          });
 
-        if(this.post !== null) list.selectByUrl(this.post);
+          if(this.post !== null) {
+            this.$nextTick(() =>
+              bus.emit('list-perform-select-by-url', this.post));
+          }
 
-        let removed = false;
-
-        list.$once('scroll-up', () => {
-          if(removed) return;
-          removed = true;
-          this.page = page - 1;
-          this.saveState();
-          this.loadList(ref, page - 1, 'down');
+          this.pageview();
+          resolve();
         });
-
-        list.$once('scroll-down', () => {
-          if(removed) return;
-          this.page = page + 1;
-          this.saveState();
-          this.loadList(ref, page + 1, 'up');
-        });
-
-        list.$on('select', (index) => {
-          this.closeSidebar();
-
-          let postDirection;
-
-          const url = list.entries[index].url;
-          const ts = list.entries[index].post_time;
-
-          if(this.post === null) postDirection = 'up';
-          else if(this.postTsStore[this.post] < ts) postDirection = 'right';
-          else if(this.postTsStore[this.post] > ts) postDirection = 'left';
-          else if(this.postTsStore[this.post] === ts) return;
-          else throw new Error('Post timestamp not stored');
-
-          this.postTsStore[url] = ts;
-
-          this.post = url;
-          this.saveState();
-
-          this.loadPost(url, postDirection);
-        });
-
-        this.listCont = list;
-        this.showList(direction, list);
-
-        this.pageview();
       });
     },
 
     loadPost(url, direction) {
-      if(this.postTrans) this.hidePost(direction);
-      this.notFound = false;
+      return new Promise((resolve) => {
+        this.clearIterator('post', { direction });
+        this.notFound = false;
 
-      util.loadPost(url, (err, data) => {
-        if(url !== this.post) {
-          // Another loading procedure already kicked in
-          return;
-        }
-
-        if(err) {
-          if(err.status === 404) {
-            this.notFound = true;
-            this.title = `404 | ${config.title}`;
-            this.post = null;
+        util.loadPost(url, (err, data) => {
+          if(url !== this.post) {
+            // Another loading procedure already kicked in
             return;
-          } else {
-            throw err;
           }
-        }
 
-        this.postCont = data;
+          if(err) {
+            if(err.status === 404) {
+              this.notFound = true;
+              this.title = `404 | ${config.title}`;
+              this.post = null;
+              return;
+            } else {
+              throw err;
+            }
+          }
 
-        const post = new Post();
-        post.topic = data.topic;
-        post.tags = data.tags;
-        post.source = data.content;
-        post.timestamp = data.post_time;
-        post.author = data.user;
+          this.postCont = data;
 
-        // For start-up loading
-        this.postTsStore[url] = post.timestamp;
+          this.pushIterator('post', {
+            topic: data.topic,
+            tags: data.tags,
+            source: data.content,
+            timestamp: data.post_time,
+            author: data.author,
+          }, {
+            delta: 50,
+            delay: 0,
+            direction,
+          });
 
-        // Update title
-        this.title = `${post.topic} | ${config.title}`;
+          // For start-up loading
+          this.postTsStore[url] = data.post_time;
 
-        post.$on('tag', (tag) => {
-          this.openSidebar();
+          // Update title
+          this.title = `${data.topic} | ${config.title}`;
 
-          if(tag === this.ref) return;
-
-          this.ref = tag;
-          this.page = 1;
-          this.saveState();
-
-          this.loadList(tag, 1, 'right');
-          this.showRef(tag, 'right');
+          this.pageview();
+          resolve();
         });
-
-        post.$mount();
-
-        this.showPost(direction, post);
-
-        this.pageview();
       });
     },
 
@@ -322,9 +391,9 @@ new Vue({
       this.postCont = null;
       if(!fromState) this.saveState();
 
-      if(this.listCont) this.listCont.unselect();
+      bus.emit('list-perform-unselect');
 
-      this.hidePost(direction);
+      this.clearIterator('post', { direction });
       this.title = `正在喂食 | ${config.title}`;
 
       this.pageview();
@@ -338,7 +407,7 @@ new Vue({
       this.saveState();
 
       this.loadList('all', 1, 'left');
-      this.showRef('全部', 'left', false);
+      this.updateRef('全部', 'left', false);
 
       this.pageview();
     },
@@ -356,226 +425,119 @@ new Vue({
       this.avatarLoaded = true;
     },
 
-    showRef(cont, direction, hasBack = true) {
-      const ref = new Transformer();
+    updateRef(content, _direction, hasBack = true) {
+      let direction = _direction;
 
-      if(hasBack) ref.content = `<span class="blocker"></span>${cont}`;
-      else ref.content = cont;
+      if(this.iteratorCount.ref === 0) direction = '';
+      else {
+        const status = this.iteratorContent.ref[this.iteratorCount.ref - 1].data;
 
-      ref.delta = 20;
-      ref.delay = 100;
-
-      if(this.refTrans) {
-        this.hideRef(direction);
-
-        ref.direction = direction;
+        if(content === status.content && hasBack === status.hasBack) return;
+        this.clearIterator('ref', { direction });
       }
 
-      ref.enter('.list-ref');
-
-      this.refTrans = ref;
+      this.pushIterator('ref', {
+        hasBack,
+        content,
+      }, {
+        direction: '',
+        delta: 20,
+        delay: 100,
+      });
     },
 
-    hideRef(direction) {
-      this.refTrans.direction = direction;
-      this.refTrans.leave();
-      this.refTrans = null;
-    },
+    updatePager() {
+      if(this.iteratorCount.pager > 0) {
+        const prev = this.iteratorContent.pager[this.iteratorCount.pager - 1].data;
+        if(prev === this.page) return;
+        const direction = this.page > prev ? 'right' : 'left';
 
-    updatePage(page) {
-      if(this.pageTrans) {
-        if(page === this.pageTrans.content) return;
-        else if(page > this.pageTrans.content) {
-          this.hidePage('right');
-          this.showPage('right', page);
-        } else if(page < this.pageTrans.content) {
-          this.hidePage('left');
-          this.showPage('left', page);
-        }
+        this.clearIterator('pager', { direction, delay: 0, delta: 20 });
+        this.pushIterator('pager', this.page, {
+          direction,
+          delta: 20,
+          delay: 100,
+        });
       } else {
-        this.showPage('', page);
+        this.pushIterator('pager', this.page, {
+          direction: '',
+        });
       }
-
-      this.page = page;
-    },
-
-    showPage(direction, num) {
-      const page = new Transformer();
-      page.delta = 20;
-      page.delay = 100;
-      page.direction = direction;
-      page.content = num;
-
-      page.enter('.pager');
-      this.pageTrans = page;
-    },
-
-    hidePage(direction) {
-      this.pageTrans.direction = direction;
-      this.pageTrans.leave();
-      this.pageTrans = null;
-    },
-
-    hideList(direction) {
-      this.listTrans.direction = direction;
-      this.listTrans.leave();
-      this.listTrans = null;
-    },
-
-    showList(direction, content) {
-      const list = new Transformer();
-      list.delta = 20;
-      list.delay = 0;
-      list.direction = direction;
-      list.enter('.list-content-holder');
-
-      list.$el.appendChild(content.$el);
-
-      this.listTrans = list;
-    },
-
-    hidePost(direction) {
-      this.postTrans.direction = direction;
-      this.postTrans.leave();
-      this.postTrans = null;
-    },
-
-    showPost(direction, content) {
-      const post = new Transformer();
-      post.delta = 50;
-      post.delay = 0;
-      post.direction = direction;
-      post.enter('.post-container');
-
-      post.$el.appendChild(content.$el);
-
-      this.postTrans = post;
     },
 
     pushAccount(name) {
-      this.accountTrans.direction = 'right';
-      this.accountTrans.leave();
-
-      const account = new Transformer();
-      account.delta = 20;
-      account.delay = 100;
-      account.duration = 200;
-      account.direction = 'right';
-      account.content = name;
-      account.enter('.name-holder');
-
-      this.accountTrans = account;
+      this.clearIterator('account', { direction: 'right' });
+      this.pushIterator('account', name, {
+        delta: 20,
+        delay: 100,
+        duration: 200,
+        direction: 'right',
+      });
+      return;
     },
 
     popAccount() {
-      const account = new Transformer();
-      account.delta = 20;
-      account.delay = 100;
-      account.content = '使用 Google 登录';
-
-      if(this.accountTrans) {
-        this.accountTrans.direction = 'left';
-        this.accountTrans.leave();
-      }
-
-      account.direction = 'left';
-      account.enter('.name-holder');
-      this.accountTrans = account;
+      this.clearIterator('account', { direction: 'left' });
+      this.pushIterator('account', '使用 Google 登录', {
+        delta: 20,
+        delay: 100,
+        duration: 200,
+        direction: 'right',
+      });
+      return;
     },
 
     doEdit() {
       if(!this.isAuthor) return;
       if(this.postCont === null) throw new Error('Invalid Environment');
 
-      const editor = new Editor();
-      editor.topic = this.postCont.topic;
-      editor.tags = this.postCont.tags;
-      editor.content = this.postCont.content;
-      editor.id = this.postCont.post_time;
-      editor.url = this.postCont.url;
-      editor.$mount();
-
-      this.editor = editor;
-
-      this.hidePost('');
-
-      this.showPost('', editor);
-      setTimeout(() => editor.initialize(true, true));
-
-      editor.$on('save', () => {
-        this.saveEdit(() => {
-          this.loadPost(editor.url, '');
-        });
-      });
-
-      editor.$on('close', () => {
-        // TODO: state on editor
-        this.loadPost(editor.url, '');
-      });
-
-      editor.$on('saveclose', () => {
-        this.saveEdit(() => this.loadPost(editor.url, ''));
+      this.$refs.postIterator.clear();
+      this.$refs.postIterator.overridePush('editor', {
+        topic: this.postCont.topic,
+        tags: this.postCont.tags,
+        content: this.postCont.content,
+        id: this.postCont.post_time,
+        url: this.postCont.url,
+      }, {
+        delta: 50,
+        delay: 0,
+        direction: '',
       });
     },
 
-    saveEdit(cb) {
-      const data = this.editor.getContent();
+    saveEdit(data) {
+      return new Promise(resolve => {
+        util.updatePost(data.post_time, data, (err, res) => {
+          if(err) throw err;
+          else if(res.ok !== 0) throw res;
 
-      util.updatePost(data.post_time, data, (err, res) => {
-        if(err) throw err;
-        else if(res.ok !== 0) throw res;
-
-        if(cb) cb();
+          resolve();
+        });
       });
     },
 
     doAdd() {
-      if(!this.isAuthor) return;
+      // if(!this.isAuthor) return;
 
-      const editor = new Editor();
-
-      this.editor = editor;
-      editor.$mount();
+      let direction = '';
 
       if(this.postCont) {
-        this.hidePost('up');
-        this.showPost('up', editor);
-      } else {
-        this.showPost('', editor);
+        this.$refs.postIterator.clear({ direction: 'up' });
+        direction = 'up';
       }
+
+      this.$refs.postIterator.overridePush('editor', {
+        isNew: true,
+      }, {
+        delta: 50,
+        delay: 0,
+        direction,
+      });
 
       this.post = null;
       this.saveState();
 
-      if(this.listCont) this.listCont.unselect();
-
-      setTimeout(() => editor.initialize(true));
-
-      const savecb = () => {
-        const data = this.editor.getContent();
-
-        if(!data.url || data.url === '') return false;
-
-        util.newPost(data, (err, res) => {
-          if(err) throw err;
-
-          this.post = data.url;
-          this.postTsStore[this.post] = res.id;
-          this.saveState();
-
-          this.loadPost(data.url, '');
-          this.loadList(this.ref, this.page, '');
-        });
-
-        return true;
-      };
-
-      editor.$on('close', () => {
-        this.closePost('down');
-      });
-
-      editor.$on('save', savecb);
-      editor.$on('saveclose', savecb);
+      bus.emit('list-perform-unselect');
     },
 
     doDelete() {
@@ -614,6 +576,39 @@ new Vue({
 
     discardDeletion() {
       this.pendingDeletion = false;
+    },
+
+    saveNew(data) {
+      return new Promise((resolve, reject) => {
+        if(!data.url || data.url === '') return void reject();
+
+        util.newPost(data, (err, res) => {
+          if(err) throw err;
+          this.postTsStore[data.url] = res.id;
+          resolve();
+        });
+      });
+    },
+
+    clearIterator(type, trans) {
+      for(const d of this.iteratorContent[type]) {
+        Object.assign(d, trans);
+        d.leave = true;
+      }
+      this.iteratorCount[type] = 0;
+    },
+
+    pushIterator(type, data, trans) {
+      this.overridePushIterator(type, type, data, trans);
+    },
+
+    overridePushIterator(type, _type, data, trans) {
+      const obj = Object.assign({}, trans);
+      obj.data = data;
+      obj.type = type;
+      obj.leave = false;
+      this.iteratorContent[type].push(obj);
+      ++this.iteratorCount[type];
     },
 
     saveState(replace) {
@@ -663,23 +658,21 @@ new Vue({
       window.location.href = `${config.backend}/feed`;
     },
   },
-});
 
-if(config.googleAnalyticsID) {
-  /* eslint-disable */
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  computed: {
+    title: {
+      get() {
+        return this.cacheTitle;
+      },
 
-  ga('create', config.googleAnalyticsID, 'auto');
+      set(t) {
+        this.cacheTitle = t;
+        if(isBrowser) document.title = t;
+      },
+    },
+  },
+}));
 
-  gaPV = (title, url) => {
-    ga('send', {
-      hitType: 'pageview',
-      title,
-      page: url,
-    });
-  }
-  /* eslint-enable */
-}
+export default context =>
+  new Promise(resolve =>
+    instance.initialize(context.url).then(() => resolve(instance)));

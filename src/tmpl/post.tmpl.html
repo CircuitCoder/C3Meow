@@ -8,7 +8,7 @@
           <i class="material-icons">access_time</i>
           {{ timestamp | time }}
         </div>
-        <div class="tags" v-show="tags.length > 0">
+        <div class="tags" v-show="tags && tags.length > 0">
           <i class="material-icons">label_outline</i>
           <span class="tag" v-for="(tag, index) of tags" @click="tagClick(index)">{{ tag }}</span>
         </div>
@@ -20,6 +20,6 @@
       <img :src="author.avatar" v-if="author" class="avatar">
     </div>
 
-    <div class="content" v-html="md(source)"></div>
+    <div class="content" v-html="compiled"></div>
   </div>
 </div>

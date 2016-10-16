@@ -1,0 +1,6 @@
+<div class="transformer"
+  @transitionend="transend"
+  :style="{ transform: transform, 'transition-duration': duration + 'ms' }"
+  :class="[stage]">
+  <slot><span v-html="content"></span></slot>
+</div>
