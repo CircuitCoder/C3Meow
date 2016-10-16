@@ -13,19 +13,13 @@ server.use(express.static(path.resolve(__dirname, '../ssrres'), {
 }));
 
 server.get('*', (req, res) => {
-  renderer.renderToString({ url: req.url }, (err, html) => {
-    if(err) console.log(err);
-    console.log(html);
-  });
-
   const stream = renderer.renderToStream({
     url: req.url
   });
 
-
   res.write(parts[0]);
   stream.pipe(res).on('end', () => {
-    console.log("END");
+    res.write(parts[1]);
   });
 });
 
