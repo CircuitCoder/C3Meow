@@ -12,6 +12,7 @@
     @keydown.s="toggleSidebar"
     tabindex="-1"
     ref="frame">
+    <span class="cache-title" v-if="$isServer">{{cacheTitle}}</span>
 
     <div class="post-container">
       <div class="loading" :class="{ visible: post !== null }">

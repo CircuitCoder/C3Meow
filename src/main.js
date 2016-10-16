@@ -667,7 +667,7 @@ const instance = new Vue(tmpl({
 
       set(t) {
         this.cacheTitle = t;
-        if(isBrowser) document.title = t;
+        if(!this.$isServer) document.title = t;
       },
     },
   },
