@@ -310,6 +310,7 @@ body {
     color: rgba(0,0,0,.3);
 
     display: flex;
+    flex-wrap: wrap;
 
     .timestamp {
       display: inline-block;
@@ -320,12 +321,10 @@ body {
     .tags {
       display: inline-block;
       flex: 1;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
       margin-right: 10px;
 
       .tag {
+        white-space: nowrap;
         margin-right: 5px;
         cursor: pointer;
         color: rgba(0,0,0,.5);
@@ -343,7 +342,7 @@ body {
     }
 
     .author {
-      display: inline-flex;
+      display: inline-block;
       margin-right: 10px;
       align-items: flex-end;
       white-space: nowrap;
