@@ -440,7 +440,7 @@ const instance = new Vue(tmpl({
         hasBack,
         content,
       }, {
-        direction: '',
+        direction,
         delta: 20,
         delay: 100,
       });
