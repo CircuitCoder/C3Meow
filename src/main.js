@@ -336,7 +336,7 @@ const instance = new Vue(tmpl({
     },
 
     loadPost(url, direction) {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         this.clearIterator('post', { direction });
         this.notFound = false;
 
@@ -351,9 +351,9 @@ const instance = new Vue(tmpl({
               this.notFound = true;
               this.title = `404 | ${config.title}`;
               this.post = null;
-              return;
+              return void resolve();
             } else {
-              throw err;
+              return void reject(err);
             }
           }
 
