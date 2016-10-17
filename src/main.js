@@ -12,14 +12,14 @@ if(isBrowser) {
   VueTouch.registerCustomEvent('sidebar-open', {
     type: 'swipe',
     direction: Hammer.DIRECTION_RIGHT,
-    threshold: 200,
+    threshold: 100,
     velocity: 0.3,
   });
 
   VueTouch.registerCustomEvent('sidebar-close', {
     type: 'swipe',
     direction: Hammer.DIRECTION_LEFT,
-    threshold: 200,
+    threshold: 100,
     velocity: 0.3,
   });
 
