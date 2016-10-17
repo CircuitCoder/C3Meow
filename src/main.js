@@ -120,7 +120,14 @@ const instance = new Vue(tmpl({
     if(!this.$isServer) {
       setupGA();
       this.initialize(window.location.pathname);
-      this.$refs.frame.focus();
+
+      document.body.addEventListener('keydown', e => {
+        if(e.code === 'Escape') this.closePost('down');
+        else if(e.code === 'KeyD') this.doDelete();
+        else if(e.code === 'KeyE') this.doEdit();
+        else if(e.code === 'KeyA') this.doAdd();
+        else if(e.code === 'KeyS') this.toggleSidebar();
+      });
     }
   },
 

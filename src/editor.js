@@ -104,9 +104,5 @@ export default Vue.component('editor', tmpl({
         user_ident: 'test,dummy',
       };
     },
-
-    eventBlocker(e) {
-      e.stopPropagation();
-    },
   },
 }));

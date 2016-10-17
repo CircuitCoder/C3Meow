@@ -4,14 +4,7 @@
     v-show="running"
     style="display: none"
     v-touch:sidebar-close="closeSidebar"
-    v-touch:sidebar-open="openSidebar"
-    @keydown.d="doDelete"
-    @keydown.e="doEdit"
-    @keydown.a="doAdd"
-    @keydown.esc="closePost('down')"
-    @keydown.s="toggleSidebar"
-    tabindex="-1"
-    ref="frame">
+    v-touch:sidebar-open="openSidebar">
     <span class="cache-title" v-if="$isServer">{{cacheTitle}}</span>
 
     <div class="post-container">
