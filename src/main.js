@@ -201,6 +201,12 @@ const instance = new Vue(tmpl({
 
       this.loadPost(url, postDirection);
     });
+
+    if(window && window.gapiLoader) {
+      window.gapiLoader.subscribe(() => {
+        instance.setupLogin();
+      });
+    }
   },
 
   methods: {
@@ -232,11 +238,14 @@ const instance = new Vue(tmpl({
       if(this.ref === 'all') this.updateRef('全部', '', false);
       else this.updateRef(this.ref, '');
 
-      this.popAccount();
-
       if(this.$isServer) return Promise.all([pList, pPost]);
 
       window.onpopstate = (e) => this.loadState(e.state);
+
+      return Promise.all([pList, pPost]);
+    },
+
+    setupLogin() {
       util.initLogin((user) => {
         // TODO: validate
         const profile = user.getBasicProfile();
@@ -274,7 +283,7 @@ const instance = new Vue(tmpl({
         });
       });
 
-      return Promise.all([pList, pPost]);
+      this.popAccount();
     },
 
     loadState(_state) {
