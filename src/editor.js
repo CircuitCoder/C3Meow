@@ -85,11 +85,10 @@ export default Vue.component('editor', tmpl({
 
       instance = this;
 
-      if(focus) {
+      if(focus)
         setTimeout(() => {
           this.cm.focus();
         });
-      }
     },
 
     getContent() {

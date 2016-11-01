@@ -9,9 +9,8 @@ import Post from './post.js';
 import List from './list.js';
 let Editor;
 
-if(isBrowser) {
+if(isBrowser)
   Editor = require('./editor.js').default;
-}
 
 export default Vue.component('iterator', tmpl({
   props: {
@@ -31,18 +30,16 @@ export default Vue.component('iterator', tmpl({
       render(h, context) {
         const { props } = context;
 
-        if(props.type === 'pager' || props.type === 'account') {
+        if(props.type === 'pager' || props.type === 'account')
           return h('span', props.data);
-        }
 
-        if(props.type === 'ref') {
-          if(props.data.hasBack) {
+        if(props.type === 'ref')
+          if(props.data.hasBack)
             return h('span', {}, [
               h('span', { class: ['blocker'] }),
               props.data.content,
             ]);
-          } else return h('span', props.data.content);
-        }
+          else return h('span', props.data.content);
 
         return h(props.type, {
           props: props.data,
@@ -59,28 +56,22 @@ export default Vue.component('iterator', tmpl({
   methods: {
     enter(el, done) {
       if(!this.$refs.transformers) return;
-      for(const trans of this.$refs.transformers) {
-        if(trans.$el === el) {
+      for(const trans of this.$refs.transformers)
+        if(trans.$el === el)
           trans.enter().then(done);
-        }
-      }
     },
 
     appear(el) {
       if(!this.$refs.transformers) return;
-      for(const trans of this.$refs.transformers) {
-        if(trans.$el === el) {
+      for(const trans of this.$refs.transformers)
+        if(trans.$el === el)
           trans.appear();
-        }
-      }
     },
 
     remove(spec) {
-      for(let i = 0; i < this.list.length; ++i) {
-        if(this.list[i] === spec) {
+      for(let i = 0; i < this.list.length; ++i)
+        if(this.list[i] === spec)
           this.list.splice(i, 1);
-        }
-      }
     },
 
     get(index) {

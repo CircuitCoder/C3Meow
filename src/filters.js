@@ -15,11 +15,9 @@ const safeMd = new MarkdownIt({
   linkify: true,
   typographer: false,
   highlight: (str, lang) => {
-    if(lang && hljs.getLanguage(lang)) {
-      try {
-        return `<pre class="hljs"><code>${hljs.highlight(lang, str).value}</code></pre>`;
-      } catch(__) { /* ignore */ }
-    }
+    if(lang && hljs.getLanguage(lang)) try {
+      return `<pre class="hljs"><code>${hljs.highlight(lang, str).value}</code></pre>`;
+    } catch(__) { /* ignore */ }
 
     return `<pre class="hljs"><code>${safeMd.utils.escapeHtml(str)}</code></pre>`;
   },

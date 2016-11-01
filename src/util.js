@@ -15,43 +15,43 @@ function isInt(str) {
 
 // Exposed
 function parseURL(url) {
-  if(url.indexOf(base) !== 0) {
+  if(url.indexOf(base) !== 0)
     throw new Error('Invalid path prefix. Please check the base field in your configuration.');
-  } else {
+  else {
     const segs = url.substring(base.length).split('/').filter(e => e.length > 0);
-    if(segs.length === 0) {
+    if(segs.length === 0)
       // Is index
       return {
         ref: 'all',
         page: 1,
         post: null,
       };
-    } if(segs.length === 1) {
+
+    if(segs.length === 1)
       // Is post
       return {
         ref: 'all',
         page: 1,
         post: segs[0],
       };
-    } else if(segs.length === 2) {
-      if(isInt(segs[1])) {
+
+    if(segs.length === 2)
+      if(isInt(segs[1]))
         // Is tag
         return {
           ref: decodeURIComponent(segs[0]),
           page: Number.parseInt(segs[1], 10),
           post: null,
         };
-      }
-    } else if(segs.length === 3) {
-      if(isInt(segs[1])) {
+
+    if(segs.length === 3)
+      if(isInt(segs[1]))
         // Is tag
         return {
           ref: decodeURIComponent(segs[0]),
           page: Number.parseInt(segs[1], 10),
           post: segs[2],
         };
-      }
-    }
 
     throw new Error('Invalid url format.');
   }
@@ -60,17 +60,15 @@ function parseURL(url) {
 function buildURL(state) {
   let refurl;
   let posturl;
-  if(state.ref === 'all' && state.page === 1) {
+  if(state.ref === 'all' && state.page === 1)
     refurl = '';
-  } else {
+  else
     refurl = `/${state.ref}/${state.page}`;
-  }
 
-  if(state.post !== null) {
+  if(state.post !== null)
     posturl = `/${state.post}`;
-  } else {
+  else
     posturl = '';
-  }
 
   const result = refurl + posturl;
   return result === '' ? '/' : result;
@@ -81,11 +79,10 @@ function postURL(url) {
 }
 
 function listURL(tag, page) {
-  if(tag === undefined || tag === null || tag === '') {
+  if(tag === undefined || tag === null || tag === '')
     return page === 1 ? '/' : `/all/${page}`;
-  } else {
+  else
     return `/${tag}/${page}`;
-  }
 }
 
 function loadList(tag, page, cb) {
@@ -94,13 +91,12 @@ function loadList(tag, page, cb) {
       .withCredentials()
       .end((err, res) => {
         if(err) return cb(err);
-        else {
+        else
           try {
             return cb(null, JSON.parse(res.text));
           } catch(e) {
             return cb(e);
           }
-        }
       });
 }
 
@@ -109,7 +105,7 @@ function loadPost(url, cb) {
       .withCredentials()
       .end((err, res) => {
         if(err) return cb(err);
-        else {
+        else
           try {
             const post = JSON.parse(res.text);
             if(post.tags === null) post.tags = [];
@@ -117,7 +113,6 @@ function loadPost(url, cb) {
           } catch(e) {
             return cb(e);
           }
-        }
       });
 }
 
@@ -177,9 +172,7 @@ function initLogin(signIn, signOut) {
     auth.isSignedIn.listen((signedIn) => {
       if(signedIn) {
         if(signIn) signIn(auth.currentUser.get());
-      } else {
-        if(signOut) signOut();
-      }
+      } else if(signOut) signOut();
     });
   });
 }

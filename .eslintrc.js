@@ -24,5 +24,6 @@ module.exports = {
     'consistent-return': [2, {
       treatUndefinedAsUnspecified: true,
     }],
+    curly: [2, 'multi']
   }
 }

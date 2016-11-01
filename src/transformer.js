@@ -40,11 +40,10 @@ export default Vue.component('transformer', tmpl({
 
   methods: {
     leave() {
-      if(this.stage === 'leaving') {
+      if(this.stage === 'leaving')
         return new Promise(resolve => {
           this.afterLeave(resolve);
         });
-      }
 
       return new Promise(resolve => {
         this.stage = 'leaving';

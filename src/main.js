@@ -149,11 +149,10 @@ const instance = new Vue(tmpl({
 
     bus.on('editor-save', (content, isNew) => {
       if(isNew) bus.emit('editor-saveclose', content, isNew);
-      else {
+      else
         this.saveEdit(content).then(() => {
           this.loadList(this.ref, this.page, '');
         });
-      }
     });
 
     bus.on('editor-close', (url, isNew) => {
@@ -202,11 +201,10 @@ const instance = new Vue(tmpl({
       this.loadPost(url, postDirection);
     });
 
-    if(window && window.gapiLoader) {
+    if(window && window.gapiLoader)
       window.gapiLoader.subscribe(() => {
         instance.setupLogin();
       });
-    }
   },
 
   methods: {
@@ -251,9 +249,8 @@ const instance = new Vue(tmpl({
         const profile = user.getBasicProfile();
         const newAvatar = profile.getImageUrl();
 
-        if(!this.user || newAvatar !== this.user.avatar) {
+        if(!this.user || newAvatar !== this.user.avatar)
           this.avatarLoaded = false;
-        }
 
         util.postLogin(user.getAuthResponse().id_token, user.getId(), (err, pres) => {
           if(err) throw err;
@@ -303,10 +300,10 @@ const instance = new Vue(tmpl({
         this.updateRef(this.ref === 'all' ? '全部' : this.ref, direction, this.ref !== 'all');
       }
 
-      if(state.post !== this.post) {
-        if(!state.post) {
+      if(state.post !== this.post)
+        if(!state.post)
           this.closePost('down', true);
-        } else {
+        else {
           let postDirection = 'up';
           if(!(state.post in this.postTsStore)) postDirection = 'up';
           if(this.postTsStore[this.post] < this.postTsStore[state.post]) postDirection = 'right';
@@ -317,7 +314,6 @@ const instance = new Vue(tmpl({
 
           this.loadPost(this.post, postDirection);
         }
-      }
     },
 
     loadList(ref, page, direction) {
@@ -326,10 +322,9 @@ const instance = new Vue(tmpl({
         this.updatePager();
 
         util.loadList(ref, page, (err, data) => {
-          if(this.page !== page || this.ref !== ref) {
+          if(this.page !== page || this.ref !== ref)
             // Another loading procedure already kicked in
             return;
-          }
 
           // TODO: handle
           if(err) throw err;
@@ -345,10 +340,9 @@ const instance = new Vue(tmpl({
             direction,
           });
 
-          if(this.post !== null) {
+          if(this.post !== null)
             this.$nextTick(() =>
               bus.emit('list-perform-select-by-url', this.post));
-          }
 
           this.pageview();
           resolve();
@@ -362,21 +356,17 @@ const instance = new Vue(tmpl({
         this.notFound = false;
 
         util.loadPost(url, (err, data) => {
-          if(url !== this.post) {
+          if(url !== this.post)
             // Another loading procedure already kicked in
             return;
-          }
 
-          if(err) {
+          if(err)
             if(err.status === 404) {
               this.notFound = true;
               this.title = `404 | ${config.title}`;
               this.post = null;
               return void resolve();
-            } else {
-              return void reject(err);
-            }
-          }
+            } else return void reject(err);
 
           this.postCont = data;
 
@@ -432,12 +422,11 @@ const instance = new Vue(tmpl({
     },
 
     modAccount() {
-      if(this.signedIn) {
+      if(this.signedIn)
         util.doLogout();
-      } else {
+      else
         // TODO: prevent multiple invoke
         util.doLogin();
-      }
     },
 
     onAvatarLoad() {
@@ -477,11 +466,10 @@ const instance = new Vue(tmpl({
           delta: 20,
           delay: 100,
         });
-      } else {
+      } else
         this.pushIterator('pager', this.page, {
           direction: '',
         });
-      }
     },
 
     pushAccount(name) {
@@ -574,10 +562,11 @@ const instance = new Vue(tmpl({
     },
 
     checkDeletion() {
-      if(!this.pendingDeletion) {
+      if(!this.pendingDeletion)
         // Ignore
         return;
-      } if(this.deletionConfirmation === this.deletionPlaceholder) {
+
+      if(this.deletionConfirmation === this.deletionPlaceholder) {
         // Perform deletion
         this.deleting = true;
         util.deletePost(this.postCont.post_time, () => {

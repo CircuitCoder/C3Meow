@@ -34,11 +34,10 @@ export default Vue.component('list', tmpl({
   },
 
   mounted() {
-    if(this.hasPrev) {
+    if(this.hasPrev)
       this.$el.scrollTop = 121; // 1 for the border
-    } else {
+    else
       this.$el.scrollTop = 0;
-    }
   },
 
   beforeDestroy() {
@@ -48,13 +47,11 @@ export default Vue.component('list', tmpl({
 
   methods: {
     scroll() {
-      if(this.$el.scrollTop === 0 && this.hasPrev) {
+      if(this.$el.scrollTop === 0 && this.hasPrev)
         bus.emit('list-scroll', this.page - 1);
-      }
 
-      if(this.$el.scrollTop === this.$el.scrollHeight - this.$el.offsetHeight && this.hasNext) {
+      if(this.$el.scrollTop === this.$el.scrollHeight - this.$el.offsetHeight && this.hasNext)
         bus.emit('list-scroll', this.page + 1);
-      }
     },
 
     select(index) {
@@ -68,12 +65,11 @@ export default Vue.component('list', tmpl({
     },
 
     selectByUrl(url) {
-      for(let i = 0; i < this.entries.length; ++i) {
+      for(let i = 0; i < this.entries.length; ++i)
         if(this.entries[i].url === url) {
           this.selected = i;
           return;
         }
-      }
 
       this.selected = -1;
     },

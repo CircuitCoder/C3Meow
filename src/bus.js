@@ -13,11 +13,9 @@ class Bus {
   }
 
   emit(event, ...args) {
-    if(event in this.listeners) {
-      for(const l of this.listeners[event]) {
+    if(event in this.listeners)
+      for(const l of this.listeners[event])
         l(...args);
-      }
-    }
   }
 }
 
