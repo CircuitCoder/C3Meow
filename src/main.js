@@ -203,7 +203,7 @@ const instance = new Vue(tmpl({
 
     if(window && window.gapiLoader)
       window.gapiLoader.subscribe(() => {
-        instance.setupLogin();
+        this.setupLogin();
       });
   },
 
