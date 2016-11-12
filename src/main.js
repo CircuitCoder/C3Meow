@@ -322,6 +322,7 @@ const instance = new Vue(tmpl({
         this.updatePager();
 
         util.loadList(ref, page, (err, data) => {
+          if(this.ref !== ref || this.page !== page) return;
           // TODO: handle
           if(err) throw err;
 
@@ -355,6 +356,7 @@ const instance = new Vue(tmpl({
         this.notFound = false;
 
         util.loadPost(url, (err, data) => {
+          if(this.post !== url) return;
           if(err)
             if(err.status === 404) {
               this.notFound = true;
