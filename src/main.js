@@ -322,10 +322,6 @@ const instance = new Vue(tmpl({
         this.updatePager();
 
         util.loadList(ref, page, (err, data) => {
-          if(this.page !== page || this.ref !== ref)
-            // Another loading procedure already kicked in
-            return;
-
           // TODO: handle
           if(err) throw err;
 
@@ -356,10 +352,6 @@ const instance = new Vue(tmpl({
         this.notFound = false;
 
         util.loadPost(url, (err, data) => {
-          if(url !== this.post)
-            // Another loading procedure already kicked in
-            return;
-
           if(err)
             if(err.status === 404) {
               this.notFound = true;

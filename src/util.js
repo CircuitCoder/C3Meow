@@ -13,6 +13,11 @@ function isInt(str) {
   return /^\d+$/.test(str);
 }
 
+const postReq = [];
+const listReq = [];
+let postReqIndex = 0;
+let listReqIndex = 0;
+
 // Exposed
 function parseURL(url) {
   if(url.indexOf(base) !== 0)
@@ -86,11 +91,16 @@ function listURL(tag, page) {
 }
 
 function loadList(tag, page, cb) {
+  const reqIndex = ++listReqIndex;
+  for(const req of listReq)
+    req.abort();
+
   const path = tag === 'all' ? `/posts/${page}` : `/tag/${tag}/${page}`;
-  request.get(config.backend + path)
+  const req = request.get(config.backend + path)
       .withCredentials()
       .end((err, res) => {
-        if(err) return cb(err);
+        if(reqIndex !== listReqIndex) return false;
+        else if(err) return cb(err);
         else
           try {
             return cb(null, JSON.parse(res.text));
@@ -98,13 +108,19 @@ function loadList(tag, page, cb) {
             return cb(e);
           }
       });
+  listReq.push(req);
 }
 
 function loadPost(url, cb) {
-  request.get(`${config.backend}/post/${url}`)
+  const reqIndex = ++postReqIndex;
+  for(const req of postReq)
+    req.abort();
+
+  const req = request.get(`${config.backend}/post/${url}`)
       .withCredentials()
       .end((err, res) => {
-        if(err) return cb(err);
+        if(reqIndex !== postReqIndex) return false;
+        else if(err) return cb(err);
         else
           try {
             const post = JSON.parse(res.text);
@@ -114,6 +130,7 @@ function loadPost(url, cb) {
             return cb(e);
           }
       });
+  postReq.push(req);
 }
 
 function ping() {
