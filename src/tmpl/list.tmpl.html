@@ -1,7 +1,7 @@
 <div class="list" @scroll="scroll" :class="{ 'has-prev': hasPrev }">
   <div class="placeholder" v-show="hasPrev">
     <i class="material-icons placeholder-icon md-24">keyboard_arrow_up</i>
-    <div>第 {{ page - 1 }} 页</div>
+    <a :href="prevLink" @click.prevent="prev">第 {{ page - 1 }} 页</a>
   </div>
   <div class="entries">
     <a v-for="(entry, index) of entries" :href="buildEntryLink(entry)" @click.prevent>
@@ -21,7 +21,7 @@
     </div>
   </div>
   <div class="placeholder" v-show="hasNext">
-    <div>第 {{ page + 1 }} 页</div>
+    <a :href="nextLink" @click.prevent="next">第 {{ page + 1 }} 页</a>
     <i class="material-icons placeholder-icon md-24">keyboard_arrow_down</i>
   </div>
   <div class="placeholder" v-show="!hasNext">

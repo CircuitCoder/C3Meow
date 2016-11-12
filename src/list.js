@@ -18,6 +18,7 @@ export default Vue.component('list', tmpl({
       default: true,
     },
     page: Number,
+    ref: String,
   },
 
   data: () => ({
@@ -48,10 +49,18 @@ export default Vue.component('list', tmpl({
   methods: {
     scroll() {
       if(this.$el.scrollTop === 0 && this.hasPrev)
-        bus.emit('list-scroll', this.page - 1);
+        this.prev();
 
       if(this.$el.scrollTop === this.$el.scrollHeight - this.$el.offsetHeight && this.hasNext)
-        bus.emit('list-scroll', this.page + 1);
+        this.next();
+    },
+
+    prev() {
+      bus.emit('list-scroll', this.page - 1);
+    },
+
+    next() {
+      bus.emit('list-scroll', this.page + 1);
     },
 
     select(index) {
@@ -80,6 +89,19 @@ export default Vue.component('list', tmpl({
 
     buildEntryLink(entry) {
       return `/${entry.url}`;
+    },
+  },
+
+  computed: {
+    nextLink() {
+      return `/${this.ref}/${this.page + 1}`;
+    },
+
+    prevLink() {
+      if(this.ref === 'all' && this.page === 2)
+        return '/';
+      else
+        return `/${this.ref}/${this.page - 1}`;
     },
   },
 }));
