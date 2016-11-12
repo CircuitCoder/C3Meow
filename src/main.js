@@ -73,9 +73,10 @@ const instance = new Vue(tmpl({
     cacheTitle: `加载中... | ${config.title}`,
     titlebar: config.title,
 
-    ref: '',
+    ref: 'all',
     page: 0,
     post: null,
+    postTitle: '',
 
     refTrans: null,
 
@@ -211,7 +212,7 @@ const instance = new Vue(tmpl({
 
   methods: {
     initialize(url) {
-      this.title = `正在喂食 | ${config.title}`;
+      this.updateTitle();
 
       let data = {};
       try {
@@ -347,6 +348,8 @@ const instance = new Vue(tmpl({
             this.$nextTick(() =>
               bus.emit('list-perform-select-by-url', this.post));
 
+          this.updateTitle();
+
           this.pageview();
           resolve();
         });
@@ -362,7 +365,8 @@ const instance = new Vue(tmpl({
           if(err)
             if(err.status === 404) {
               this.notFound = true;
-              this.title = `404 | ${config.title}`;
+              this.postTitle = '404';
+              this.updateTitle();
               this.post = null;
               return void resolve();
             } else return void reject(err);
@@ -385,7 +389,8 @@ const instance = new Vue(tmpl({
           this.postTsStore[url] = data.post_time;
 
           // Update title
-          this.title = `${data.topic} | ${config.title}`;
+          this.postTitle = data.topic;
+          this.updateTitle();
 
           this.pageview();
           resolve();
@@ -396,13 +401,14 @@ const instance = new Vue(tmpl({
     closePost(direction, fromState) {
       // TODO: refactor
       this.post = null;
+      this.postTitle = '';
       this.postCont = null;
       if(!fromState) this.saveState();
 
       bus.emit('list-perform-unselect');
 
       this.clearIterator('post', { direction });
-      this.title = `正在喂食 | ${config.title}`;
+      this.updateTitle();
 
       this.pageview();
     },
@@ -416,6 +422,8 @@ const instance = new Vue(tmpl({
 
       this.loadList('all', 1, 'left');
       this.updateRef('全部', 'left', false);
+
+      this.updateTitle();
 
       this.pageview();
     },
@@ -661,6 +669,22 @@ const instance = new Vue(tmpl({
 
     gotoFeed() {
       window.location.href = `${config.backend}/feed`;
+    },
+
+    updateTitle() {
+      const ref = this.ref;
+      const postTitle = this.postTitle;
+
+      let t = config.title;
+      if(ref === '' || ref === 'all') {
+        if(!postTitle)
+          t = `正在喂食 | ${t}`;
+      } else t = `${ref} | ${t}`;
+
+      if(postTitle)
+        t = `${postTitle} | ${t}`;
+
+      this.title = t;
     },
   },
 
