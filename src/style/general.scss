@@ -87,12 +87,18 @@ body {
 
     .back-to-all {
       position: absolute;
+      display: block;
       top: 0;
       bottom: 0;
       right: 0px;
       left: 0px;
       padding: 0 20px + 30px;
       background: white;
+
+      cursor: default;
+
+      color: inherit;
+      text-decoration: none;
 
       transition-property: opacity;
       transition-duration: 0.2s;
@@ -330,8 +336,9 @@ body {
       .tag {
         white-space: nowrap;
         margin-right: 5px;
-        cursor: pointer;
         color: rgba(0,0,0,.5);
+
+        text-decoration: none;
 
         transition: opacity 0.2s ease;
         opacity: 0.6;
@@ -714,6 +721,13 @@ body {
 
   strong {
     color: black;
+  }
+}
+
+.list {
+  a {
+    color: inherit;
+    text-decoration: inherit;
   }
 }
 

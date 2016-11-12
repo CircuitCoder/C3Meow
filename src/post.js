@@ -12,11 +12,16 @@ export default Vue.component('post', tmpl({
     timestamp: Number,
     tags: Array,
     author: Object,
+    url: String,
   },
   methods: {
     tagClick(index) {
       bus.emit('tag', this.tags[index]);
       this.$emit('tag', this.tags[index]);
+    },
+
+    buildTagLink(tag) {
+      return `/${tag}/1`;
     },
   },
 

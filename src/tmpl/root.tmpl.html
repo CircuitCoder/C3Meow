@@ -50,9 +50,9 @@
         <div class="hint">Loading<span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span></div>
       </div>
       <div class="list-ref" :class="{ 'show-back-to-all': ref !== 'all' }">
-        <div class="back-to-all" @click="backToAll">
+        <a class="back-to-all" href="/" @click.prevent="backToAll">
           返回全部
-        </div>
+        </a>
         <i class="material-icons back-to-all-arrow">keyboard_arrow_left</i>
         <div class="pager">
           <iterator type="pager" :list="iteratorContent.pager"></iterator>

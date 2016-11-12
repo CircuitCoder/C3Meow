@@ -57,8 +57,6 @@
     transform: translateX(-100px); // For the border to stand out
     border-bottom: $border-color 1px solid;
 
-    cursor: pointer;
-
     &:hover {
       .entry-topic {
         opacity: 1;

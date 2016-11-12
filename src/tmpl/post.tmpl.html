@@ -10,7 +10,10 @@
         </div>
         <div class="tags" v-show="tags && tags.length > 0">
           <i class="material-icons">label_outline</i>
-          <span class="tag" v-for="(tag, index) of tags" @click="tagClick(index)">{{ tag }}</span>
+          <a class="tag"
+            v-for="(tag, index) of tags"
+            :href="buildTagLink(tag)"
+            @click.prevent="tagClick(index)">{{ tag }}</a>
         </div>
         <div class="author" v-show="author">
           <i class="material-icons">edit</i>
