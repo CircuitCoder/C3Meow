@@ -35,10 +35,8 @@ export default Vue.component('list', tmpl({
   },
 
   mounted() {
-    if(this.hasPrev)
-      this.$el.scrollTop = 121; // 1 for the border
-    else
-      this.$el.scrollTop = 0;
+    if(bus.get('running')) this.initScroll();
+    else bus.once('start', () => this.initScroll());
   },
 
   beforeDestroy() {
@@ -47,6 +45,13 @@ export default Vue.component('list', tmpl({
   },
 
   methods: {
+    initScroll() {
+      if(this.hasPrev)
+        this.$el.scrollTop = 121; // 1 for the border
+      else
+        this.$el.scrollTop = 0;
+    },
+
     scroll() {
       if(this.$el.scrollTop === 0 && this.hasPrev)
         this.prev();

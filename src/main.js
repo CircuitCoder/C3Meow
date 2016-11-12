@@ -134,6 +134,8 @@ const instance = new Vue(tmpl({
   created() {
     if(!this.$isServer) this.$mount('#app');
 
+    bus.set('running', false);
+
     bus.on('tag', tag => {
       this.openSidebar();
 
@@ -228,6 +230,10 @@ const instance = new Vue(tmpl({
 
       setTimeout(() => {
         this.running = true;
+        this.$nextTick(() => {
+          bus.set('running', true);
+          bus.emit('start');
+        });
       });
 
       const pList = this.loadList(this.ref, this.page, '');
