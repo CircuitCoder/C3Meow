@@ -77,5 +77,9 @@ export default Vue.component('list', tmpl({
     convertTime(t) {
       return time(t);
     },
+
+    buildEntryLink(entry) {
+      return `/${entry.url}`;
+    },
   },
 }));

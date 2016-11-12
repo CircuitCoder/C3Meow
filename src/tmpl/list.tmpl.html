@@ -4,7 +4,7 @@
     <div>第 {{ page - 1 }} 页</div>
   </div>
   <div class="entries">
-    <a v-for="(entry, index) of entries" :href="entry.url" @click.prevent>
+    <a v-for="(entry, index) of entries" :href="buildEntryLink(entry)" @click.prevent>
       <div class="entry" @click="select(index)" :class="{ selected: index === selected }">
         <div class="entry-topic">
           {{ entry.topic }}

@@ -95,7 +95,9 @@ function loadList(tag, page, cb) {
   for(const req of listReq)
     req.abort();
 
-  const path = tag === 'all' ? `/posts/${page}` : `/tag/${tag}/${page}`;
+  const enctag = encodeURIComponent(tag);
+
+  const path = tag === 'all' ? `/posts/${page}` : `/tag/${enctag}/${page}`;
   const req = request.get(config.backend + path)
       .withCredentials()
       .end((err, res) => {
@@ -116,7 +118,9 @@ function loadPost(url, cb) {
   for(const req of postReq)
     req.abort();
 
-  const req = request.get(`${config.backend}/post/${url}`)
+  const encurl = encodeURIComponent(url);
+
+  const req = request.get(`${config.backend}/post/${encurl}`)
       .withCredentials()
       .end((err, res) => {
         if(reqIndex !== postReqIndex) return false;

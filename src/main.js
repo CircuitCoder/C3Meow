@@ -201,7 +201,7 @@ const instance = new Vue(tmpl({
       this.loadPost(url, postDirection);
     });
 
-    if(window && window.gapiLoader)
+    if(isBrowser && window && window.gapiLoader)
       window.gapiLoader.subscribe(() => {
         this.setupLogin();
       });
