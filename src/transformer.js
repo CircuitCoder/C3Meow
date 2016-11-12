@@ -16,20 +16,11 @@ export default Vue.component('transformer', tmpl({
       type: Number,
       default: 0,
     },
-
-    leaveHook: Boolean,
   },
 
   data: () => ({
-    stage: 'entering',
-    transform: '',
-
     transcb: null,
   }),
-
-  watch: {
-    leaveHook: 'leave',
-  },
 
   created() {
     if(this.$isServer) {
@@ -50,7 +41,6 @@ export default Vue.component('transformer', tmpl({
         this.update();
 
         this.transcb = () => {
-          this.$emit('left');
           resolve();
         };
       });
@@ -93,7 +83,9 @@ export default Vue.component('transformer', tmpl({
     },
 
     update() {
-      this.transform = this.generate();
+      this.$el.className = `${this.stage} transformer`;
+      this.$el.style.transform = this.generate();
+      this.$el.style.transitionDuration = `${this.duration}ms`;
     },
 
     generate() {

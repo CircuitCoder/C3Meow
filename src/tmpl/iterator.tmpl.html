@@ -1,16 +1,14 @@
 <transition-group
-  :css="false"
   @enter="enter"
+  @leave="leave"
   @appear="appear">
   <transformer v-for="spec of list"
     :direction="spec.direction"
     :delay="spec.delay"
     :delta="spec.delta"
     :duration="spec.duration"
-    :leave-hook="spec.leave"
     :key="spec"
-    ref="transformers"
-    @left="remove(spec)">
+    ref="transformers">
     <adaptor :type="spec.type ? spec.type : type" :data="spec.data"></adaptor>
   </transformer>
 </transition-group>

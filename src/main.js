@@ -42,6 +42,7 @@ import './iterator.js';
 import './filters.js';
 
 let gaPV;
+let transGen = 0;
 
 function setupGA() {
   if(config.googleAnalyticsID) {
@@ -106,14 +107,6 @@ const instance = new Vue(tmpl({
       ref: [],
       pager: [],
       account: [],
-    },
-
-    iteratorCount: {
-      post: 0,
-      list: 0,
-      ref: 0,
-      pager: 0,
-      account: 0,
     },
   }),
 
@@ -443,9 +436,9 @@ const instance = new Vue(tmpl({
     updateRef(content, _direction, hasBack = true) {
       let direction = _direction;
 
-      if(this.iteratorCount.ref === 0) direction = '';
+      if(this.iteratorContent.ref.length === 0) direction = '';
       else {
-        const status = this.iteratorContent.ref[this.iteratorCount.ref - 1].data;
+        const status = this.iteratorContent.ref[this.iteratorContent.ref.length - 1].data;
 
         if(content === status.content && hasBack === status.hasBack) return;
         this.clearIterator('ref', { direction });
@@ -462,8 +455,8 @@ const instance = new Vue(tmpl({
     },
 
     updatePager() {
-      if(this.iteratorCount.pager > 0) {
-        const prev = this.iteratorContent.pager[this.iteratorCount.pager - 1].data;
+      if(this.iteratorContent.pager.length > 0) {
+        const prev = this.iteratorContent.pager[this.iteratorContent.pager.length - 1].data;
         if(prev === this.page) return;
         const direction = this.page > prev ? 'right' : 'left';
 
@@ -604,11 +597,19 @@ const instance = new Vue(tmpl({
     },
 
     clearIterator(type, trans) {
-      for(const d of this.iteratorContent[type]) {
+      const curGen = ++transGen;
+      for(const d of this.iteratorContent[type]) if(!d.pending) {
         Object.assign(d, trans);
-        d.leave = true;
+        d.pending = curGen;
       }
-      this.iteratorCount[type] = 0;
+
+      this.$nextTick(() => {
+        const newContents = [];
+        for(const d of this.iteratorContent[type])
+          if(d.pending !== curGen)
+            newContents.push(d);
+        this.iteratorContent[type] = newContents;
+      });
     },
 
     pushIterator(type, data, trans) {
@@ -621,7 +622,6 @@ const instance = new Vue(tmpl({
       obj.type = _type;
       obj.leave = false;
       this.iteratorContent[type].push(obj);
-      ++this.iteratorCount[type];
     },
 
     saveState(replace) {

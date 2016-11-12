@@ -1,6 +1,3 @@
-<div class="transformer"
-  @transitionend.stop.prevent="transend"
-  :style="{ transform: transform, 'transition-duration': duration + 'ms' }"
-  :class="[stage]">
+<div class="transformer" @transitionend="transend">
   <slot></slot>
 </div>

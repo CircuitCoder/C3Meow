@@ -55,10 +55,10 @@ export default Vue.component('iterator', tmpl({
 
   methods: {
     enter(el, done) {
-      if(!this.$refs.transformers) return;
+      if(!this.$refs.transformers) return void done();
       for(const trans of this.$refs.transformers)
         if(trans.$el === el)
-          trans.enter().then(done);
+          trans.enter();
     },
 
     appear(el) {
@@ -68,10 +68,11 @@ export default Vue.component('iterator', tmpl({
           trans.appear();
     },
 
-    remove(spec) {
-      for(let i = 0; i < this.list.length; ++i)
-        if(this.list[i] === spec)
-          this.list.splice(i, 1);
+    leave(el, done) {
+      if(!this.$refs.transformers) return void done();
+      for(const trans of this.$refs.transformers)
+        if(trans.$el === el)
+          trans.leave();
     },
 
     get(index) {
