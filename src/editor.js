@@ -2,10 +2,10 @@ import Vue from 'vue';
 import CodeMirror from 'codemirror';
 
 import 'codemirror/lib/codemirror.css';
-import 'codemirror/keymap/vim.js';
-import 'codemirror/mode/markdown/markdown.js';
-import 'codemirror/addon/search/searchcursor.js';
-import 'codemirror/addon/dialog/dialog.js';
+import 'codemirror/keymap/vim';
+import 'codemirror/mode/markdown/markdown';
+import 'codemirror/addon/search/searchcursor';
+import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/dialog/dialog.css';
 
 import tmpl from './tmpl/editor.tmpl.html';
@@ -92,7 +92,7 @@ export default Vue.component('editor', tmpl({
     },
 
     getContent() {
-      const tags = this.tagsStr.split(' ').filter((e) => e !== '');
+      const tags = this.tagsStr.split(' ').filter(e => e !== '');
 
       return {
         topic: this.topicStr,

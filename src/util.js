@@ -190,7 +190,7 @@ function initLogin(signIn, signOut) {
       client_id: config.googleClientID,
     });
 
-    auth.isSignedIn.listen((signedIn) => {
+    auth.isSignedIn.listen(signedIn => {
       if(signedIn) {
         if(signIn) signIn(auth.currentUser.get());
       } else if(signOut) signOut();

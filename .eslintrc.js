@@ -7,7 +7,6 @@ module.exports = {
   ],
   // add your custom rules here
   'rules': {
-    'import/no-unresolved': 0,
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     'keyword-spacing': [2, {
@@ -24,6 +23,17 @@ module.exports = {
     'consistent-return': [2, {
       treatUndefinedAsUnspecified: true,
     }],
-    curly: [2, 'multi']
+    curly: [2, 'multi'],
+    'no-plusplus': 0,
+    'no-restricted-syntax': 0,
+    'arrow-parens': [2, 'as-needed'],
+    'no-void': 0,
+
+    'import/no-unresolved': 0,
+    'import/first': 0,
+  },
+  env: {
+    browser: true,
+    node: true,
   }
 }

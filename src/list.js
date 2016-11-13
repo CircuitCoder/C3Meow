@@ -3,7 +3,7 @@ import Vue from 'vue';
 import './style/list.scss';
 import tmpl from './tmpl/list.tmpl.html';
 
-import { time } from './filters.js';
+import { time } from './filters';
 import bus from './bus';
 
 export default Vue.component('list', tmpl({

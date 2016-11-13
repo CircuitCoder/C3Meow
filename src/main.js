@@ -4,6 +4,7 @@ const isBrowser = typeof window !== 'undefined' && typeof window !== 'undefined'
 
 if(isBrowser) {
   const VueTouch = require('vue-touch');
+  // eslint-disable-next-line import/no-extraneous-dependencies
   const Hammer = require('hammerjs');
 
   Hammer.defaults.cssProps.userSelect = 'initial';
@@ -37,9 +38,9 @@ import bus from './bus';
 
 import './style/general.scss';
 
-import './iterator.js';
+import './iterator';
 
-import './filters.js';
+import './filters';
 
 let gaPV;
 let transGen = 0;
@@ -168,14 +169,14 @@ const instance = new Vue(tmpl({
       });
     });
 
-    bus.on('list-scroll', (page) => {
+    bus.on('list-scroll', page => {
       const up = this.page > page;
       this.page = page;
       this.saveState();
       this.loadList(this.ref, page, up ? 'up' : 'down');
     });
 
-    bus.on('list-select', (entry) => {
+    bus.on('list-select', entry => {
       this.closeSidebar();
 
       let postDirection;
@@ -238,13 +239,13 @@ const instance = new Vue(tmpl({
 
       if(this.$isServer) return Promise.all([pList, pPost]);
 
-      window.onpopstate = (e) => this.loadState(e.state);
+      window.onpopstate = e => this.loadState(e.state);
 
       return Promise.all([pList, pPost]);
     },
 
     setupLogin() {
-      util.initLogin((user) => {
+      util.initLogin(user => {
         // TODO: validate
         const profile = user.getBasicProfile();
         const newAvatar = profile.getImageUrl();
@@ -317,7 +318,7 @@ const instance = new Vue(tmpl({
     },
 
     loadList(ref, page, direction) {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         this.clearIterator('list', { direction });
         this.updatePager();
 

@@ -4,13 +4,14 @@ import tmpl from './tmpl/iterator.tmpl.html';
 
 const isBrowser = typeof window !== 'undefined' && typeof window !== 'undefined';
 
-import Transformer from './transformer.js';
-import Post from './post.js';
-import List from './list.js';
+import Transformer from './transformer';
+import Post from './post';
+import List from './list';
+
 let Editor;
 
 if(isBrowser)
-  Editor = require('./editor.js').default;
+  Editor = require('./editor').default;
 
 export default Vue.component('iterator', tmpl({
   props: {
