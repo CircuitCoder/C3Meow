@@ -223,25 +223,29 @@ const instance = new Vue(tmpl({
         if(!this.$isServer) this.saveState(true);
       }
 
-      setTimeout(() => {
-        this.running = true;
-        this.$nextTick(() => {
-          bus.set('running', true);
-          bus.emit('start');
-        });
-      });
-
       const pList = this.loadList(this.ref, this.page, '');
       const pPost = this.post ? this.loadPost(this.post, '') : Promise.resolve();
 
       if(this.ref === 'all') this.updateRef('全部', '', false);
       else this.updateRef(this.ref, '');
 
-      if(this.$isServer) return Promise.all([pList, pPost]);
+      if(!this.$isServer)
+        window.onpopstate = e => this.loadState(e.state);
 
-      window.onpopstate = e => this.loadState(e.state);
+      const pRunning = new Promise(resolve => {
+        setTimeout(() => {
+          this.running = true;
+          this.$nextTick(() => {
+            bus.set('running', true);
+            bus.emit('start');
+            this.$nextTick(() => {
+              resolve();
+            });
+          });
+        });
+      });
 
-      return Promise.all([pList, pPost]);
+      return Promise.all([pList, pPost, pRunning]);
     },
 
     setupLogin() {

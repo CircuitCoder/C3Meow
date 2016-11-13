@@ -49,8 +49,8 @@ server.get('*', (req, res) => {
     res.end(parts[1]);
   })
   .on('error', err => {
-    res.sendStatus(500);
     console.error(err.stack);
+    res.end();
   });
 });
 

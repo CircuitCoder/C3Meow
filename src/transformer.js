@@ -83,9 +83,11 @@ export default Vue.component('transformer', tmpl({
     },
 
     update() {
-      this.$el.className = `${this.stage} transformer`;
-      this.$el.style.transform = this.generate();
-      this.$el.style.transitionDuration = `${this.duration}ms`;
+      if(this.$el) {
+        this.$el.className = `${this.stage} transformer`;
+        this.$el.style.transform = this.generate();
+        this.$el.style.transitionDuration = `${this.duration}ms`;
+      }
     },
 
     generate() {
