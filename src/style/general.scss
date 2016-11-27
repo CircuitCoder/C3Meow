@@ -293,7 +293,6 @@ body {
   }
 
   .top.has-author {
-    padding-right: 80px;
     position: relative;
   }
 
@@ -311,7 +310,9 @@ body {
     font-weight: 800;
     line-height: 40px;
     font-size: 36px;
+
     margin-bottom: 20px;
+    padding-right: 80px;
   }
 
   .properties {
@@ -322,41 +323,69 @@ body {
     display: flex;
     flex-wrap: wrap;
 
+    padding-right: 80px;
+
     .timestamp {
-      display: inline-block;
-      margin-right: 10px;
       white-space: nowrap;
     }
 
     .tags {
-      display: inline-block;
       flex: 1;
-      margin-right: 10px;
 
       .tag {
         white-space: nowrap;
         margin-right: 5px;
         color: rgba(0,0,0,.5);
+        display: inline-block;
 
         text-decoration: none;
 
         transition: opacity 0.2s ease;
         opacity: 0.6;
+
+        &:last-child {
+          margin-right: 0;
+        }
+
         &:hover {
           opacity: 1;
         }
       }
-
-      .tag:last-child {
-        margin-right: 0;
-      }
     }
 
     .author {
+      white-space: nowrap;
+      align-items: flex-end;
+      align-self: flex-end;
+    }
+
+    .timestamp, .tags, .author {
       display: inline-block;
       margin-right: 10px;
-      align-items: flex-end;
-      white-space: nowrap;
+
+      padding-left: 20px;
+
+      position: relative;
+
+      .material-icons {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+  }
+
+  @media screen and (max-width: $responsive-trigger - 1px) {
+    .properties {
+      display: block;
+      min-height: 80px;
+      .tags, .author, .timestamp {
+        display: block;
+      }
+    }
+
+    .topic {
+      padding-right: 0;
     }
   }
 
@@ -721,6 +750,16 @@ body {
 
   strong {
     color: black;
+  }
+
+  p {
+    line-height: 1.8em;
+    margin: 1.2em 0;
+  }
+
+  li {
+    line-height: 1.8em;
+    margin: 10px 0;
   }
 }
 
