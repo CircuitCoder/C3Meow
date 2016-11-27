@@ -55,25 +55,24 @@ export default Vue.component('iterator', tmpl({
   },
 
   methods: {
-    enter(el, done) {
-      if(!this.$refs.transformers) return void done();
+    perform(el, action) {
+      if(!this.$refs.transformers) return Promise.resolve();
       for(const trans of this.$refs.transformers)
         if(trans.$el === el)
-          trans.enter();
+          return trans[action]();
+      return Promise.resolve();
+    },
+
+    enter(el) {
+      return this.perform(el, 'enter');
     },
 
     appear(el) {
-      if(!this.$refs.transformers) return;
-      for(const trans of this.$refs.transformers)
-        if(trans.$el === el)
-          trans.appear();
+      return this.perform(el, 'appear');
     },
 
-    leave(el, done) {
-      if(!this.$refs.transformers) return void done();
-      for(const trans of this.$refs.transformers)
-        if(trans.$el === el)
-          trans.leave();
+    leave(el) {
+      return this.perform(el, 'leave');
     },
 
     get(index) {

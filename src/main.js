@@ -628,7 +628,12 @@ const instance = new Vue(tmpl({
       obj.data = data;
       obj.type = _type;
       obj.leave = false;
+      obj.key = this.generateIteratorKey();
       this.iteratorContent[type].push(obj);
+    },
+
+    generateIteratorKey() {
+      return Math.random().toString(36).substr(2, 10);
     },
 
     saveState(replace) {
