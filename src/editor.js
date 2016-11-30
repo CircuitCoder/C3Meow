@@ -100,7 +100,6 @@ export default Vue.component('editor', tmpl({
         tags,
         content: this.cm.getValue(),
         post_time: this.id,
-        user_ident: 'test,dummy',
       };
     },
   },

@@ -87,6 +87,7 @@ const instance = new Vue(tmpl({
     notFound: false,
 
     user: null,
+    uident: null,
     signedIn: false,
     isAuthor: false,
     avatarLoaded: false,
@@ -253,6 +254,8 @@ const instance = new Vue(tmpl({
         // TODO: validate
         const profile = user.getBasicProfile();
         const newAvatar = profile.getImageUrl();
+
+        this.uident = `google,${user.getId()}`;
 
         if(!this.user || newAvatar !== this.user.avatar)
           this.avatarLoaded = false;
@@ -518,8 +521,9 @@ const instance = new Vue(tmpl({
     },
 
     saveEdit(data) {
+      const hybrid = Object.assign({ uident: this.uident }, data);
       return new Promise(resolve => {
-        util.updatePost(data.post_time, data, (err, res) => {
+        util.updatePost(hybrid.post_time, hybrid, (err, res) => {
           if(err) throw err;
           else if(res.ok !== 0) throw res;
 
@@ -592,10 +596,11 @@ const instance = new Vue(tmpl({
     },
 
     saveNew(data) {
+      const hybrid = Object.assign({ uident: this.uident }, data);
       return new Promise((resolve, reject) => {
-        if(!data.url || data.url === '') return void reject();
+        if(!hybrid.url || hybrid.url === '') return void reject();
 
-        util.newPost(data, (err, res) => {
+        util.newPost(hybrid, (err, res) => {
           if(err) throw err;
           this.postTsStore[data.url] = res.id;
           resolve();
