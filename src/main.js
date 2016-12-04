@@ -161,9 +161,11 @@ const instance = new Vue(tmpl({
     bus.on('editor-saveclose', (content, isNew) => {
       (isNew ? this.saveNew(content) : this.saveEdit(content))
       .then(() => {
+        console.log(content.url);
+        console.log(this.post);
         if(this.post !== content.url) {
-          this.saveState(); // TODO: replace state on edit
           this.post = content.url;
+          this.saveState(); // TODO: replace state on edit
         }
         this.loadPost(content.url, '');
         this.loadList(this.ref, this.page, '');
