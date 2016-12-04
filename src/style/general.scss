@@ -65,6 +65,8 @@ body {
 
   overflow: hidden;
 
+  box-shadow: rgba(0,0,0,.12) 0 4px 6px;
+
   .list-ref {
     position: absolute;
     top: 0;
@@ -175,7 +177,7 @@ body {
 
   @media screen and (max-width: $responsive-trigger - 1px) {
     transition: transform 0.2s ease-in;
-    transform: translateX(-$sidebar-width);
+    transform: translateX(-$sidebar-width - 6px);
 
     &.extended {
       transition: transform 0.2s ease-out;
@@ -299,6 +301,8 @@ body {
     bottom: 0;
 
     border-radius: 50%;
+
+    box-shadow: rgba(0,0,0,.24) 0 2px 3px;
   }
 
   .topic {
@@ -473,6 +477,8 @@ body {
   background: white;
   padding: 0 20px;
 
+  box-shadow: rgba(0,0,0,.06) 0 4px 6px;
+
   .account {
     cursor: pointer;
     float: right;
@@ -487,6 +493,8 @@ body {
       position: absolute;
       bottom: -1px;
       right: -1px;
+
+      box-shadow: rgba(0,0,0,.06) 0 4px 6px;
 
       &.overlap {
         background-color: $border-color;
@@ -528,10 +536,10 @@ body {
 
     .avatar-background-cover {
       height: 40px;
-      width: 62px;
+      width: 72px;
       position: absolute;
       bottom: 0;
-      right: -1px;
+      right: -6px;
       background-color: white;
     }
 
@@ -672,6 +680,8 @@ body {
 
   background: white;
   border-bottom: $border-color 1px solid;
+
+  box-shadow: rgba(0,0,0,.06) 0 4px 6px;
 
   @media screen and (max-width: $responsive-trigger - 1px) {
     transform: translateY(0);
