@@ -1,18 +1,16 @@
 .transformer {
   &.entering {
     opacity: 0;
-    transition-property: none;
+    transition: none;
   }
 
   &.visible {
-    transition-property: opacity, transform;
-    transition-timing-function: ease-out;
+    transition: opacity ease-out, transform ease-out;
     opacity: 1;
   }
 
   &.leaving {
-    transition-property: opacity, transform;
-    transition-timing-function: ease-in;
+    transition: opacity ease-out, transform ease-in;
     opacity: 0;
   }
 }
