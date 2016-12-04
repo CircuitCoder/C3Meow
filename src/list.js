@@ -18,7 +18,9 @@ export default Vue.component('list', tmpl({
       default: true,
     },
     page: Number,
-    ref: String,
+    reference: {
+      type: String,
+    },
   },
 
   data: () => ({
@@ -99,14 +101,14 @@ export default Vue.component('list', tmpl({
 
   computed: {
     nextLink() {
-      return `/${this.ref}/${this.page + 1}`;
+      return `/${this.reference}/${this.page + 1}`;
     },
 
     prevLink() {
-      if(this.ref === 'all' && this.page === 2)
+      if(this.reference === 'all' && this.page === 2)
         return '/';
       else
-        return `/${this.ref}/${this.page - 1}`;
+        return `/${this.reference}/${this.page - 1}`;
     },
   },
 }));

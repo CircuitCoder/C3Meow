@@ -336,7 +336,7 @@ const instance = new Vue(tmpl({
           if(err) throw err;
 
           this.pushIterator('list', {
-            ref,
+            reference: ref,
             entries: data.posts,
             page,
             hasPrev: page !== 1,
