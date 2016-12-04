@@ -19,7 +19,7 @@
     "highlight.js": "^9.4.0",
     "markdown-it": "^8.1.0",
     "superagent": "^2.0.0",
-    "vue": "^2.0.3",
+    "vue": "2.1.4",
     "vue-server-renderer": "^2.0.3",
     "vue-touch": "git://github.com/vuejs/vue-touch.git#next"
   },
@@ -58,7 +58,7 @@
     "vue-html-loader": "^1.0.0",
     "vue-loader": "^9.5.0",
     "vue-style-loader": "^1.0.0",
-    "vue-template-compiler": "^2.0.5",
+    "vue-template-compiler": "2.1.4",
     "vue-template-loader": "^0.1.2",
     "webpack": "^1.12.2",
     "webpack-dev-middleware": "^1.4.0",
