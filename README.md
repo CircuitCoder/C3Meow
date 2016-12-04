@@ -8,6 +8,11 @@
 ```bash
 git clone https://github.com/CircuitCoder/C3Meow.git && cd C3Meow
 npm install
+
+# 编辑配置文件
+cp src/config.example.js src/config.js
+editor src/config.js
+
 npm run build
 ```
 
