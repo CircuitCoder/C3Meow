@@ -161,8 +161,6 @@ const instance = new Vue(tmpl({
     bus.on('editor-saveclose', (content, isNew) => {
       (isNew ? this.saveNew(content) : this.saveEdit(content))
       .then(() => {
-        console.log(content.url);
-        console.log(this.post);
         if(this.post !== content.url) {
           this.post = content.url;
           this.saveState(); // TODO: replace state on edit
@@ -191,7 +189,7 @@ const instance = new Vue(tmpl({
       else if(this.postTsStore[this.post] < ts) postDirection = 'right';
       else if(this.postTsStore[this.post] > ts) postDirection = 'left';
       else if(this.postTsStore[this.post] === ts) return;
-      else throw new Error('Post timestamp not stored');
+      else postDirection = ''; // Previously not found
 
       this.postTsStore[url] = ts;
 
@@ -222,9 +220,9 @@ const instance = new Vue(tmpl({
         this.ref = 'all';
         this.post = null;
         this.page = 1;
-
-        if(!this.$isServer) this.saveState(true);
       }
+
+      if(!this.$isServer) this.saveState(true);
 
       const pList = this.loadList(this.ref, this.page, '');
       const pPost = this.post ? this.loadPost(this.post, '') : Promise.resolve();
@@ -315,9 +313,10 @@ const instance = new Vue(tmpl({
           this.closePost('down', true);
         else {
           let postDirection = 'up';
-          if(!(state.post in this.postTsStore)) postDirection = 'up';
-          if(this.postTsStore[this.post] < this.postTsStore[state.post]) postDirection = 'right';
-          if(this.postTsStore[this.post] > this.postTsStore[state.post]) postDirection = 'left';
+          if(!state.post) postDirection = 'up';
+          else if(!(state.post in this.postTsStore)) postDirection = '';
+          else if(this.postTsStore[this.post] < this.postTsStore[state.post]) postDirection = 'right';
+          else if(this.postTsStore[this.post] > this.postTsStore[state.post]) postDirection = 'left';
 
           this.post = state.post;
           bus.emit('list-perform-select-by-url', this.post);
@@ -372,7 +371,6 @@ const instance = new Vue(tmpl({
               this.notFound = true;
               this.postTitle = '404';
               this.updateTitle();
-              this.post = null;
               return void resolve();
             } else return void reject(err);
 
@@ -405,6 +403,7 @@ const instance = new Vue(tmpl({
 
     closePost(direction, fromState) {
       // TODO: refactor
+      if(this.notFound) this.notFound = false;
       this.post = null;
       this.postTitle = '';
       this.postCont = null;
