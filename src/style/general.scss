@@ -721,6 +721,8 @@ body {
     color: black;
     transition: opacity .2s ease;
 
+    word-break: break-word;
+
     &:hover {
       opacity: 0.87;
     }
