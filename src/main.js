@@ -315,6 +315,7 @@ const instance = new Vue(tmpl({
           let postDirection = 'up';
           if(!state.post) postDirection = 'up';
           else if(!(state.post in this.postTsStore)) postDirection = '';
+          else if(!(this.post in this.postTsStore)) postDirection = '';
           else if(this.postTsStore[this.post] < this.postTsStore[state.post]) postDirection = 'right';
           else if(this.postTsStore[this.post] > this.postTsStore[state.post]) postDirection = 'left';
 
