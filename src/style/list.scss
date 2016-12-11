@@ -32,6 +32,10 @@
     &:hover {
       opacity: .5;
     }
+
+    &.last-page:hover {
+      opacity: .3;
+    }
   }
 
   .entries {
