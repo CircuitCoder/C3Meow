@@ -20,6 +20,16 @@
     align-items: center;
     opacity: 0.3;
 
+    box-sizing: border-box;
+
+    &.page-up {
+      padding-bottom: 10px;
+    }
+
+    &.page-down {
+      padding-top: 10px;
+    }
+
     .placeholder-icon {
       display: block;
       height: 24px;

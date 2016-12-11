@@ -1,5 +1,5 @@
 <div class="list" @scroll="scroll" :class="{ 'has-prev': hasPrev }">
-  <a class="placeholder" v-show="hasPrev" :href="prevLink" @click.prevent="prev">
+  <a class="placeholder page-up" v-show="hasPrev" :href="prevLink" @click.prevent="prev">
     <i class="material-icons placeholder-icon md-24">keyboard_arrow_up</i>
     <div>第 {{ page - 1 }} 页</div>
   </a>
@@ -20,7 +20,7 @@
       这里除了一只猫，什么都没有
     </div>
   </div>
-  <a class="placeholder" v-show="hasNext" :href="nextLink" @click.prevent="next">
+  <a class="placeholder page-down" v-show="hasNext" :href="nextLink" @click.prevent="next">
     <div>第 {{ page + 1 }} 页</div>
     <i class="material-icons placeholder-icon md-24">keyboard_arrow_down</i>
   </a >
