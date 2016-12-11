@@ -6,6 +6,8 @@ import tmpl from './tmpl/list.tmpl.html';
 import { time } from './filters';
 import bus from './bus';
 
+import config from './config';
+
 export default Vue.component('list', tmpl({
   props: {
     entries: Array,
@@ -55,6 +57,8 @@ export default Vue.component('list', tmpl({
     },
 
     scroll() {
+      if(!config.scrollToSwitch) return;
+
       if(this.$el.scrollTop === 0 && this.hasPrev)
         this.prev();
 

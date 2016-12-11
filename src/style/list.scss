@@ -26,6 +26,12 @@
     }
 
     flex-direction: column;
+
+    transition: opacity .2s ease;
+
+    &:hover {
+      opacity: .5;
+    }
   }
 
   .entries {

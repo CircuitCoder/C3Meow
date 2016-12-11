@@ -1,8 +1,8 @@
 <div class="list" @scroll="scroll" :class="{ 'has-prev': hasPrev }">
-  <div class="placeholder" v-show="hasPrev">
+  <a class="placeholder" v-show="hasPrev" :href="prevLink" @click.prevent="prev">
     <i class="material-icons placeholder-icon md-24">keyboard_arrow_up</i>
-    <a :href="prevLink" @click.prevent="prev">第 {{ page - 1 }} 页</a>
-  </div>
+    <div>第 {{ page - 1 }} 页</div>
+  </a>
   <div class="entries">
     <a v-for="(entry, index) of entries" :href="buildEntryLink(entry)" @click.prevent>
       <div class="entry" @click="select(index)" :class="{ selected: index === selected }">
@@ -20,10 +20,10 @@
       这里除了一只猫，什么都没有
     </div>
   </div>
-  <div class="placeholder" v-show="hasNext">
-    <a :href="nextLink" @click.prevent="next">第 {{ page + 1 }} 页</a>
+  <a class="placeholder" v-show="hasNext" :href="prevLink" @click.prevent="next">
+    <div>第 {{ page + 1 }} 页</div>
     <i class="material-icons placeholder-icon md-24">keyboard_arrow_down</i>
-  </div>
+  </a >
   <div class="placeholder" v-show="!hasNext">
     已经是最后一页了~
   </div>
