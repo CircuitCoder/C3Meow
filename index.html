@@ -21,6 +21,11 @@
     <link href="https://fonts.lug.ustc.edu.cn/icon?family=Material+Icons" rel="stylesheet">
   </head>
   <body>
+    <div class="global-loading hidden" style="display: none">
+      <div class="global-loading-hint">
+        <span class="hint-head">喵</span><span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span>
+      </div>
+    </div>
     <div id="app"></div>
     <script>
       window.gapiLoader = {
@@ -42,6 +47,13 @@
        src="https://apis.google.com/js/api:client.js"
        onload="gapiLoader.load()"
        onreadstatechange="if(this.readyState==='complete') this.onload()">
+    </script>
+    <script>
+      var loadingPH = document.querySelector('.global-loading');
+      loadingPH.style.display = 'flex';
+      window.setTimeout(function() {
+        loadingPH.className = 'global-loading';
+      });
     </script>
   </body>
 </html>
