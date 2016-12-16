@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import MarkdownIt from 'markdown-it';
 
-import hljs from 'highlight.js';
+import hljs from './lib/hljs';
 import 'highlight.js/styles/solarized-dark.css';
 
 const unsafeMd = new MarkdownIt({
