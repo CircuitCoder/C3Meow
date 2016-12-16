@@ -8,8 +8,6 @@ const index = fs.readFileSync('./ssrres/index.html', 'utf-8');
 const parts = index.split(/\<div\ id\=.*\<\/div\>/);
 const frontParts = parts[0].split(/\<title.*\<\/title\>/);
 
-console.log(frontParts[1]);
-
 const server = express();
 server.use(express.static(path.resolve(__dirname, '../ssrres'), {
   index: false,
