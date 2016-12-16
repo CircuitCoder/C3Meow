@@ -5,14 +5,16 @@ module.exports = function(_content) {
   this.cacheable && this.cacheable();
   if(!this.emitFile) throw new Error('emitFile is required from module system');
 
-  let content = JSON.stringify(this.exec(_content, this.resourcePath));
-  let basename = path.basename(this.resourcePath, '.json.js');
+  const content = JSON.stringify(this.exec(_content, this.resourcePath));
+  const basename = path.basename(this.resourcePath, '.json.js');
 
-  let url = loaderUtils.interpolateName(this, `${basename}.[hash].json`, {
+  const targetName = process.env.NODE_ENV === 'production' ? `${basename}.[hash].json` : `${basename}.json`;
+
+  const url = loaderUtils.interpolateName(this, targetName, {
     content: content
   });
 
-  let publicPath = '__webpack_public_path__ + ' + JSON.stringify(url);
+  const publicPath = '__webpack_public_path__ + ' + JSON.stringify(url);
 
   this.emitFile(url, content);
   return 'module.exports = ' + publicPath + ';';
