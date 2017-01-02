@@ -350,6 +350,9 @@ const instance = new Vue(tmpl({
           // TODO: handle
           if(err) throw err;
 
+          for(const p of data.posts)
+            this.postTsStore[p.url] = p.post_time;
+
           this.pushIterator('list', {
             reference: ref,
             entries: data.posts,
