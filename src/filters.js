@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import MarkdownIt from 'markdown-it';
+import moment from 'moment';
 
 import hljs from './lib/hljs';
 import 'highlight.js/styles/solarized-dark.css';
@@ -24,11 +25,7 @@ const safeMd = new MarkdownIt({
 });
 
 function time(t) {
-  const d = new Date(1970, 0);
-
-  // ns to ms
-  d.setMilliseconds(t);
-  return d.toLocaleDateString();
+  return moment.utc(t).local().format('l');
 }
 
 const markdown = (source, safe) => (safe ? safeMd.render(source) : unsafeMd.render(source));

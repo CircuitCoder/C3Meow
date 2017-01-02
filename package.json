@@ -18,6 +18,7 @@
     "express": "^4.14.0",
     "highlight.js": "^9.4.0",
     "markdown-it": "^8.1.0",
+    "moment": "^2.17.1",
     "superagent": "^3.3.1",
     "vue": "2.1.8",
     "vue-server-renderer": "2.1.8",
