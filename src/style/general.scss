@@ -326,6 +326,28 @@ body {
 
     .timestamp {
       white-space: nowrap;
+
+      .create-timestamp {
+        opacity: 1;
+        transition: opacity .2s ease-out;
+      }
+
+      .update-timestamp {
+        margin-top: -24px;
+        opacity: 0;
+        transition: opacity .2s ease-in;
+      }
+
+      &:hover {
+        .update-timestamp {
+          transition: opacity .2s ease-out;
+          opacity: 1;
+        }
+        .create-timestamp {
+          opacity: 0;
+          transition: opacity .2s ease-in;
+        }
+      }
     }
 
     .tags {

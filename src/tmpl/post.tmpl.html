@@ -5,8 +5,14 @@
       <div class="topic" v-text="topic"></div>
       <div class="properties">
         <div class="timestamp">
-          <i class="material-icons">access_time</i>
-          {{ timestamp | time }}
+          <div class="create-timestamp">
+            <i class="material-icons">access_time</i>
+            {{ timestamp | time }}
+          </div>
+          <div class="update-timestamp">
+            <i class="material-icons">update</i>
+            {{ updateTimestamp | time }}
+          </div>
         </div>
         <div class="tags" v-show="tags && tags.length > 0">
           <i class="material-icons">label_outline</i>

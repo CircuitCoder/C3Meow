@@ -10,6 +10,7 @@ export default Vue.component('post', tmpl({
     topic: String,
     source: String,
     timestamp: Number,
+    updateTimestamp: Number,
     tags: Array,
     author: Object,
     url: String,

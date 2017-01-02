@@ -393,11 +393,14 @@ const instance = new Vue(tmpl({
 
           this.postCont = data;
 
+          console.log(data);
+
           this.pushIterator('post', {
             topic: data.topic,
             tags: data.tags,
             source: data.content,
             timestamp: data.post_time,
+            updateTimestamp: data.update_time,
             author: data.user,
           }, {
             delta: 50,
