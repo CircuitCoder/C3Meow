@@ -70,6 +70,7 @@ import tmpl from './tmpl/root.tmpl.html';
 
 // eslint-disable-next-line no-new
 const instance = new Vue(tmpl({
+  el: '#app',
   data: () => ({
     running: false,
     cacheTitle: `加载中... | ${config.title}`,
@@ -128,8 +129,6 @@ const instance = new Vue(tmpl({
   },
 
   created() {
-    if(!this.$isServer) this.$mount('#app');
-
     bus.set('running', false);
 
     bus.on('tag', tag => {
