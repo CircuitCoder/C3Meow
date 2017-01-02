@@ -23,6 +23,6 @@
       <img :src="author.avatar" v-if="author" class="avatar">
     </div>
 
-    <div class="content" v-html="compiled"></div>
+    <div class="content" v-html="compiled" @click="linkRedirector"></div>
   </div>
 </div>

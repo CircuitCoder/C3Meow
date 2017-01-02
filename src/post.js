@@ -23,6 +23,14 @@ export default Vue.component('post', tmpl({
     buildTagLink(tag) {
       return `/${tag}/1`;
     },
+
+    linkRedirector(e) {
+      if(e instanceof MouseEvent)
+        if(e.target.tagName === 'A')
+          bus.emit('navigate', e.target.href, prevent => {
+            if(prevent) e.preventDefault();
+          });
+    },
   },
 
   computed: {

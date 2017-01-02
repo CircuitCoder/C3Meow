@@ -199,6 +199,20 @@ const instance = new Vue(tmpl({
       this.loadPost(url, postDirection);
     });
 
+    bus.on('navigate', (url, synccb) => {
+      if(url.indexOf(window.location.origin) !== 0) return synccb(false);
+
+      const pathname = url.substr(window.location.origin.length);
+      try {
+        const parsed = util.parseURL(pathname);
+        this.loadState(parsed);
+        this.saveState(parsed);
+        return synccb(true);
+      } catch(e) {
+        return synccb(false);
+      }
+    });
+
     if(isBrowser && window && window.gapiLoader)
       window.gapiLoader.subscribe(() => {
         this.setupLogin();
