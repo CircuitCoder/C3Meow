@@ -10,7 +10,7 @@
             {{ timestamp | time }}
           </div>
           <div class="update-timestamp">
-            <i class="material-icons">update</i>
+            <i class="material-icons">edit</i>
             {{ updateTimestamp | time }}
           </div>
         </div>
@@ -22,7 +22,7 @@
             @click.prevent="tagClick(index)">{{ tag }}</a>
         </div>
         <div class="author" v-show="author">
-          <i class="material-icons">edit</i>
+          <i class="material-icons">person</i>
           {{ author ? author.name : '' }}
         </div>
       </div>
