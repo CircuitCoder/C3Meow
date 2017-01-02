@@ -40,8 +40,8 @@ server.get('*', (req, res) => {
     }
 
     if(tagOpening > 2) {
-      res.write(frontParts[1]);
       res.write(`<title>${stash}</title>`);
+      res.write(frontParts[1]);
       res.write(buf);
     }
   })

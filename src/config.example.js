@@ -18,4 +18,7 @@ module.exports = {
 
   // Google Analytics Tracking ID, if there is one
   googleAnalyticsID: 'INPUT_YOUR_ID',
+
+  // Scroll to switch pages, defaults to false
+  scrollToSwitch: true,
 };

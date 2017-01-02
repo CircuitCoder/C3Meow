@@ -1,3 +1,4 @@
+@import './const.scss';
 $loading-loop: 2s;
 
 @keyframes cloud-animation {
@@ -64,6 +65,26 @@ $loading-loop: 2s;
   }
 }
 
+@mixin animated-hint {
+  .dot-1 {
+    animation-name: dot-1-animation;
+  }
+
+  .dot-2 {
+    animation-name: dot-2-animation;
+  }
+
+  .dot-3 {
+    animation-name: dot-3-animation;
+  }
+
+  span {
+    animation-duration: $loading-loop;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease;
+  }
+}
+
 .loading {
   opacity: 0.3;
 
@@ -97,25 +118,42 @@ $loading-loop: 2s;
   }
 
   .hint {
+    @include animated-hint;
+
     line-height: 16px;
     font-size: 12px;
+  }
+}
 
-    .dot-1 {
-      animation-name: dot-1-animation;
-    }
+.global-loading {
+  background: $bg-gray;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 
-    .dot-2 {
-      animation-name: dot-2-animation;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    .dot-3 {
-      animation-name: dot-3-animation;
-    }
+  transition: opacity .2s ease-out;
+  opacity: 1;
 
-    span {
-      animation-duration: $loading-loop;
-      animation-iteration-count: infinite;
-      animation-timing-function: ease;
+  &.hidden {
+    opacity: 0;
+  }
+
+  .global-loading-hint {
+    @include animated-hint;
+
+    line-height: 36px;
+    font-size: 32px;
+    font-weight: bold;
+    opacity: 0.12;
+
+    .hint-head {
+      letter-spacing: 3px;
     }
   }
 }

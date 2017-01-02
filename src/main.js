@@ -704,7 +704,7 @@ const instance = new Vue(tmpl({
     },
 
     gotoFeed() {
-      window.location.href = `${config.backend}/feed`;
+      window.open(this.feedURL);
     },
 
     updateTitle() {
@@ -735,6 +735,8 @@ const instance = new Vue(tmpl({
         if(!this.$isServer) document.title = t;
       },
     },
+
+    feedURL: () => `${config.backend}/feed`,
   },
 }));
 
