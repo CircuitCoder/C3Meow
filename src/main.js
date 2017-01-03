@@ -393,8 +393,6 @@ const instance = new Vue(tmpl({
 
           this.postCont = data;
 
-          console.log(data);
-
           this.pushIterator('post', {
             topic: data.topic,
             tags: data.tags,
