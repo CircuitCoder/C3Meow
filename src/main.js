@@ -238,7 +238,7 @@ const instance = new Vue(tmpl({
       if(!this.$isServer) this.saveState(true);
 
       const pList = this.loadList(this.ref, this.page, '');
-      const pPost = this.post ? this.loadPost(this.post, '') : Promise.resolve();
+      const pPost = this.post ? this.loadPost(this.post, '') : Promise.resolve(true);
 
       if(this.ref === 'all') this.updateRef('全部', '', false);
       else this.updateRef(this.ref, '');
@@ -259,7 +259,11 @@ const instance = new Vue(tmpl({
         });
       });
 
-      return Promise.all([pList, pPost, pRunning]);
+      return Promise.all([pList, pPost, pRunning])
+      .then(([lResult, pResult]) => new Promise((resolve, reject) => {
+        if(lResult && pResult) return resolve();
+        else return reject({ code: 404 });
+      }));
     },
 
     setupLogin() {
@@ -371,7 +375,7 @@ const instance = new Vue(tmpl({
           this.updateTitle();
 
           this.pageview();
-          resolve();
+          resolve(data.posts.length > 0);
         });
       });
     },
@@ -388,7 +392,7 @@ const instance = new Vue(tmpl({
               this.notFound = true;
               this.postTitle = '404';
               this.updateTitle();
-              return void resolve();
+              return void resolve(false);
             } else return void reject(err);
 
           this.postCont = data;
@@ -414,7 +418,7 @@ const instance = new Vue(tmpl({
           this.updateTitle();
 
           this.pageview();
-          resolve();
+          resolve(true);
         });
       });
     },
@@ -741,5 +745,5 @@ const instance = new Vue(tmpl({
 }));
 
 export default context =>
-  new Promise(resolve =>
-    instance.initialize(context.url).then(() => resolve(instance)));
+  new Promise((resolve, reject) =>
+    instance.initialize(context.url).then(() => resolve(instance)).catch(err => reject(err)));

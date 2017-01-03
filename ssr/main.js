@@ -23,9 +23,15 @@ server.get('*', (req, res) => {
   let stash = '';
   let buf = '';
 
-  res.write(frontParts[0]);
- 
+  let firstChunk = false;
+
   stream.on('data', chunk => {
+    // Wait for error
+    if(!firstChunk) {
+      firstChunk = true;
+      res.write(frontParts[0]);
+    }
+ 
     if(tagOpening > 2) return void res.write(chunk);
 
     const str = chunk.toString('utf-8');
@@ -49,6 +55,9 @@ server.get('*', (req, res) => {
     res.end(parts[1]);
   })
   .on('error', err => {
+    if(err.code) 
+      return res.status(err.code).end();
+
     console.error(err.stack);
     res.end();
   });
