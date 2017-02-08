@@ -54,8 +54,8 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /manifest\.json\.js$/,
-        loader: './build/json-emit-loader'
+        test: /\.json\.gen\.js$/,
+        loader: './build/json-emit-loader!value-loader'
       },
       {
         test: /\.json$/,

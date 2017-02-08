@@ -6,7 +6,7 @@ module.exports = function(_content) {
   if(!this.emitFile) throw new Error('emitFile is required from module system');
 
   const content = JSON.stringify(this.exec(_content, this.resourcePath));
-  const basename = path.basename(this.resourcePath, '.json.js');
+  const basename = path.basename(this.resourcePath, '.json.gen.js');
 
   const targetName = process.env.NODE_ENV === 'production' ? `${basename}.[hash].json` : `${basename}.json`;
 
