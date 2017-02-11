@@ -1,9 +1,9 @@
 <transition name="init-frame">
-  <div
+  <v-touch
     class="frame"
     v-show="running"
-    v-touch:sidebar-close="closeSidebar"
-    v-touch:sidebar-open="openSidebar">
+    v-on:sidebar-close="closeSidebar"
+    v-on:sidebar-open="openSidebar">
     <span class="cache-title" v-if="$isServer">{{cacheTitle}}</span>
 
     <div class="post-container">
