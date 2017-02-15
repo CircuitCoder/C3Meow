@@ -23,7 +23,7 @@ function buildOfflineResponse(record) {
   const respHeaders = new Headers();
   respHeaders.set('C3-OFFLINE', 'true');
 
-  if(typeof record !== 'undefined') return new Response(JSON.stringify(record), { headers: respHeaders });
+  if(typeof record !== 'undefined') return new Response(JSON.stringify(record.data), { headers: respHeaders });
   else return new Response('', {
     status: 404,
     statusText: 'Cache missed',
@@ -42,7 +42,7 @@ async function fetchListAndUpdate(req, tagName, page) {
       .objectStore('lists')
       .get([tagName, page]);
 
-    return buildOfflineResponse(record.data);
+    return buildOfflineResponse(record);
   }
 
   if(resp.status !== 200) return resp;
@@ -52,6 +52,7 @@ async function fetchListAndUpdate(req, tagName, page) {
 
   try {
     await db.transaction('lists', 'readwrite').objectStore('lists').put({
+      time: Date.now(),
       tagName,
       page,
       data: respData,
@@ -79,7 +80,10 @@ async function fetchInternalPostAndUpdate(req, ts) {
 
   if(ts === resp.post_time) {
     const db = await DBP;
-    await db.transaction('posts', 'readwrite').objectStore('posts').put(respData);
+    await db.transaction('posts', 'readwrite').objectStore('posts').put({
+      time: Date.now(),
+      data: respData,
+    });
   }
 
   return resp;
@@ -104,7 +108,10 @@ async function fetchPostAndUpdate(req, url) {
 
   if(url === respData.url) {
     const db = await DBP;
-    await db.transaction('posts', 'readwrite').objectStore('posts').put(respData);
+    await db.transaction('posts', 'readwrite').objectStore('posts').put({
+      time: Date.now(),
+      data: respData
+    });
   }
 
   return resp;
@@ -171,8 +178,8 @@ global.addEventListener('install', event => {
     if(db.oldVersion === 0) {
       db.createObjectStore('lists', { keyPath: ['tagName', 'page'] });
 
-      const postsStore = db.createObjectStore('posts', { keyPath: 'post_time' });
-      postsStore.createIndex('url', 'url', { unique: true });
+      const postsStore = db.createObjectStore('posts', { keyPath: 'data.post_time' });
+      postsStore.createIndex('url', 'data.url', { unique: true });
     }
   });
 
