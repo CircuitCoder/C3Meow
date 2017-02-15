@@ -6,6 +6,7 @@ var baseWebpackConfig = require('./webpack.base.conf')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var WebpackVisualizerPlugin = require('webpack-visualizer-plugin');
+var SWWPlugin = require('serviceworker-webpack-plugin')
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -34,6 +35,11 @@ module.exports = merge(baseWebpackConfig, {
       inject: true
     }),
     new WebpackVisualizerPlugin(),
+
+    new SWWPlugin({
+      entry: './src/sw.js',
+      filename: 'sw.js',
+    })
   ],
   vue: {
     loaders: utils.cssLoaders({

@@ -8,7 +8,7 @@ const autoprefixer = require('autoprefixer');
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    app: './src/main.js',
   },
   output: {
     path: config.build.assetsRoot,
@@ -52,10 +52,6 @@ module.exports = {
         loader: 'babel',
         include: projectRoot,
         exclude: /node_modules/
-      },
-      {
-        test: /\.json\.gen\.js$/,
-        loader: './build/json-emit-loader!value-loader'
       },
       {
         test: /\.json$/,

@@ -1767,7 +1767,7 @@
     },
     "file-loader": {
       "version": "0.9.0",
-      "from": "file-loader@>=0.9.0 <0.10.0",
+      "from": "https://registry.npmjs.org/file-loader/-/file-loader-0.9.0.tgz",
       "resolved": "https://registry.npmjs.org/file-loader/-/file-loader-0.9.0.tgz",
       "dev": true
     },
@@ -2167,6 +2167,11 @@
       "from": "icss-replace-symbols@>=1.0.2 <2.0.0",
       "resolved": "https://registry.npmjs.org/icss-replace-symbols/-/icss-replace-symbols-1.0.2.tgz",
       "dev": true
+    },
+    "idb": {
+      "version": "2.0.0",
+      "from": "idb@latest",
+      "resolved": "https://registry.npmjs.org/idb/-/idb-2.0.0.tgz"
     },
     "ieee754": {
       "version": "1.1.8",
@@ -4038,6 +4043,12 @@
       "from": "serve-static@>=1.11.2 <1.12.0",
       "resolved": "https://registry.npmjs.org/serve-static/-/serve-static-1.11.2.tgz"
     },
+    "serviceworker-webpack-plugin": {
+      "version": "0.1.8",
+      "from": "serviceworker-webpack-plugin@latest",
+      "resolved": "https://registry.npmjs.org/serviceworker-webpack-plugin/-/serviceworker-webpack-plugin-0.1.8.tgz",
+      "dev": true
+    },
     "set-blocking": {
       "version": "2.0.0",
       "from": "set-blocking@>=2.0.0 <2.1.0",
@@ -4187,11 +4198,6 @@
       "resolved": "https://registry.npmjs.org/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz",
       "dev": true
     },
-    "string_decoder": {
-      "version": "0.10.31",
-      "from": "string_decoder@>=0.10.0 <0.11.0",
-      "resolved": "https://registry.npmjs.org/string_decoder/-/string_decoder-0.10.31.tgz"
-    },
     "string-hash": {
       "version": "1.1.1",
       "from": "string-hash@>=1.1.0 <2.0.0",
@@ -4202,6 +4208,11 @@
       "version": "1.0.2",
       "from": "string-width@>=1.0.1 <2.0.0",
       "resolved": "https://registry.npmjs.org/string-width/-/string-width-1.0.2.tgz"
+    },
+    "string_decoder": {
+      "version": "0.10.31",
+      "from": "string_decoder@>=0.10.0 <0.11.0",
+      "resolved": "https://registry.npmjs.org/string_decoder/-/string_decoder-0.10.31.tgz"
     },
     "stringstream": {
       "version": "0.0.5",
@@ -4789,6 +4800,12 @@
       "version": "1.0.0",
       "from": "wordwrap@>=1.0.0 <1.1.0",
       "resolved": "https://registry.npmjs.org/wordwrap/-/wordwrap-1.0.0.tgz",
+      "dev": true
+    },
+    "worker-loader": {
+      "version": "0.7.1",
+      "from": "worker-loader@latest",
+      "resolved": "https://registry.npmjs.org/worker-loader/-/worker-loader-0.7.1.tgz",
       "dev": true
     },
     "wrap-ansi": {

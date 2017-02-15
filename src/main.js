@@ -744,6 +744,12 @@ const instance = new Vue(tmpl({
   },
 }));
 
+// eslint-disable-next-line
+import sw from 'serviceworker-webpack-plugin/lib/runtime';
+
+if('serviceWorker' in navigator)
+  sw.register({ scope: config.base });
+
 export default context =>
   new Promise((resolve, reject) =>
     instance.initialize(context.url).then(() => resolve(instance)).catch(err => reject(err)));

@@ -39,4 +39,4 @@ const result = {
   ],
 };
 
-module.exports = `module.exports = ${JSON.stringify(result)}`;
+module.exports = `${JSON.stringify(result)}`;
