@@ -2675,6 +2675,11 @@
       "from": "markdown-it@8.2.2",
       "resolved": "https://registry.npmjs.org/markdown-it/-/markdown-it-8.2.2.tgz"
     },
+    "material-design-icons-iconfont": {
+      "version": "3.0.3",
+      "from": "material-design-icons-iconfont@latest",
+      "resolved": "https://registry.npmjs.org/material-design-icons-iconfont/-/material-design-icons-iconfont-3.0.3.tgz"
+    },
     "math-expression-evaluator": {
       "version": "1.2.14",
       "from": "math-expression-evaluator@>=1.2.14 <2.0.0",

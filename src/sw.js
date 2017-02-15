@@ -111,7 +111,7 @@ async function fetchPostAndUpdate(req, url) {
 }
 
 function fetchBackend(req) {
-  if(req.method !== 'GET') return fetch(req);
+  if(req.method !== 'GET') return null;
 
   const pathname = new URL(req.url).pathname;
 
