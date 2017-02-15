@@ -188,11 +188,10 @@ global.addEventListener('install', event => {
 
 global.addEventListener('fetch', event => {
   const toBackend = event.request.headers.has('C3-SW-BACKEND');
-  let resp;
+  let resp = null;
   if(toBackend) resp = fetchBackend(event.request);
   else if(new URL(event.request.url).origin === (global.location.origin))
     resp = fetchOrigin(event.request);
-  else resp = fetch(event.request);
 
   if(resp !== null) event.respondWith(resp);
 });

@@ -66,6 +66,14 @@ function setupGA() {
   }
 }
 
+function setupServiceWorker() {
+  // eslint-disable-next-line
+  const sw = require('serviceworker-webpack-plugin/lib/runtime');
+
+  if('serviceWorker' in navigator)
+    sw.register({ scope: config.base });
+}
+
 import tmpl from './tmpl/root.tmpl.html';
 
 // eslint-disable-next-line no-new
@@ -116,6 +124,7 @@ const instance = new Vue(tmpl({
   mounted() {
     if(!this.$isServer) {
       setupGA();
+      setupServiceWorker();
       this.initialize(window.location.pathname);
 
       document.body.addEventListener('keydown', e => {
@@ -743,12 +752,6 @@ const instance = new Vue(tmpl({
     feedURL: () => `${config.backend}/feed`,
   },
 }));
-
-// eslint-disable-next-line
-import sw from 'serviceworker-webpack-plugin/lib/runtime';
-
-if('serviceWorker' in navigator)
-  sw.register({ scope: config.base });
 
 export default context =>
   new Promise((resolve, reject) =>
