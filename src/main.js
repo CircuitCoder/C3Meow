@@ -99,6 +99,7 @@ const instance = new Vue(tmpl({
     uident: null,
     signedIn: false,
     isAuthor: false,
+    avatarShown: false,
     avatarLoaded: false,
 
     postTsStore: [],
@@ -320,6 +321,7 @@ const instance = new Vue(tmpl({
       });
 
       this.popAccount();
+      this.avatarShown = true;
     },
 
     loadState(_state) {

@@ -64,19 +64,22 @@
     </div>
     <div class="bottom-bar">
       <div class="account" @click="modAccount" :class="{ 'signed-in': signedIn }">
-        <div class="avatar-background"></div>
-        <div class="avatar-background overlap"></div>
-        <div class="avatar-background-cover"></div>
-        <div class="avatar placeholder"></div>
+        <div class="avatar-section" :class="{ shown: avatarShown }">
+          <div class="avatar-background"></div>
+          <div class="avatar-background overlap"></div>
+          <div class="avatar-background-cover"></div>
+          <div class="avatar placeholder"></div>
 
-        <div class="avatar container" :class="{ visible: this.avatarLoaded }">
-          <img :src="user ? user.avatar : ''" class="avatar-content" @load="onAvatarLoad">
+          <div class="avatar container" :class="{ visible: this.avatarLoaded }">
+            <img :src="user ? user.avatar : ''" class="avatar-content" @load="onAvatarLoad">
+          </div>
+
+          <div class="action-overlap">
+            <i class="material-icons login">archive</i>
+            <i class="material-icons logout">unarchive</i>
+          </div>
         </div>
 
-        <div class="action-overlap">
-          <i class="material-icons login">archive</i>
-          <i class="material-icons logout">unarchive</i>
-        </div>
         <div class="name-holder">
           <iterator type="account" :list="iteratorContent.account"></iterator>
         </div>

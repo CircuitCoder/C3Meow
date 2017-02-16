@@ -652,6 +652,21 @@ body {
       }
     }
 
+    .avatar-section {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 60px;
+      height: 60px;
+
+      transform: scale(0);
+      transition: transform .2s ease;
+
+      &.shown {
+        transform: scale(1);
+      }
+    }
+
     &:hover {
       .action-overlap {
         transition: opacity 0.2s ease-out;
