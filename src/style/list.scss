@@ -1,4 +1,5 @@
 @import './const.scss';
+@import './func.scss';
 
 .list {
   position: absolute;
@@ -11,6 +12,11 @@
 
   overflow-x: hidden;
   overflow-y: scroll;
+
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
 
   .placeholder {
     width: 100%;
@@ -48,8 +54,17 @@
     }
   }
 
+  .cached-indicator {
+    padding: 15px 20px;
+    height: 30px;
+
+    background-image: stripe(-45deg, transparent, rgba(0,0,0,.03));
+    background-size: 40px 40px;
+  }
+
   .entries {
     min-height: 100%;
+    border-top: $border-color 1px solid;
   }
 
   .list-empty-hint {
@@ -66,7 +81,7 @@
     font-size: 14px;
   }
 
-  &.has-prev .entries {
+  &.has-prev .cached-indicator {
     border-top: $border-color 1px solid;
   }
 

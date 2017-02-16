@@ -99,14 +99,14 @@ function loadList(tag, page, cb) {
 
   const path = tag === 'all' ? `/posts/${page}` : `/tag/${enctag}/${page}`;
   const req = request.get(config.backend + path)
-      .set('C3-SW-BACKEND', 'true')
       .withCredentials()
       .end((err, res) => {
         if(reqIndex !== listReqIndex) return false;
         else if(err) return cb(err);
         else
           try {
-            return cb(null, JSON.parse(res.text));
+            const body = JSON.parse(res.text);
+            return cb(null, body, body.cached ? body.cached.time : null);
           } catch(e) {
             return cb(e);
           }
@@ -122,16 +122,14 @@ function loadPost(url, cb) {
   const encurl = encodeURIComponent(url);
 
   const req = request.get(`${config.backend}/post/${encurl}`)
-      .set('C3-SW-BACKEND', 'true')
       .withCredentials()
       .end((err, res) => {
         if(reqIndex !== postReqIndex) return false;
         else if(err) return cb(err);
         else
           try {
-            const post = JSON.parse(res.text);
-            if(post.tags === null) post.tags = [];
-            return cb(null, post);
+            const body = JSON.parse(res.text);
+            return cb(null, body, body.cached ? body.cached.time : null);
           } catch(e) {
             return cb(e);
           }
@@ -159,7 +157,6 @@ function doLogout(cb) {
 
 function postLogin(token, sub, cb) {
   request.post(`${config.backend}/account/login`)
-      .set('C3-SW-BACKEND', 'true')
       .withCredentials()
       .send({ token, sub })
       .end((err, res) => {
@@ -175,7 +172,6 @@ function postLogin(token, sub, cb) {
 
 function postLogout(cb) {
   request.post(`${config.backend}/account/logout`)
-      .set('C3-SW-BACKEND', 'true')
       .withCredentials()
       .end((err, res) => {
         if(err) return cb(err);
@@ -204,7 +200,6 @@ function initLogin(signIn, signOut) {
 
 function updatePost(id, content, cb) {
   request.post(`${config.backend}/internal/post/${id}`)
-      .set('C3-SW-BACKEND', 'true')
       .withCredentials()
       .send(content)
       .end((err, res) => {
@@ -220,7 +215,6 @@ function updatePost(id, content, cb) {
 
 function newPost(content, cb) {
   request.post(`${config.backend}/posts`)
-      .set('C3-SW-BACKEND', 'true')
       .withCredentials()
       .send(content)
       .end((err, res) => {
@@ -236,7 +230,6 @@ function newPost(content, cb) {
 
 function deletePost(id, cb) {
   request.delete(`${config.backend}/internal/post/${id}`)
-      .set('C3-SW-BACKEND', 'true')
       .withCredentials()
       .end((err, res) => {
         if(err) return cb(err);

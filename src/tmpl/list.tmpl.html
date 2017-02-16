@@ -3,6 +3,17 @@
     <i class="material-icons placeholder-icon md-24">keyboard_arrow_up</i>
     <div>第 {{ page - 1 }} 页</div>
   </a>
+
+  <div class="cached-indicator" v-if="cachedTime">
+    <div class="cached-refresh" @click="refresh()">
+      <i class="material-icons">cached</i>
+    </div>
+    <div class="cached-hint">
+      尾巴找不到信号哦<br>
+      缓存于 {{ convertTime(cachedTime) }}
+    </div>
+  </div>
+
   <div class="entries">
     <a v-for="(entry, index) of entries" :href="buildEntryLink(entry)" @click.prevent>
       <div class="entry" @click="select(index)" :class="{ selected: index === selected }">

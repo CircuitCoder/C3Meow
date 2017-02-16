@@ -1,6 +1,16 @@
 <div class="post">
   <div class="column">
 
+    <div class="cached-indicator" v-if="cachedTime">
+      <div class="cached-refresh" @click="refresh()">
+        <i class="material-icons">cached</i>
+      </div>
+      <div class="cached-hint">
+        尾巴找不到信号哦<br>
+        缓存于 {{ cachedTime | time }}
+      </div>
+    </div>
+
     <div class="top" :class="{ 'has-author': author }">
       <div class="topic" v-text="topic"></div>
       <div class="properties">

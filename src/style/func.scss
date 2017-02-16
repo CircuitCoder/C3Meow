@@ -1,0 +1,3 @@
+@function stripe($deg, $colorA, $colorB) {
+  @return linear-gradient($deg, $colorA 25%, $colorB 25%, $colorB 50%, $colorA 50%, $colorA 75%, $colorB 75%);
+}

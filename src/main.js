@@ -221,6 +221,11 @@ const instance = new Vue(tmpl({
       }
     });
 
+    bus.on('refresh', target => {
+      if(target === 'list') this.loadList(this.ref, this.page, '');
+      else if(target === 'post') this.loadPost(this.post, '');
+    });
+
     if(isBrowser && window && window.gapiLoader)
       window.gapiLoader.subscribe(() => {
         this.setupLogin();
@@ -357,7 +362,7 @@ const instance = new Vue(tmpl({
         this.clearIterator('list', { direction });
         this.updatePager();
 
-        util.loadList(ref, page, (err, data) => {
+        util.loadList(ref, page, (err, data, cachedTime) => {
           if(this.ref !== ref || this.page !== page) return;
           // TODO: handle
           if(err) throw err;
@@ -369,6 +374,7 @@ const instance = new Vue(tmpl({
             reference: ref,
             entries: data.posts,
             page,
+            cachedTime,
             hasPrev: page !== 1,
             hasNext: data.hasNext,
           }, {
@@ -394,7 +400,7 @@ const instance = new Vue(tmpl({
         this.clearIterator('post', { direction });
         this.notFound = false;
 
-        util.loadPost(url, (err, data) => {
+        util.loadPost(url, (err, data, cachedTime) => {
           if(this.post !== url) return;
           if(err)
             if(err.status === 404) {
@@ -413,6 +419,7 @@ const instance = new Vue(tmpl({
             timestamp: data.post_time,
             updateTimestamp: data.update_time,
             author: data.user,
+            cachedTime,
           }, {
             delta: 50,
             delay: 0,

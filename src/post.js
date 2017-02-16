@@ -14,6 +14,7 @@ export default Vue.component('post', tmpl({
     tags: Array,
     author: Object,
     url: String,
+    cachedTime: Number,
   },
   methods: {
     tagClick(index) {
@@ -31,6 +32,10 @@ export default Vue.component('post', tmpl({
           bus.emit('navigate', e.target.href, prevent => {
             if(prevent) e.preventDefault();
           });
+    },
+
+    refresh() {
+      bus.emit('refresh', 'post');
     },
   },
 

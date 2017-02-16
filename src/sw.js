@@ -1,5 +1,7 @@
 // Service Worker
 
+import config from './config';
+
 const assets = global.serviceWorkerOption.assets;
 
 if(!global.indexedDB) global.indexedDB =
@@ -20,14 +22,25 @@ import idb from 'idb';
 let DBP;
 
 function buildOfflineResponse(record) {
-  const respHeaders = new Headers();
-  respHeaders.set('C3-OFFLINE', 'true');
-
-  if(typeof record !== 'undefined') return new Response(JSON.stringify(record.data), { headers: respHeaders });
-  else return new Response('', {
+  if(typeof record !== 'undefined')
+    return new Response(JSON.stringify({
+      cached: {
+        time: record.time,
+      },
+      ...record.data,
+    }), {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    });
+  else return new Response(JSON.stringify({
+    cached: true,
+  }), {
     status: 404,
     statusText: 'Cache missed',
-    headers: respHeaders,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+    },
   });
 }
 
@@ -110,7 +123,7 @@ async function fetchPostAndUpdate(req, url) {
     const db = await DBP;
     await db.transaction('posts', 'readwrite').objectStore('posts').put({
       time: Date.now(),
-      data: respData
+      data: respData,
     });
   }
 
@@ -120,7 +133,7 @@ async function fetchPostAndUpdate(req, url) {
 function fetchBackend(req) {
   if(req.method !== 'GET') return null;
 
-  const pathname = new URL(req.url).pathname;
+  const pathname = req.url.substr(config.backend.length);
 
   let regResult = pathname.match(/^\/posts(?:\/(\d+))?\/*$/);
   if(regResult) { // Is list of all
@@ -194,10 +207,14 @@ global.addEventListener('install', event => {
 });
 
 global.addEventListener('fetch', event => {
-  const toBackend = event.request.headers.has('C3-SW-BACKEND');
+  const toBackend = event.request.url.indexOf(config.backend) === 0 &&
+    (event.request.url.length === config.backend.length ||
+    event.request.url.charAt(config.backend.length) === '/');
   let resp = null;
-  if(toBackend) resp = fetchBackend(event.request);
-  else if(new URL(event.request.url).origin === (global.location.origin))
+  if(toBackend) {
+    const req = event.request.clone();
+    resp = fetchBackend(req);
+  } else if(new URL(event.request.url).origin === (global.location.origin))
     resp = fetchOrigin(event.request);
 
   if(resp !== null) event.respondWith(resp);

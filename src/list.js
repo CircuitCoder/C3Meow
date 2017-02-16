@@ -23,6 +23,7 @@ export default Vue.component('list', tmpl({
     reference: {
       type: String,
     },
+    cachedTime: Number,
   },
 
   data: () => ({
@@ -100,6 +101,10 @@ export default Vue.component('list', tmpl({
 
     buildEntryLink(entry) {
       return `/${entry.url}`;
+    },
+
+    refresh() {
+      bus.emit('refresh', 'list');
     },
   },
 

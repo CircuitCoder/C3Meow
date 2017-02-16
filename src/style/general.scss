@@ -1,6 +1,7 @@
 @import './const.scss';
 @import './icons.scss';
 @import './loading.scss';
+@import './func.scss';
 
 html {
   // Prevents viewport bounce
@@ -270,6 +271,17 @@ body {
     padding: 0 40px;
     background-color: $bg-gray;
     overflow: auto;
+
+    .cached-indicator {
+      margin-bottom: 20px;
+      padding: 10px 5px;
+      border-left: $border-color 5px solid;
+
+      background-image: stripe(-45deg, transparent, rgba(0,0,0, .03));
+
+      background-repeat: repeat;
+      background-size: 40px 40px;
+    }
 
     @media screen and (max-width: $responsive-trigger - 1px) {
       top: $title-bar-height;
@@ -784,13 +796,6 @@ body {
   }
 }
 
-.list {
-  a {
-    color: inherit;
-    text-decoration: inherit;
-  }
-}
-
 // Delete mask
 .delete-mask {
   position: absolute;
@@ -887,5 +892,38 @@ body {
   &.opacity-leave-active {
     opacity: 0;
     transition: opacity 0.2s ease-in;
+  }
+}
+
+// Cached indicator
+.cached-indicator {
+  overflow: hidden;
+  display: flex;
+
+  line-height: 15px;
+  font-size: 12px;
+
+  color: rgba(0,0,0, .3);
+
+  .cached-refresh {
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    margin-right: 5px;
+    font-size: 24px;
+    line-height: 30px;
+
+    cursor: pointer;
+    color: rgba(0, 0, 0, .54);
+    opacity: (0.3 / 0.54);
+    transition: opacity .2s ease;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .cached-hint {
+    flex: 1;
   }
 }
