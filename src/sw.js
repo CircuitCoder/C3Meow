@@ -59,7 +59,6 @@ async function fetchListAndUpdate(req, tagName, page) {
   }
 
   if(resp.status !== 200) return resp;
-
   const respData = await resp.clone().json();
   const db = await DBP;
 
@@ -89,6 +88,7 @@ async function fetchInternalPostAndUpdate(req, ts) {
     return buildOfflineResponse(record);
   }
 
+  if(resp.status !== 200) return resp;
   const respData = await resp.clone().json();
 
   if(ts === resp.post_time) {
@@ -117,6 +117,7 @@ async function fetchPostAndUpdate(req, url) {
     return buildOfflineResponse(record);
   }
 
+  if(resp.status !== 200) return resp;
   const respData = await resp.clone().json();
 
   if(url === respData.url) {

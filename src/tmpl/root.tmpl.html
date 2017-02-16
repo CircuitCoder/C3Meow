@@ -15,9 +15,14 @@
         <div class="hint">Loading<span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span></div>
       </div>
 
-      <div class="not-found" :class="{ visible: notFound }">
-        喵...找不到了...
-      </div>
+      <transition name="opacity">
+        <div class="post-status" v-if="postStatus == 'not-found'">
+          喵...找不到了...
+        </div>
+        <div class="post-status" v-if="postStatus == 'cache-missed'">
+          没有信号哟
+        </div>
+      </transition>
 
       <iterator type="post" :list="iteratorContent.post"></iterator>
     </div>

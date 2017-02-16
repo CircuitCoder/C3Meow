@@ -93,7 +93,7 @@ const instance = new Vue(tmpl({
 
     postCont: null,
     listCont: null,
-    notFound: false,
+    postStatus: 'normal',
 
     user: null,
     uident: null,
@@ -277,6 +277,7 @@ const instance = new Vue(tmpl({
       return Promise.all([pList, pPost, pRunning])
       .then(([lResult, pResult]) => new Promise((resolve, reject) => {
         if(lResult && pResult) return resolve();
+        else if(!this.$isServer) return resolve();
         else return reject({ code: 404 });
       }));
     },
@@ -360,14 +361,19 @@ const instance = new Vue(tmpl({
     },
 
     loadList(ref, page, direction) {
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         this.clearIterator('list', { direction });
         this.updatePager();
 
         util.loadList(ref, page, (err, data, cachedTime) => {
-          if(this.ref !== ref || this.page !== page) return;
-          // TODO: handle
-          if(err) throw err;
+          if(this.ref !== ref || this.page !== page) return void resolve(true);
+
+          let cacheMissed = false;
+          if(err)
+            if(err.status === 404) {
+              if(data.cached) cacheMissed = true;
+              return void resolve(false);
+            } else return void reject(err);
 
           for(const p of data.posts)
             this.postTsStore[p.url] = p.post_time;
@@ -377,6 +383,7 @@ const instance = new Vue(tmpl({
             entries: data.posts,
             page,
             cachedTime,
+            cacheMissed,
             hasPrev: page !== 1,
             hasNext: data.hasNext,
           }, {
@@ -392,7 +399,7 @@ const instance = new Vue(tmpl({
           this.updateTitle();
 
           this.pageview();
-          resolve(data.posts.length > 0);
+          return void resolve(data.posts.length > 0);
         });
       });
     },
@@ -400,14 +407,19 @@ const instance = new Vue(tmpl({
     loadPost(url, direction) {
       return new Promise((resolve, reject) => {
         this.clearIterator('post', { direction });
-        this.notFound = false;
+        this.postStatus = 'normal';
 
         util.loadPost(url, (err, data, cachedTime) => {
-          if(this.post !== url) return;
+          if(this.post !== url) return void resolve(true);
           if(err)
             if(err.status === 404) {
-              this.notFound = true;
-              this.postTitle = '404';
+              if(data.cached) {
+                this.postStatus = 'cache-missed';
+                this.postTitle = '缓存没中';
+              } else {
+                this.postStatus = 'not-found';
+                this.postTitle = '404';
+              }
               this.updateTitle();
               return void resolve(false);
             } else return void reject(err);
@@ -436,14 +448,14 @@ const instance = new Vue(tmpl({
           this.updateTitle();
 
           this.pageview();
-          resolve(true);
+          return void resolve(true);
         });
       });
     },
 
     closePost(direction, fromState) {
       // TODO: refactor
-      if(this.notFound) this.notFound = false;
+      this.postStatus = 'normal';
       this.post = null;
       this.postTitle = '';
       this.postCont = null;

@@ -102,13 +102,18 @@ function loadList(tag, page, cb) {
       .withCredentials()
       .end((err, res) => {
         if(reqIndex !== listReqIndex) return false;
-        else if(err) return cb(err);
-        else
+        else if(err) {
+          let body = {};
+          try {
+            body = JSON.parse(res.text);
+          } catch(e) { /* Ignore */ }
+          return cb(err, body);
+        } else
           try {
             const body = JSON.parse(res.text);
             return cb(null, body, body.cached ? body.cached.time : null);
           } catch(e) {
-            return cb(e);
+            return cb(err);
           }
       });
   listReq.push(req);
@@ -125,13 +130,18 @@ function loadPost(url, cb) {
       .withCredentials()
       .end((err, res) => {
         if(reqIndex !== postReqIndex) return false;
-        else if(err) return cb(err);
-        else
+        else if(err) {
+          let body = {};
+          try {
+            body = JSON.parse(res.text);
+          } catch(e) { /* Ignore */ }
+          return cb(err, body);
+        } else
           try {
             const body = JSON.parse(res.text);
             return cb(null, body, body.cached ? body.cached.time : null);
           } catch(e) {
-            return cb(e);
+            return cb(err);
           }
       });
   postReq.push(req);

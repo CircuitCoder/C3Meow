@@ -231,9 +231,7 @@ body {
     }
   }
 
-  .not-found {
-    opacity: 0;
-    transition: opacity 0.2s ease-in;
+  .post-status {
     background: $bg-gray;
 
     position: absolute;
@@ -248,10 +246,6 @@ body {
     justify-content: center;
 
     font-size: 24px;
-
-    &.visible {
-      opacity: 1;
-    }
   }
 
   .transformer {
