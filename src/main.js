@@ -222,10 +222,7 @@ const instance = new Vue(tmpl({
       }
     });
 
-    bus.on('refresh', target => {
-      if(target === 'list') this.loadList(this.ref, this.page, '');
-      else if(target === 'post') this.loadPost(this.post, '');
-    });
+    bus.on('refresh', target => this.refresh(target));
 
     if(isBrowser && window && window.gapiLoader)
       window.gapiLoader.subscribe(() => {
@@ -451,6 +448,11 @@ const instance = new Vue(tmpl({
           return void resolve(true);
         });
       });
+    },
+
+    refresh(target) {
+      if(target === 'list') this.loadList(this.ref, this.page, '');
+      else if(target === 'post') this.loadPost(this.post, '');
     },
 
     closePost(direction, fromState) {

@@ -17,12 +17,18 @@
 
       <transition name="opacity">
         <div class="post-status" v-if="postStatus == 'not-found'">
-          <i class="material-icons">error</i>
+          <div class="post-status-icon">
+            <i class="material-icons">error</i>
+          </div>
           喵...找不到了...
+          <i class="material-icons post-status-refresh" @click="refresh('post')">refresh</i>
         </div>
         <div class="post-status" v-if="postStatus == 'cache-missed'">
-          <i class="material-icons">cloud_off</i>
+          <div class="post-status-icon">
+            <i class="material-icons">cloud_off</i>
+          </div>
           没有信号哟
+          <i class="material-icons post-status-refresh" @click="refresh('post')">refresh</i>
         </div>
       </transition>
 

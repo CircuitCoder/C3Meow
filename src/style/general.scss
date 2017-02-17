@@ -250,12 +250,32 @@ body {
     font-size: 24px;
     line-height: 32px;
 
-    .material-icons {
+    .post-status-icon {
       display: block;
       font-size: 128px;
       line-height: 128px;
       color: rgba(0,0,0,.24);
       margin-bottom: 8px;
+    }
+
+    .post-status-refresh {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+
+      line-height: 32px;
+      width: 32px;
+      font-size:24px;
+
+      color: rgba(0,0,0,.54);
+      opacity: (.24 / .54);
+      transition: opacity .2s ease;;
+
+      cursor: pointer;
+
+      &:hover {
+        opacity: 1;
+      }
     }
   }
 
