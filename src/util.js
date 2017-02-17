@@ -116,6 +116,8 @@ function loadList(tag, page, cb) {
             return cb(err);
           }
       });
+
+  listReq.splice(0, listReq.length);
   listReq.push(req);
 }
 
@@ -144,6 +146,8 @@ function loadPost(url, cb) {
             return cb(err);
           }
       });
+
+  postReq.splice(0, postReq.length);
   postReq.push(req);
 }
 
