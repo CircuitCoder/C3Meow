@@ -82,7 +82,7 @@ var webpackConfig = merge(baseWebpackConfig, {
 
     new SWWPlugin({
       entry: './src/sw.js',
-      filename: 'sw.[hash].js',
+      filename: 'sw.js',
     })
   ]
 })
