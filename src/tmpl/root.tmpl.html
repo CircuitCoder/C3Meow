@@ -17,9 +17,11 @@
 
       <transition name="opacity">
         <div class="post-status" v-if="postStatus == 'not-found'">
+          <i class="material-icons">find_in_page</i>
           喵...找不到了...
         </div>
         <div class="post-status" v-if="postStatus == 'cache-missed'">
+          <i class="material-icons">cloud_off</i>
           没有信号哟
         </div>
       </transition>
