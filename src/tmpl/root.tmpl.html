@@ -84,7 +84,7 @@
           <div class="avatar placeholder"></div>
 
           <div class="avatar container" :class="{ visible: this.avatarLoaded }">
-            <img :src="user ? user.avatar : ''" class="avatar-content" @load="onAvatarLoad">
+            <img :src="user ? user.avatar : avatarBackupURL" class="avatar-content" @load="onAvatarLoad" @error="onAvatarFail">
           </div>
 
           <div class="action-overlap">

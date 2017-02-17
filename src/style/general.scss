@@ -1,7 +1,9 @@
 @import './const.scss';
+@import './func.scss';
+
 @import './icons.scss';
 @import './loading.scss';
-@import './func.scss';
+@import './avatar.scss';
 
 html {
   // Prevents viewport bounce
@@ -277,7 +279,7 @@ body {
 
       color: rgba(0,0,0,.54);
       opacity: (.24 / .54);
-      transition: opacity .2s ease;;
+      transition: opacity .2s ease;
 
       cursor: pointer;
 
@@ -689,7 +691,7 @@ body {
       height: 60px;
 
       transform: scale(0);
-      transition: transform .2s ease;
+      transition: transform .2s ease-out;
 
       &.shown {
         transform: scale(1);
@@ -759,6 +761,7 @@ body {
   height: $title-bar-height;
   padding: 0 20px;
   transform: translateY(- ($title-bar-height + 5px));
+  // TODO: ease-in and ease-out
   transition: transform 0.2s ease;
 
   background: white;

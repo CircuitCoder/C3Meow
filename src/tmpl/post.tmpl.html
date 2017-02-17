@@ -36,7 +36,7 @@
           {{ author ? author.name : '' }}
         </div>
       </div>
-      <img :src="author.avatar" v-if="author" class="avatar">
+      <avatar :src="author.avatar" v-if="author" class="avatar"></avatar>
     </div>
 
     <div class="content" v-html="compiled" @click="linkRedirector"></div>

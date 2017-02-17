@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80px" height="80px" viewBox="0 0 80 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="background: #FFFFFF;">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>avatar</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square">
+        <g id="avatar" stroke="#979797">
+            <g id="Group" transform="translate(12.000000, 13.000000)">
+                <path d="M1.5,46.5 L0.5,48.5" id="Line"></path>
+                <path d="M16.5,1.5 L15.5,49.5" id="Line"></path>
+                <path d="M18.5,2.5 L24.5,8.5" id="Line"></path>
+                <path d="M26.5,8.5 L38.5,7.5" id="Line"></path>
+                <path d="M41.5,0.5 L38.5,6.5" id="Line"></path>
+                <path d="M42.5,2.5 L48.5,51.5" id="Line"></path>
+                <path d="M27.5,19.5 L28.5,22.5" id="Line"></path>
+                <path d="M35.5,18.5 L36.5,21.5" id="Line"></path>
+                <path d="M16.5,50.5 L20.5,52.5" id="Line"></path>
+                <path d="M23.5,53.5 L41.5,53.5" id="Line"></path>
+                <path d="M43.5,53.5 L46.5,51.5" id="Line"></path>
+                <path d="M2.5,46.5 L15.5,47.5" id="Line"></path>
+                <path d="M2.5,48.5 L15.5,49.5" id="Line"></path>
+            </g>
+        </g>
+    </g>
+</svg>

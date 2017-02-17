@@ -39,6 +39,7 @@ import bus from './bus';
 import './style/general.scss';
 
 import './iterator';
+import './avatar';
 
 import './filters';
 
@@ -76,6 +77,8 @@ function setupServiceWorker() {
 
 import tmpl from './tmpl/root.tmpl.html';
 
+import avatarBackupURL from './assets/avatar.svg';
+
 // eslint-disable-next-line no-new
 const instance = new Vue(tmpl({
   el: '#app',
@@ -102,6 +105,7 @@ const instance = new Vue(tmpl({
     signedIn: false,
     isAuthor: false,
     avatarShown: false,
+    avatarBackupURL,
     avatarLoaded: false,
 
     postTsStore: [],
@@ -505,6 +509,11 @@ const instance = new Vue(tmpl({
     },
 
     onAvatarLoad() {
+      this.avatarLoaded = true;
+    },
+
+    onAvatarFail() {
+      this.user.avatar = avatarBackupURL;
       this.avatarLoaded = true;
     },
 

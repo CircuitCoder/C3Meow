@@ -1,0 +1,4 @@
+<div class="avatar-group">
+  <img class="avatar-backup" :src="backupURL">
+  <img class="avatar-primary" :src="src" @load="showPrimary()" :class="{ shown: primaryShown }">
+</div>
