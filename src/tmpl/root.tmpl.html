@@ -7,7 +7,7 @@
     <span class="cache-title" v-if="$isServer">{{cacheTitle}}</span>
 
     <div class="post-container">
-      <div class="loading" :class="{ visible: post !== null }">
+      <div class="loading" :class="{ visible: post !== null, 'quick-leave': postShown }">
         <i class="material-icons cloud">cloud</i>
         <div class="arrow-wrapper">
           <i class="material-icons arrow">keyboard_arrow_down</i>

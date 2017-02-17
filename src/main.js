@@ -88,6 +88,8 @@ const instance = new Vue(tmpl({
     page: 0,
     post: null,
     postTitle: '',
+    postShown: false,
+    postShownInterval: -1,
 
     refTrans: null,
 
@@ -405,9 +407,17 @@ const instance = new Vue(tmpl({
       return new Promise((resolve, reject) => {
         this.clearIterator('post', { direction });
         this.postStatus = 'normal';
+        this.postShown = false;
+        if(this.postShownInterval >= 0) clearInterval(this.postShownInterval);
 
         util.loadPost(url, (err, data, cachedTime) => {
           if(this.post !== url) return void resolve(true);
+
+          this.postShownInterval = setTimeout(() => {
+            this.postShown = true;
+            this.postShownInterval = -1;
+          }, 200);
+
           if(err)
             if(err.status === 404) {
               if(data.cached) {
