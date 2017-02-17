@@ -3,13 +3,36 @@ const fs = require('fs');
 const express = require('express');
 const path = require('path');
 
-const renderer = SSR.createBundleRenderer(fs.readFileSync('./ssrres/static/js/app.js', 'utf-8'));
-const index = fs.readFileSync('./ssrres/index.html', 'utf-8');
+const basepath = path.resolve(__dirname, './..');
+
+const ssrManifest = require(path.resolve(basepath, 'ssrres/wp-manifest.json'));
+const distManifest = require(path.resolve(basepath, 'dist/wp-manifest.json'));
+const assetsMapping = {};
+for(const chunk in ssrManifest)
+  if(chunk in distManifest)
+    assetsMapping[ssrManifest[chunk]] = path.resolve(basepath, 'dist', distManifest[chunk]);
+assetsMapping['static/js/vendor.js'] = path.resolve(basepath, 'dist', distManifest['vendor.js']);
+assetsMapping['static/js/vendor.js.map'] = path.resolve(basepath, 'dist', distManifest['vendor.js.map']);
+
+const renderer = SSR.createBundleRenderer(
+  fs.readFileSync(path.resolve(basepath, './ssrres/static/js/app.js'), 'utf-8')
+);
+const index = fs.readFileSync(path.resolve(basepath, './ssrres/index.html'), 'utf-8');
 const parts = index.split(/\<div\ id\=.*\<\/div\>/);
 const frontParts = parts[0].split(/\<title.*\<\/title\>/);
+const backPart = parts[1]
+  .replace('<script type=text/javascript src=/static/js/manifest.js></script>', '')
+  .replace('<script type=text/javascript src=/static/js/app.js>','<script type=text/javascript src=/static/js/manifest.js></script><script type=text/javascript src=/static/js/vendor.js></script><script type=text/javascript src=/static/js/app.js>');
 
 const server = express();
-server.use(express.static(path.resolve(__dirname, '../ssrres'), {
+
+server.use((req, res, next) => {
+  if(req.path.substr(1) in assetsMapping)
+    return res.sendFile(assetsMapping[req.path.substr(1)]);
+  return next();
+});
+
+server.use(express.static(path.resolve(basepath, 'ssrres'), {
   index: false,
 }));
 
@@ -52,7 +75,7 @@ server.get('*', (req, res) => {
     }
   })
   .on('end', () => {
-    res.end(parts[1]);
+    res.end(backPart);
   })
   .on('error', err => {
     if(err.code) 
