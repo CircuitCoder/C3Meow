@@ -369,10 +369,10 @@ const instance = new Vue(tmpl({
           if(err)
             if(err.status === 404) {
               if(data.cached) cacheMissed = true;
-              return void resolve(false);
+              else return void resolve(false);
             } else return void reject(err);
 
-          for(const p of data.posts)
+          if(data.posts) for(const p of data.posts)
             this.postTsStore[p.url] = p.post_time;
 
           this.pushIterator('list', {
@@ -396,7 +396,7 @@ const instance = new Vue(tmpl({
           this.updateTitle();
 
           this.pageview();
-          return void resolve(data.posts.length > 0);
+          return void resolve((!cacheMissed) && data.posts.length > 0);
         });
       });
     },
@@ -412,7 +412,7 @@ const instance = new Vue(tmpl({
             if(err.status === 404) {
               if(data.cached) {
                 this.postStatus = 'cache-missed';
-                this.postTitle = '缓存没中';
+                this.postTitle = '无网络连接';
               } else {
                 this.postStatus = 'not-found';
                 this.postTitle = '404';

@@ -65,9 +65,13 @@
   .entries {
     min-height: 100%;
     border-top: $border-color 1px solid;
+
+    &:first-child {
+      border-top: none;
+    }
   }
 
-  .list-empty-hint {
+  .list-status {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -79,6 +83,26 @@
     justify-content: center;
 
     font-size: 14px;
+
+    .list-status-refresh {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+
+      line-height: 32px;
+      width: 32px;
+      font-size: 24px;
+
+      color: rgba(0,0,0,.54);
+      opacity: (.3 / .54);
+      transition: opacity .2s ease;;
+
+      cursor: pointer;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
 
   &.has-prev .cached-indicator {

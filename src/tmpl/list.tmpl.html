@@ -1,5 +1,5 @@
-<div class="list" @scroll="scroll" :class="{ 'has-prev': hasPrev }">
-  <a class="placeholder page-up" v-show="hasPrev" :href="prevLink" @click.prevent="prev">
+<div class="list" @scroll="scroll" :class="{ 'has-prev': showNaviLinks && hasPrev }">
+  <a class="placeholder page-up" v-if="showNaviLinks && hasPrev" :href="prevLink" @click.prevent="prev">
     <i class="material-icons placeholder-icon md-24">keyboard_arrow_up</i>
     <div>第 {{ page - 1 }} 页</div>
   </a>
@@ -27,15 +27,26 @@
         <div class="overlap"></div>
       </div>
     </a>
-    <div class="list-empty-hint" v-show="!entries || entries.length === 0">
+
+    <div class="list-status" v-if="(!entries || entries.length === 0) && !cacheMissed">
       这里除了一只猫，什么都没有
+      <div class="list-status-refresh" @click="refresh()">
+        <i class="material-icons">refresh</i>
+      </div>
+    </div>
+
+    <div class="list-status" v-if="cacheMissed">
+      没有网络哦
+      <div class="list-status-refresh" @click="refresh()">
+        <i class="material-icons">refresh</i>
+      </div>
     </div>
   </div>
-  <a class="placeholder page-down" v-show="hasNext" :href="nextLink" @click.prevent="next">
+  <a class="placeholder page-down" v-if="showNaviLinks && hasNext" :href="nextLink" @click.prevent="next">
     <div>第 {{ page + 1 }} 页</div>
     <i class="material-icons placeholder-icon md-24">keyboard_arrow_down</i>
   </a >
-  <div class="placeholder last-page" v-show="!hasNext">
+  <div class="placeholder last-page" v-if="showNaviLinks && !hasNext">
     已经是最后一页了~
   </div>
 </div>

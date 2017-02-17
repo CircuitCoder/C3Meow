@@ -24,6 +24,7 @@ export default Vue.component('list', tmpl({
       type: String,
     },
     cachedTime: Number,
+    cacheMissed: Boolean,
   },
 
   data: () => ({
@@ -86,6 +87,7 @@ export default Vue.component('list', tmpl({
     },
 
     selectByUrl(url) {
+      if(!this.entries) return;
       for(let i = 0; i < this.entries.length; ++i)
         if(this.entries[i].url === url) {
           this.selected = i;
@@ -109,6 +111,9 @@ export default Vue.component('list', tmpl({
   },
 
   computed: {
+    showNaviLinks() {
+      return (!this.cacheMissed) && this.entries && this.entries.length > 0;
+    },
     nextLink() {
       return `/${this.reference}/${this.page + 1}`;
     },

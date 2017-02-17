@@ -50,6 +50,9 @@ body {
   display: flex;
   flex-direction: column;
 
+  padding-top: $title-bar-height + 1px;
+  padding-bottom: $bottom-bar-height + 1px;
+
   justify-content: center;
   align-items: center;
 
@@ -265,7 +268,7 @@ body {
 
       line-height: 32px;
       width: 32px;
-      font-size:24px;
+      font-size: 24px;
 
       color: rgba(0,0,0,.54);
       opacity: (.24 / .54);
