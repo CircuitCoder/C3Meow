@@ -26,13 +26,20 @@ const backPart = parts[1]
 
 const server = express();
 
+// Remap static assets to staticly built ones
 server.use((req, res, next) => {
   if(req.path.substr(1) in assetsMapping)
     return res.sendFile(assetsMapping[req.path.substr(1)]);
   return next();
 });
 
+// Static assets in ssrres (sw.js ...)
 server.use(express.static(path.resolve(basepath, 'ssrres'), {
+  index: false,
+}));
+
+// Static assets in dist (source maps ...)
+server.use(express.static(path.resolve(basepath, 'dist'), {
   index: false,
 }));
 

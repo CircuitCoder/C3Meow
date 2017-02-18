@@ -81,7 +81,6 @@ import avatarBackupURL from './assets/avatar.svg';
 
 // eslint-disable-next-line no-new
 const instance = new Vue(tmpl({
-  el: '#app',
   data: () => ({
     running: false,
     cacheTitle: `加载中... | ${config.title}`,
@@ -794,6 +793,14 @@ const instance = new Vue(tmpl({
     feedURL: () => `${config.backend}/feed`,
   },
 }));
+
+if(isBrowser) {
+  const appElem = document.getElementById('app');
+  const prerenderedElem = document.querySelector('.frame[server-rendered="true"]');
+
+  if(appElem) instance.$mount(appElem);
+  else if(prerenderedElem) instance.$mount(prerenderedElem);
+}
 
 export default context =>
   new Promise((resolve, reject) =>
