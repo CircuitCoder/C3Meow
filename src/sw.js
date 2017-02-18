@@ -19,7 +19,22 @@ if(!global.IDBKeyRange) global.IDBKeyRange =
 
 import idb from 'idb';
 
-let DBP;
+const DB_NAME = 'c3meow';
+
+async function getIDBStore(name, mode = 'readonly') {
+  const dbc = await idb.open(DB_NAME, 1, db => {
+    if(db.oldVersion === 0) {
+      db.createObjectStore('lists', { keyPath: ['tagName', 'page'] });
+
+      const postsStore = db.createObjectStore('posts', { keyPath: 'data.post_time' });
+      postsStore.createIndex('url', 'data.url', { unique: true });
+    }
+  });
+
+  return dbc
+    .transaction(name, mode)
+    .objectStore(name);
+}
 
 function buildOfflineResponse(record) {
   if(typeof record !== 'undefined')
@@ -49,21 +64,18 @@ async function fetchListAndUpdate(req, tagName, page) {
   try {
     resp = await fetch(req);
   } catch(e) {
-    const db = await DBP;
-    const record = await db
-      .transaction('lists')
-      .objectStore('lists')
-      .get([tagName, page]);
+    const store = await getIDBStore('lists');
+    const record = await store.get([tagName, page]);
 
     return buildOfflineResponse(record);
   }
 
   if(resp.status !== 200) return resp;
   const respData = await resp.clone().json();
-  const db = await DBP;
 
   try {
-    await db.transaction('lists', 'readwrite').objectStore('lists').put({
+    const store = await getIDBStore('lists', 'readwrite');
+    await store.put({
       time: Date.now(),
       tagName,
       page,
@@ -79,11 +91,8 @@ async function fetchInternalPostAndUpdate(req, ts) {
   try {
     resp = await fetch(req);
   } catch(e) {
-    const db = await DBP;
-    const record = await db
-      .transaction('posts')
-      .objectStore('posts')
-      .get(ts);
+    const store = await getIDBStore('posts');
+    const record = await store.get(ts);
 
     return buildOfflineResponse(record);
   }
@@ -91,13 +100,14 @@ async function fetchInternalPostAndUpdate(req, ts) {
   if(resp.status !== 200) return resp;
   const respData = await resp.clone().json();
 
-  if(ts === resp.post_time) {
-    const db = await DBP;
-    await db.transaction('posts', 'readwrite').objectStore('posts').put({
-      time: Date.now(),
-      data: respData,
-    });
-  }
+  if(ts === resp.post_time)
+    try {
+      const store = await getIDBStore('posts', 'readwrite');
+      await store.put({
+        time: Date.now(),
+        data: respData,
+      });
+    } catch(e) { /* Ignore */ }
 
   return resp;
 }
@@ -107,12 +117,8 @@ async function fetchPostAndUpdate(req, url) {
   try {
     resp = await fetch(req);
   } catch(e) {
-    const db = await DBP;
-    const record = await db
-      .transaction('posts')
-      .objectStore('posts')
-      .index('url')
-      .get(url);
+    const store = await getIDBStore('posts');
+    const record = await store.index('url').get(url);
 
     return buildOfflineResponse(record);
   }
@@ -120,13 +126,14 @@ async function fetchPostAndUpdate(req, url) {
   if(resp.status !== 200) return resp;
   const respData = await resp.clone().json();
 
-  if(url === respData.url) {
-    const db = await DBP;
-    await db.transaction('posts', 'readwrite').objectStore('posts').put({
-      time: Date.now(),
-      data: respData,
-    });
-  }
+  if(url === respData.url)
+    try {
+      const store = await getIDBStore('posts', 'readwrite');
+      await store.put({
+        time: Date.now(),
+        data: respData,
+      });
+    } catch(e) { /* Ignore */ }
 
   return resp;
 }
@@ -188,15 +195,6 @@ function fetchOrigin(req) {
 }
 
 global.addEventListener('install', event => {
-  DBP = idb.open('c3meow', 1, db => {
-    if(db.oldVersion === 0) {
-      db.createObjectStore('lists', { keyPath: ['tagName', 'page'] });
-
-      const postsStore = db.createObjectStore('posts', { keyPath: 'data.post_time' });
-      postsStore.createIndex('url', 'data.url', { unique: true });
-    }
-  });
-
   event.waitUntil(
     caches.open('v1').then(cache =>
       cache.addAll([
