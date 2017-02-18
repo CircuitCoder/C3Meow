@@ -46,6 +46,8 @@ import './filters';
 let gaPV;
 let transGen = 0;
 
+let PRERENDERED = false;
+
 function setupGA() {
   if(config.googleAnalyticsID) {
     /* eslint-disable */
@@ -131,7 +133,7 @@ const instance = new Vue(tmpl({
     if(!this.$isServer) {
       setupGA();
       setupServiceWorker();
-      this.initialize(window.location.pathname);
+      if(!PRERENDERED) this.initialize(window.location.pathname);
 
       document.body.addEventListener('keydown', e => {
         if(e.code === 'Escape') this.closePost('down');
@@ -252,7 +254,7 @@ const instance = new Vue(tmpl({
         this.page = 1;
       }
 
-      if(!this.$isServer) this.saveState(true);
+      if(!(this.$isServer || PRERENDERED)) this.saveState(true);
 
       const pList = this.loadList(this.ref, this.page, '');
       const pPost = this.post ? this.loadPost(this.post, '') : Promise.resolve(true);
@@ -260,7 +262,7 @@ const instance = new Vue(tmpl({
       if(this.ref === 'all') this.updateRef('全部', '', false);
       else this.updateRef(this.ref, '');
 
-      if(!this.$isServer)
+      if(!(this.$isServer || PRERENDERED))
         window.onpopstate = e => this.loadState(e.state);
 
       const pRunning = new Promise(resolve => {
@@ -799,7 +801,12 @@ if(isBrowser) {
   const prerenderedElem = document.querySelector('.frame[server-rendered="true"]');
 
   if(appElem) instance.$mount(appElem);
-  else if(prerenderedElem) instance.$mount(prerenderedElem);
+  else if(prerenderedElem) {
+    PRERENDERED = true;
+    instance.initialize(window.location.pathname).then(() => {
+      instance.$mount(prerenderedElem);
+    });
+  }
 }
 
 export default context =>
