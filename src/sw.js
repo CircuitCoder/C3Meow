@@ -184,7 +184,7 @@ function fetchOrigin(req) {
       return fetch(req).then(liveResp =>
         caches.open('v1').then(cache => {
           cache.put(req, liveResp.clone());
-          return resp;
+          return liveResp;
         }),
       );
     }).catch(() => new Response('', { status: 404, statusText: 'Cache missed' }));
