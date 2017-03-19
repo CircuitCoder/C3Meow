@@ -217,6 +217,8 @@ const instance = new Vue(tmpl({
 
     bus.on('navigate', (url, synccb) => {
       if(url.indexOf(window.location.origin) !== 0) return synccb(false);
+      else if(url.length !== window.location.origin.length
+        && url.charAt(window.location.origin.length) !== '/') return synccb(false);
 
       const pathname = url.substr(window.location.origin.length);
       try {

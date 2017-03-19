@@ -23,7 +23,12 @@ function parseURL(url) {
   if(url.indexOf(base) !== 0)
     throw new Error('Invalid path prefix. Please check the base field in your configuration.');
   else {
-    const segs = url.substring(base.length).split('/').filter(e => e.length > 0);
+    const segs = url
+      .substring(base.length)
+      .split('/')
+      .filter(e => e.length > 0)
+      .map(decodeURIComponent);
+
     if(segs.length === 0)
       // Is index
       return {
@@ -44,7 +49,7 @@ function parseURL(url) {
       if(isInt(segs[1]))
         // Is tag
         return {
-          ref: decodeURIComponent(segs[0]),
+          ref: segs[0],
           page: Number.parseInt(segs[1], 10),
           post: null,
         };
@@ -53,7 +58,7 @@ function parseURL(url) {
       if(isInt(segs[1]))
         // Is tag
         return {
-          ref: decodeURIComponent(segs[0]),
+          ref: segs[0],
           page: Number.parseInt(segs[1], 10),
           post: segs[2],
         };
