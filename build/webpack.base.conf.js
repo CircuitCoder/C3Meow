@@ -6,6 +6,9 @@ var projectRoot = path.resolve(__dirname, '../')
 const precss = require('precss');
 const autoprefixer = require('autoprefixer');
 
+var SWWPlugin = require('serviceworker-webpack-plugin')
+var appConfig = require('../src/config.js');
+
 module.exports = {
   entry: {
     app: './src/main.js',
@@ -90,4 +93,11 @@ module.exports = {
     loaders: utils.cssLoaders(),
   },
   postcss: () => [precss, autoprefixer],
+  plugins: [
+    new SWWPlugin({
+      entry: './src/sw.js',
+      filename: 'sw.js',
+      publicPath: appConfig.base,
+    })
+  ],
 }
