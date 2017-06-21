@@ -98,6 +98,16 @@ module.exports = {
       entry: './src/sw.js',
       filename: 'sw.js',
       publicPath: appConfig.base,
-    })
+    }),
+    {
+      // https://github.com/lodash/lodash/issues/1916#issuecomment-177659991
+      // Remove me when upgrading to Webpack 2
+      'apply': function(compiler) {
+        compiler.parser.plugin('expression global', function() {
+          this.state.module.addVariable('global', "(function() { return this; }()) || Function('return this')()");
+          return true;
+        });
+      }
+    }
   ],
 }

@@ -4,8 +4,6 @@
     v-show="running"
     v-on:sidebar-close="closeSidebar"
     v-on:sidebar-open="openSidebar">
-    <span class="cache-title" v-if="$isServer">{{cacheTitle}}</span>
-
     <div class="post-container">
       <div class="loading" :class="{ visible: post !== null, 'quick-leave': postShown }">
         <i class="material-icons cloud">cloud</i>

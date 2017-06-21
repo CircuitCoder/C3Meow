@@ -47,6 +47,7 @@ let gaPV;
 let transGen = 0;
 
 let PRERENDERED = false;
+let ssrContext;
 
 function setupGA() {
   if(config.googleAnalyticsID) {
@@ -790,7 +791,8 @@ const instance = new Vue(tmpl({
 
       set(t) {
         this.cacheTitle = t;
-        if(!this.$isServer) document.title = t;
+        if(this.$isServer) ssrContext.title = t;
+        else document.title = t;
       },
     },
 
@@ -800,7 +802,7 @@ const instance = new Vue(tmpl({
 
 if(isBrowser) {
   const appElem = document.getElementById('app');
-  const prerenderedElem = document.querySelector('.frame[server-rendered="true"]');
+  const prerenderedElem = document.querySelector('.frame[data-server-rendered="true"]');
 
   if(appElem) instance.$mount(appElem);
   else if(prerenderedElem) {
@@ -811,6 +813,8 @@ if(isBrowser) {
   }
 }
 
-export default context =>
-  new Promise((resolve, reject) =>
+export default context => {
+  ssrContext = context;
+  return new Promise((resolve, reject) =>
     instance.initialize(context.url).then(() => resolve(instance)).catch(err => reject(err)));
+};
