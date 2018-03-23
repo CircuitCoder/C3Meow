@@ -257,17 +257,6 @@ const instance = new Vue(tmpl({
         this.page = 1;
       }
 
-      if(!(this.$isServer || PRERENDERED)) this.saveState(true);
-
-      const pList = this.loadList(this.ref, this.page, '');
-      const pPost = this.post ? this.loadPost(this.post, '') : Promise.resolve(true);
-
-      if(this.ref === 'all') this.updateRef('全部', '', false);
-      else this.updateRef(this.ref, '');
-
-      if(!(this.$isServer || PRERENDERED))
-        window.onpopstate = e => this.loadState(e.state);
-
       const pRunning = new Promise(resolve => {
         setTimeout(() => {
           this.running = true;
@@ -280,6 +269,19 @@ const instance = new Vue(tmpl({
           });
         });
       });
+
+      if(PRERENDERED) return pRunning;
+
+      if(!this.$isServer) this.saveState(true);
+
+      const pList = this.loadList(this.ref, this.page, '');
+      const pPost = this.post ? this.loadPost(this.post, '') : Promise.resolve(true);
+
+      if(this.ref === 'all') this.updateRef('全部', '', false);
+      else this.updateRef(this.ref, '');
+
+      if(!this.$isServer)
+        window.onpopstate = e => this.loadState(e.state);
 
       return Promise.all([pList, pPost, pRunning])
       .then(([lResult, pResult]) => new Promise((resolve, reject) => {
@@ -393,15 +395,12 @@ const instance = new Vue(tmpl({
             cacheMissed,
             hasPrev: page !== 1,
             hasNext: data.hasNext,
+            initialHighlight: this.post,
           }, {
             delta: 20,
             delay: 0,
             direction,
           });
-
-          if(this.post !== null)
-            this.$nextTick(() =>
-              bus.emit('list-perform-select-by-url', this.post));
 
           this.updateTitle();
 

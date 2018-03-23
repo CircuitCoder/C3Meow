@@ -25,6 +25,7 @@ export default Vue.component('list', tmpl({
     },
     cachedTime: Number,
     cacheMissed: Boolean,
+    initialHighlight: String,
   },
 
   data: () => ({
@@ -38,6 +39,9 @@ export default Vue.component('list', tmpl({
     this.selectByUrlHandler = url => this.selectByUrl(url);
     bus.on('list-perform-unselect', this.unselectHandler);
     bus.on('list-perform-select-by-url', this.selectByUrlHandler);
+
+    if(this.initialHighlight)
+      this.selectByUrlHandler(this.initialHighlight);
   },
 
   mounted() {
