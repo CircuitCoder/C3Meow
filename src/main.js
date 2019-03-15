@@ -1,15 +1,16 @@
 import Vue from 'vue';
 
-// Emit the 3x favicon for OG icon
-try {
-  // eslint-disable-next-line import/no-webpack-loader-syntax
-  require('file-loader?limit=0!./assets/favicon@3x.png');
-} catch(e) {
-  // Will occur on SSR rendering
-  // Silently ignores
-}
-
 const isBrowser = typeof window !== 'undefined' && typeof window !== 'undefined';
+
+// Emit the 3x favicon for OG icon
+if(isBrowser)
+  try {
+    // eslint-disable-next-line import/no-webpack-loader-syntax
+    require('!!file-loader!./assets/favicon@3x.png');
+  } catch(e) {
+    // Will occur on SSR rendering
+    // Silently ignores
+  }
 
 if(isBrowser) {
   const VueTouch = require('vue-touch');
