@@ -1,8 +1,13 @@
 import Vue from 'vue';
 
 // Emit the 3x favicon for OG icon
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import 'file-loader?limit=0!./assets/favicon@3x.png';
+try {
+  // eslint-disable-next-line import/no-webpack-loader-syntax
+  require('file-loader?limit=0!./assets/favicon@3x.png');
+} catch(e) {
+  // Will occur on SSR rendering
+  // Silently ignores
+}
 
 const isBrowser = typeof window !== 'undefined' && typeof window !== 'undefined';
 
