@@ -22,7 +22,6 @@ function transformCont(src) {
     hideLinkHrefIfSameAsText: true,
     singleNewLineParagraphs: true,
   });
-  console.log(text);
   return text;
 }
 
