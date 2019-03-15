@@ -88,6 +88,11 @@ server.get('*', (req, res) => {
       res.write(`<meta property=og:title content="${context.title}">`);
       res.write(`<meta property=og:description content="${transformed}">`);
       res.write(`<meta property=og:url content="${appConfig.frontend}${req.url}">`);
+      res.write(`<meta property=og:image content="${appConfig.frontend}/${distManifest['favicon@3x.png']}">`);
+      res.write(`<meta property=og:image:secure_url content="${appConfig.frontend}/${distManifest['favicon@3x.png']}">`);
+      res.write(`<meta property=og:image:width content="192">`);
+      res.write(`<meta property=og:image:height content="192">`);
+      res.write(`<meta property=og:image:alt content="${appConfig.title}">`);
 
       res.write(frontParts[1]);
     }

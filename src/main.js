@@ -1,5 +1,9 @@
 import Vue from 'vue';
 
+// Emit the 3x favicon for OG icon
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import 'file-loader?limit=0!./assets/favicon@3x.png';
+
 const isBrowser = typeof window !== 'undefined' && typeof window !== 'undefined';
 
 if(isBrowser) {
