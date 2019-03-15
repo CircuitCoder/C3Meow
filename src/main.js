@@ -733,7 +733,7 @@ const instance = new Vue(tmpl({
       if(replace) window.history.replaceState(state, '', url);
       else window.history.pushState(state, '', url);
 
-      this.updateOGUrl(url);
+      this.updateOGUrl(`${config.frontend}${url}`);
     },
 
     updateOGUrl(url) {

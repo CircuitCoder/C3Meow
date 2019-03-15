@@ -7,6 +7,9 @@ module.exports = {
   // Backend url Without tailing slash
   backend: 'http://SOMEWHERE.AROUND.THE/WORLD',
 
+  // Backend url Without tailing slash
+  frontend: 'http://SOMEWHERE.AROUND.THE/WORLD',
+
   // Base pathname
   base: '/',
 

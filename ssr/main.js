@@ -3,6 +3,8 @@ const fs = require('fs');
 const express = require('express');
 const path = require('path');
 
+const appConfig = require('../src/config');
+
 const basepath = path.resolve(__dirname, './..');
 
 const ssrManifest = require(path.resolve(basepath, 'ssrres/wp-manifest.json'));
@@ -19,7 +21,7 @@ const renderer = SSR.createBundleRenderer(
 );
 const index = fs.readFileSync(path.resolve(basepath, './ssrres/index.html'), 'utf-8');
 const parts = index.split(/\<div\ id\=.*\<\/div\>/);
-const frontParts = parts[0].split(/\<title.*\<\/title\>/);
+const frontParts = parts[0].split(/\<title\>.*\<\/title\>\<meta property=og[^>]*\>\<meta property=og[^>]*\>/);
 const backPart = parts[1]
   .replace('<script type=text/javascript src=/static/js/manifest.js></script>', '')
   .replace('<script type=text/javascript src=/static/js/app.js>','<script type=text/javascript src=/static/js/manifest.js></script><script type=text/javascript src=/static/js/vendor.js></script><script type=text/javascript src=/static/js/app.js>');
@@ -77,6 +79,8 @@ server.get('*', (req, res) => {
 
     if(tagOpening > 2) {
       res.write(`<title>${stash}</title>`);
+      res.write(`<meta property=og:title content="${stash}">`);
+      res.write(`<meta property=og:url content="${appConfig.frontend}${req.url}">`);
       res.write(frontParts[1]);
       res.write(buf);
     }
