@@ -265,7 +265,10 @@ const instance = new Vue(tmpl({
       else this.updateRef(this.ref, '');
 
       if(!(this.$isServer || PRERENDERED))
-        window.onpopstate = e => this.loadState(e.state);
+        window.onpopstate = e => {
+          this.loadState(e.state);
+          this.updateOGUrl(window.location.href);
+        };
 
       const pRunning = new Promise(resolve => {
         setTimeout(() => {
@@ -729,6 +732,13 @@ const instance = new Vue(tmpl({
 
       if(replace) window.history.replaceState(state, '', url);
       else window.history.pushState(state, '', url);
+
+      this.updateOGUrl(url);
+    },
+
+    updateOGUrl(url) {
+      const ogUrl = document.querySelector('meta[property="og:url"]');
+      ogUrl.setAttribute('content', url);
     },
 
     toggleSidebar() {
@@ -790,7 +800,11 @@ const instance = new Vue(tmpl({
 
       set(t) {
         this.cacheTitle = t;
-        if(!this.$isServer) document.title = t;
+        if(!this.$isServer) {
+          document.title = t;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          ogTitle.setAttribute('content', t);
+        }
       },
     },
 
