@@ -88,6 +88,8 @@ const instance = new Vue(tmpl({
     cacheTitle: `加载中... | ${config.title}`,
     titlebar: config.title,
 
+    ctx: null,
+
     ref: 'all',
     page: 0,
     post: null,
@@ -240,8 +242,14 @@ const instance = new Vue(tmpl({
   },
 
   methods: {
-    initialize(url) {
+    initialize(url, ctx = null) {
       this.updateTitle();
+
+      if(ctx) {
+        this.ctx = ctx;
+        this.ctx.cont = config.desc || '喵喵喵~';
+        this.ctx.title = this.title;
+      }
 
       let data = {};
       try {
@@ -442,6 +450,8 @@ const instance = new Vue(tmpl({
             } else return void reject(err);
 
           this.postCont = data;
+          if(this.ctx)
+            this.ctx.cont = data.content;
 
           this.pushIterator('post', {
             topic: data.topic,
@@ -800,6 +810,10 @@ const instance = new Vue(tmpl({
 
       set(t) {
         this.cacheTitle = t;
+
+        if(this.ctx)
+          this.ctx.title = t;
+
         if(!this.$isServer) {
           document.title = t;
           const ogTitle = document.querySelector('meta[property="og:title"]');
@@ -827,4 +841,6 @@ if(isBrowser) {
 
 export default context =>
   new Promise((resolve, reject) =>
-    instance.initialize(context.url).then(() => resolve(instance)).catch(err => reject(err)));
+    instance
+      .initialize(context.url, context)
+      .then(() => resolve(instance)).catch(err => reject(err)));

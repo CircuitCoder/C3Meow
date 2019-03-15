@@ -3,7 +3,28 @@ const fs = require('fs');
 const express = require('express');
 const path = require('path');
 
+const MarkdownIt = require('markdown-it');
+const H2T = require('html-to-text');
+
 const appConfig = require('../src/config');
+
+const compileMd = new MarkdownIt({
+  html: true,
+  linkify: true,
+  typographer: false,
+});
+
+function transformCont(src) {
+  const html = compileMd.render(src);
+  const text = H2T.fromString(html, {
+    wordwrap: false,
+    linkHrefBaseUrl: appConfig.frontend,
+    hideLinkHrefIfSameAsText: true,
+    singleNewLineParagraphs: true,
+  });
+  console.log(text);
+  return text;
+}
 
 const basepath = path.resolve(__dirname, './..');
 
@@ -46,13 +67,12 @@ server.use(express.static(path.resolve(basepath, 'dist'), {
 }));
 
 server.get('*', (req, res) => {
-  const stream = renderer.renderToStream({
+  const context = {
     url: req.url
-  });
+  };
 
-  let tagClosing = 0;
-  let tagOpening = 0;
-  let stash = '';
+  const stream = renderer.renderToStream(context);
+
   let buf = '';
 
   let firstChunk = false;
@@ -62,28 +82,17 @@ server.get('*', (req, res) => {
     if(!firstChunk) {
       firstChunk = true;
       res.write(frontParts[0]);
-    }
- 
-    if(tagOpening > 2) return void res.write(chunk);
 
-    const str = chunk.toString('utf-8');
-
-    buf += str;
-    for(const i of str) {
-      if(i === '<') ++tagOpening;
-      else if(i === '>') ++tagClosing;
-      else if(tagClosing === 2 && tagOpening === 2) stash += i;
-
-      if(tagOpening > 2) break;
-    }
-
-    if(tagOpening > 2) {
-      res.write(`<title>${stash}</title>`);
-      res.write(`<meta property=og:title content="${stash}">`);
+      const transformed = transformCont(context.cont);
+      res.write(`<title>${context.title}</title>`);
+      res.write(`<meta property=og:title content="${context.title}">`);
+      res.write(`<meta property=og:description content="${transformed}">`);
       res.write(`<meta property=og:url content="${appConfig.frontend}${req.url}">`);
+
       res.write(frontParts[1]);
-      res.write(buf);
     }
+
+    res.write(chunk);
   })
   .on('end', () => {
     res.end(backPart);

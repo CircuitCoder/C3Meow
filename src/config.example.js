@@ -7,7 +7,7 @@ module.exports = {
   // Backend url Without tailing slash
   backend: 'http://SOMEWHERE.AROUND.THE/WORLD',
 
-  // Backend url Without tailing slash
+  // Frontend url Without tailing slash
   frontend: 'http://SOMEWHERE.AROUND.THE/WORLD',
 
   // Base pathname
@@ -15,6 +15,9 @@ module.exports = {
 
   // Title
   title: 'C3Meow',
+
+  // Default desc for Open Graph
+  desc: '喵喵喵~',
 
   // Google auth client ID
   googleClientID: 'INPUT_YOUR_ID',
