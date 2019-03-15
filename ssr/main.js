@@ -5,6 +5,7 @@ const path = require('path');
 
 const MarkdownIt = require('markdown-it');
 const H2T = require('html-to-text');
+const he = require('he');
 
 const appConfig = require('../src/config');
 
@@ -22,7 +23,9 @@ function transformCont(src) {
     hideLinkHrefIfSameAsText: true,
     singleNewLineParagraphs: true,
   });
-  return text;
+  const escaped = he.encode(text);
+  console.log(escaped);
+  return escaped;
 }
 
 const basepath = path.resolve(__dirname, './..');
