@@ -24,7 +24,6 @@ function transformCont(src) {
     singleNewLineParagraphs: true,
   });
   const escaped = he.encode(text);
-  console.log(escaped);
   return escaped;
 }
 
