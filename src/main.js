@@ -499,8 +499,7 @@ const instance = new Vue(tmpl({
       if(!_post && !this.postCont) return false;
 
       const post = _post || this.postCont.id;
-      console.log(post);
-      return true;
+      return post;
     },
 
     refresh(target) {
