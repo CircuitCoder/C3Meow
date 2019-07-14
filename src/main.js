@@ -106,6 +106,7 @@ const instance = new Vue(tmpl({
     postTitle: '',
     postShown: false,
     postShownInterval: -1,
+    comments: null,
 
     refTrans: null,
 
@@ -485,9 +486,21 @@ const instance = new Vue(tmpl({
           this.updateTitle();
 
           this.pageview();
+
+          // Immediately start loading comments, but do not wait for it
+          this.loadComments();
+
           return void resolve(true);
         });
       });
+    },
+
+    loadComments(_post = null) {
+      if(!_post && !this.postCont) return false;
+
+      const post = _post || this.postCont.id;
+      console.log(post);
+      return true;
     },
 
     refresh(target) {

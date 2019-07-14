@@ -177,7 +177,7 @@ function fetchOrigin(req) {
   const pathname = new URL(req.url).pathname;
   if(pathname === '/__webpack_hmr') // Development environment
     return null;
-  else if(pathname.match(/\/[a-zA-Z\-]+(\.[0-9a-f]+)?\.(css|js|css\.map|js\.map|png|jpg|json|woff2?|ttf|eot)$/)) // Is an asset
+  else if(pathname.match(/\/[a-zA-Z-]+(\.[0-9a-f]+)?\.(css|js|css\.map|js\.map|png|jpg|json|woff2?|ttf|eot)$/)) // Is an asset
     return caches.match(req).then(resp => {
       if(resp) return resp;
 

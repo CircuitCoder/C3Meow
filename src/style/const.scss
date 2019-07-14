@@ -1,4 +1,4 @@
-$ref-height: 80px;
+$ref-height: 60px;
 $border-color: rgba(0,0,0,.12);
 $bottom-bar-height: 40px;
 $sidebar-width: 300px;
@@ -8,8 +8,9 @@ $responsive-trigger: $sidebar-width + $column-width + 40px * 2 + 20px;
 // 40px: post padding
 // 20px: post scrollbar
 
-$bg-gray: #EEE;
+// $bg-gray: #EEE;
+$bg-gray: #eceff1;
 
-$title-bar-height: 80px;
-$title-bar-icon-size: 36px;
-$title-bar-font-size: 24px;
+$title-bar-height: 60px;
+$title-bar-icon-size: 24px;
+$title-bar-font-size: 18px;
